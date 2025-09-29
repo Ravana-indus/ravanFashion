@@ -1,0 +1,198 @@
+name: 📊 Test Summary Dashboard
+
+on:
+  workflow_run:
+    workflows: ["🧪 Testing & Quality Assurance"]
+    types:
+      - completed
+    branches: [main, develop]
+
+jobs:
+  generate-test-summary:
+    name: 📊 Generate Test Dashboard
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion != 'skipped' }}
+
+    steps:
+    - name: 📥 Download workflow artifacts
+      uses: actions/download-artifact@v4
+      with:
+        run-id: ${{ github.event.workflow_run.id }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: 🟢 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+
+    - name: 📊 Generate test dashboard
+      run: |
+        # Create test summary dashboard
+        cat > test-dashboard.html << 'EOF'
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>🧪 Test Dashboard - Ravan Fashion</title>
+          <style>
+            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 20px; background: #f8f9fa; }
+            .dashboard { max-width: 1200px; margin: 0 auto; }
+            .header { text-align: center; margin-bottom: 30px; }
+            .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px; }
+            .metric-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+            .metric-value { font-size: 2em; font-weight: bold; margin: 10px 0; }
+            .metric-label { color: #666; font-size: 0.9em; }
+            .status-passed { color: #28a745; }
+            .status-failed { color: #dc3545; }
+            .status-pending { color: #ffc107; }
+            .test-details { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+            .test-section { margin-bottom: 20px; }
+            .test-section h3 { margin-bottom: 10px; color: #333; }
+            .test-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
+            .last-updated { text-align: center; color: #666; margin-top: 30px; }
+          </style>
+        </head>
+        <body>
+          <div class="dashboard">
+            <div class="header">
+              <h1>🧪 Test Dashboard</h1>
+              <p>Ravan Fashion Shopify Theme - Test Results & Quality Metrics</p>
+            </div>
+
+            <div class="metrics">
+              <div class="metric-card">
+                <div class="metric-label">Overall Status</div>
+                <div class="metric-value status-pending">⏳</div>
+                <div class="metric-label">Processing Results</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-label">Code Coverage</div>
+                <div class="metric-value">--</div>
+                <div class="metric-label">Percentage</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-label">Performance Score</div>
+                <div class="metric-value">--</div>
+                <div class="metric-label">Lighthouse Score</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-label">Accessibility Score</div>
+                <div class="metric-value">--</div>
+                <div class="metric-label">WCAG Compliance</div>
+              </div>
+            </div>
+
+            <div class="test-details">
+              <div class="test-section">
+                <h3>🔤 Tamil Text Validation</h3>
+                <div class="test-item">
+                  <span>Unicode Normalization</span>
+                  <span class="status-pending">⏳</span>
+                </div>
+                <div class="test-item">
+                  <span>Cultural Term Validation</span>
+                  <span class="status-pending">⏳</span>
+                </div>
+              </div>
+
+              <div class="test-section">
+                <h3>🧪 Test Suites</h3>
+                <div class="test-item">
+                  <span>Unit Tests</span>
+                  <span class="status-pending">⏳</span>
+                </div>
+                <div class="test-item">
+                  <span>Integration Tests</span>
+                  <span class="status-pending">⏳</span>
+                </div>
+                <div class="test-item">
+                  <span>E2E Tests</span>
+                  <span class="status-pending">⏳</span>
+                </div>
+                <div class="test-item">
+                  <span>Performance Tests</span>
+                  <span class="status-pending">⏳</span>
+                </div>
+                <div class="test-item">
+                  <span>Accessibility Tests</span>
+                  <span class="status-pending">⏳</span>
+                </div>
+              </div>
+
+              <div class="test-section">
+                <h3>🎭 Cultural Content</h3>
+                <div class="test-item">
+                  <span>Tamil Product Data</span>
+                  <span class="status-pending">⏳</span>
+                </div>
+                <div class="test-item">
+                  <span>Cultural Guide Content</span>
+                  <span class="status-pending">⏳</span>
+                </div>
+                <div class="test-item">
+                  <span>Festival Calendar</span>
+                  <span class="status-pending">⏳</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="last-updated">
+              <p>Last updated: <span id="update-time">Processing...</span></p>
+              <p>Workflow Run: <a href="${{ github.event.workflow_run.html_url }}" target="_blank">#${{ github.event.workflow_run.run_number }}</a></p>
+            </div>
+          </div>
+
+          <script>
+            // Set current time
+            document.getElementById('update-time').textContent = new Date().toLocaleString();
+          </script>
+        </body>
+        </html>
+        EOF
+
+    - name: 📤 Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./
+        destination_dir: test-dashboard
+
+    - name: 💬 Comment test results
+      if: github.event.workflow_run.event == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const { owner, repo } = context.repo;
+          const { number: pull_number } = context.issue;
+
+          // Get pull request details
+          const { data: pr } = await github.rest.pulls.get({
+            owner,
+            repo,
+            pull_number
+          });
+
+          // Create comment with test dashboard link
+          const comment = `## 🧪 Test Results Ready
+
+Your test results have been processed and are now available in the test dashboard.
+
+**📊 Test Dashboard**: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/test-dashboard/test-dashboard.html
+
+**🔗 Workflow Run**: [#${{ github.event.workflow_run.run_number }}](${{ github.event.workflow_run.html_url }})
+
+The dashboard includes:
+- Overall test status and metrics
+- Code coverage and performance scores
+- Accessibility and cultural validation results
+- Detailed test suite breakdowns
+
+Please review the results and address any issues before merging.`;
+
+          await github.rest.issues.createComment({
+            owner,
+            repo,
+            issue_number: pull_number,
+            body: comment
+          });

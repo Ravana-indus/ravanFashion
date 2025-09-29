@@ -1,0 +1,820 @@
+<style>
+  .related-products {
+    margin-top: 4rem;
+    padding: 2rem 0;
+    background: linear-gradient(135deg, #fef3f3 0%, #fefce8 100%);
+    border-radius: 1rem;
+  }
+
+  .related-products.dark-theme {
+    background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+    color: white;
+  }
+
+  .related-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .related-header h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #6a1b1b;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+
+  .related-header .tamil-subtitle {
+    font-size: 1.1rem;
+    color: #7c1e1e;
+    font-weight: 500;
+  }
+
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .related-product-card {
+    background: white;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    border: 2px solid transparent;
+  }
+
+  .related-product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(106, 27, 27, 0.15);
+    border-color: #6a1b1b;
+  }
+
+  .related-product-image {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 1;
+  }
+
+  .related-product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .related-product-card:hover .related-product-image img {
+    transform: scale(1.05);
+  }
+
+  .related-badges {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    z-index: 2;
+  }
+
+  .related-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .related-badge.new {
+    background: #10b981;
+    color: white;
+  }
+
+  .related-badge.sale {
+    background: #ef4444;
+    color: white;
+  }
+
+  .related-badge.limited {
+    background: #f59e0b;
+    color: white;
+  }
+
+  .related-badge.cultural {
+    background: #7c3aed;
+    color: white;
+  }
+
+  .related-quick-actions {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 2;
+  }
+
+  .related-product-card:hover .related-quick-actions {
+    opacity: 1;
+  }
+
+  .related-quick-btn {
+    width: 2.5rem;
+    height: 2.5rem;
+    border: none;
+    border-radius: 50%;
+    background: white;
+    color: #6a1b1b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+  }
+
+  .related-quick-btn:hover {
+    background: #6a1b1b;
+    color: white;
+    transform: scale(1.1);
+  }
+
+  .related-product-info {
+    padding: 1.5rem;
+  }
+
+  .related-product-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+    height: 3.2rem;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .related-product-price {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .related-price {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #6a1b1b;
+  }
+
+  .related-compare-price {
+    font-size: 1rem;
+    color: #6b7280;
+    text-decoration: line-through;
+  }
+
+  .related-sale-percentage {
+    background: #ef4444;
+    color: white;
+    padding: 0.125rem 0.5rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .related-product-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .related-stars {
+    display: flex;
+    gap: 0.125rem;
+  }
+
+  .related-star {
+    width: 1rem;
+    height: 1rem;
+    fill: #fbbf24;
+  }
+
+  .related-star.empty {
+    fill: #e5e7eb;
+  }
+
+  .related-rating-count {
+    font-size: 0.875rem;
+    color: #6b7280;
+  }
+
+  .related-product-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .related-add-to-cart {
+    flex: 1;
+    padding: 0.75rem;
+    background: #6a1b1b;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .related-add-to-cart:hover {
+    background: #7c1e1e;
+  }
+
+  .related-view-details {
+    padding: 0.75rem;
+    background: white;
+    color: #6a1b1b;
+    border: 2px solid #6a1b1b;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .related-view-details:hover {
+    background: #6a1b1b;
+    color: white;
+  }
+
+  .related-color-swatches {
+    display: flex;
+    gap: 0.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .related-color-swatch {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    border: 2px solid #e5e7eb;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .related-color-swatch:hover {
+    transform: scale(1.1);
+    border-color: #6a1b1b;
+  }
+
+  .related-relation-tag {
+    display: inline-block;
+    background: #fef3c7;
+    color: #92400e;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  .related-loading {
+    text-align: center;
+    padding: 3rem;
+    color: #6b7280;
+  }
+
+  .related-loading .spinner {
+    width: 2rem;
+    height: 2rem;
+    border: 3px solid #e5e7eb;
+    border-top: 3px solid #6a1b1b;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1rem;
+  }
+
+  .related-empty {
+    text-align: center;
+    padding: 3rem;
+    color: #6b7280;
+  }
+
+  .related-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .related-nav-btn {
+    width: 3rem;
+    height: 3rem;
+    border: 2px solid #6a1b1b;
+    background: white;
+    color: #6a1b1b;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .related-nav-btn:hover:not(:disabled) {
+    background: #6a1b1b;
+    color: white;
+  }
+
+  .related-nav-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .related-indicators {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .related-indicator {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: #e5e7eb;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .related-indicator.active {
+    background: #6a1b1b;
+    width: 1.5rem;
+    border-radius: 9999px;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  @media (max-width: 768px) {
+    .related-products {
+      margin-top: 2rem;
+      padding: 1.5rem 0;
+    }
+
+    .related-header h2 {
+      font-size: 1.5rem;
+    }
+
+    .related-grid {
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+
+    .related-product-info {
+      padding: 1rem;
+    }
+
+    .related-controls {
+      margin-bottom: 1rem;
+    }
+
+    .related-nav-btn {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+  }
+</style>
+
+<div class="related-products" id="related-products">
+  <div class="related-header">
+    <h2>
+      <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
+        <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h6a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/>
+      </svg>
+      {{ 'product.related_products' | t }}
+    </h2>
+    <div class="tamil-subtitle">{{ 'product.related_products_tamil' | t }}</div>
+  </div>
+
+  <!-- Loading State -->
+  <div id="related-loading" class="related-loading">
+    <div class="spinner"></div>
+    <p>{{ 'related.loading' | t }}</p>
+  </div>
+
+  <!-- Products Grid -->
+  <div id="related-grid" class="related-grid" style="display: none;">
+    <!-- Products will be dynamically loaded here -->
+  </div>
+
+  <!-- Empty State -->
+  <div id="related-empty" class="related-empty" style="display: none;">
+    <svg class="w-12 h-12 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+      <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 0l-2 2a1 1 0 101.414 1.414L8 10.414l1.293 1.293a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+    </svg>
+    <h3>{{ 'related.no_products' | t }}</h3>
+    <p>{{ 'related.try_different_category' | t }}</p>
+  </div>
+
+  <!-- Navigation Controls -->
+  <div id="related-controls" class="related-controls" style="display: none;">
+    <button class="related-nav-btn" id="related-prev" onclick="window.theme.relatedProducts.previous()">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+      </svg>
+    </button>
+
+    <div class="related-indicators" id="related-indicators">
+      <!-- Indicators will be dynamically added here -->
+    </div>
+
+    <button class="related-nav-btn" id="related-next" onclick="window.theme.relatedProducts.next()">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<script>
+  // Related Products System
+  window.theme = window.theme || {};
+  window.theme.relatedProducts = window.theme.relatedProducts || {};
+
+  // Configuration
+  window.theme.relatedProducts.config = {
+    productsPerPage: 4,
+    autoRotate: true,
+    rotateInterval: 5000,
+    relations: ['collection', 'type', 'tags', 'vendor', 'manual']
+  };
+
+  // Mock related products data (in real implementation, this would come from Shopify Product Recommendations API)
+  window.theme.relatedProducts.mockData = [
+    {
+      id: 1,
+      title: "Traditional Tamil Silk Saree",
+      price: 8999,
+      comparePrice: 12999,
+      image: "https://picsum.photos/400/400?random=1",
+      url: "/products/traditional-tamil-silk-saree",
+      rating: 4.8,
+      reviewCount: 127,
+      badges: ["cultural", "new"],
+      relation: "Similar Style",
+      colors: ["#dc2626", "#fbbf24", "#10b981"],
+      tags: ["traditional", "silk", "festival"]
+    },
+    {
+      id: 2,
+      title: "Contemporary Tamil Fusion Dress",
+      price: 4599,
+      comparePrice: null,
+      image: "https://picsum.photos/400/400?random=2",
+      url: "/products/contemporary-tamil-fusion-dress",
+      rating: 4.6,
+      reviewCount: 89,
+      badges: ["new"],
+      relation: "Same Collection",
+      colors: ["#7c3aed", "#ec4899"],
+      tags: ["modern", "fusion", "casual"]
+    },
+    {
+      id: 3,
+      title: "Tamil Heritage Jewelry Set",
+      price: 3299,
+      comparePrice: 4599,
+      image: "https://picsum.photos/400/400?random=3",
+      url: "/products/tamil-heritage-jewelry-set",
+      rating: 4.9,
+      reviewCount: 203,
+      badges: ["cultural", "sale"],
+      relation: "Complete the Look",
+      colors: ["fbbf24", "#dc2626"],
+      tags: ["jewelry", "traditional", "bridal"]
+    },
+    {
+      id: 4,
+      title: "Modern Tamil Streetwear Hoodie",
+      price: 2499,
+      comparePrice: null,
+      image: "https://picsum.photos/400/400?random=4",
+      url: "/products/modern-tamil-streetwear-hoodie",
+      rating: 4.5,
+      reviewCount: 156,
+      badges: ["new"],
+      relation: "Trending Now",
+      colors: ["#1f2937", "#6b7280"],
+      tags: ["streetwear", "modern", "casual"]
+    },
+    {
+      id: 5,
+      title: "Festive Tamil Kurta Set",
+      price: 5999,
+      comparePrice: 7999,
+      image: "https://picsum.photos/400/400?random=5",
+      url: "/products/festive-tamil-kurta-set",
+      rating: 4.7,
+      reviewCount: 94,
+      badges: ["cultural", "sale"],
+      relation: "Festival Collection",
+      colors: ["#dc2626", "#fbbf24", "#10b981"],
+      tags: ["festival", "traditional", "ethnic"]
+    },
+    {
+      id: 6,
+      title: "Tamil Artisan Handbag",
+      price: 3899,
+      comparePrice: null,
+      image: "https://picsum.photos/400/400?random=6",
+      url: "/products/tamil-artisan-handbag",
+      rating: 4.4,
+      reviewCount: 67,
+      badges: ["cultural", "limited"],
+      relation: "Accessories",
+      colors: ["#7c3aed", "#ec4899"],
+      tags: ["handbag", "artisan", "handmade"]
+    }
+  ];
+
+  // State
+  window.theme.relatedProducts.currentPage = 0;
+  window.theme.relatedProducts.products = [];
+  window.theme.relatedProducts.rotationInterval = null;
+
+  // Initialize related products
+  window.theme.relatedProducts.init = function() {
+    window.theme.relatedProducts.loadProducts();
+    window.theme.relatedProducts.setupEventListeners();
+
+    if (window.theme.relatedProducts.config.autoRotate) {
+      window.theme.relatedProducts.startAutoRotate();
+    }
+  };
+
+  // Load related products
+  window.theme.relatedProducts.loadProducts = function() {
+    // Simulate API loading delay
+    setTimeout(() => {
+      window.theme.relatedProducts.products = window.theme.relatedProducts.mockData;
+      window.theme.relatedProducts.render();
+
+      // Hide loading, show content
+      document.getElementById('related-loading').style.display = 'none';
+      document.getElementById('related-grid').style.display = 'grid';
+
+      if (window.theme.relatedProducts.products.length > window.theme.relatedProducts.config.productsPerPage) {
+        document.getElementById('related-controls').style.display = 'flex';
+        window.theme.relatedProducts.updateIndicators();
+      }
+    }, 1000);
+  };
+
+  // Render products
+  window.theme.relatedProducts.render = function() {
+    const container = document.getElementById('related-grid');
+    const startIndex = window.theme.relatedProducts.currentPage * window.theme.relatedProducts.config.productsPerPage;
+    const endIndex = startIndex + window.theme.relatedProducts.config.productsPerPage;
+    const productsToShow = window.theme.relatedProducts.products.slice(startIndex, endIndex);
+
+    container.innerHTML = productsToShow.map(product => `
+      <div class="related-product-card">
+        <div class="related-product-image">
+          <img src="${product.image}" alt="${product.title}" loading="lazy">
+
+          <div class="related-badges">
+            ${product.badges.map(badge => `
+              <span class="related-badge ${badge}">{{ 'related.badge_' + badge | t }}</span>
+            `).join('')}
+          </div>
+
+          <div class="related-quick-actions">
+            <button class="related-quick-btn" onclick="window.theme.relatedProducts.addToWishlist(${product.id})" title="{{ 'general.add_to_wishlist' | t }}">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+              </svg>
+            </button>
+            <button class="related-quick-btn" onclick="window.theme.relatedProducts.quickView(${product.id})" title="{{ 'product.view_details' | t }}">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="related-product-info">
+          <span class="related-relation-tag">${product.relation}</span>
+
+          <h3 class="related-product-title">${product.title}</h3>
+
+          <div class="related-product-rating">
+            <div class="related-stars">
+              ${window.theme.relatedProducts.renderStars(product.rating)}
+            </div>
+            <span class="related-rating-count">(${product.reviewCount})</span>
+          </div>
+
+          <div class="related-product-price">
+            <span class="related-price">₹${product.price.toLocaleString()}</span>
+            ${product.comparePrice ? `
+              <span class="related-compare-price">₹${product.comparePrice.toLocaleString()}</span>
+              <span class="related-sale-percentage">
+                ${Math.round((1 - product.price / product.comparePrice) * 100)}% OFF
+              </span>
+            ` : ''}
+          </div>
+
+          ${product.colors.length > 0 ? `
+            <div class="related-color-swatches">
+              ${product.colors.map(color => `
+                <div class="related-color-swatch" style="background-color: ${color};" title="${color}"></div>
+              `).join('')}
+            </div>
+          ` : ''}
+
+          <div class="related-product-actions">
+            <button class="related-add-to-cart" onclick="window.theme.relatedProducts.addToCart(${product.id})">
+              {{ 'product.add_to_cart' | t }}
+            </button>
+            <button class="related-view-details" onclick="window.theme.relatedProducts.viewDetails(${product.id})">
+              {{ 'product.view_details' | t }}
+            </button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  };
+
+  // Render star rating
+  window.theme.relatedProducts.renderStars = function(rating) {
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 !== 0;
+    const emptyStars = 5 - Math.ceil(rating);
+
+    let stars = '';
+
+    // Full stars
+    for (let i = 0; i < fullStars; i++) {
+      stars += '<svg class="related-star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>';
+    }
+
+    // Half star
+    if (hasHalfStar) {
+      stars += '<svg class="related-star" fill="currentColor" viewBox="0 0 20 20"><defs><linearGradient id="half"><stop offset="50%" stop-color="currentColor"/><stop offset="50%" stop-color="#e5e7eb"/></linearGradient></defs><path fill="url(#half)" d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>';
+    }
+
+    // Empty stars
+    for (let i = 0; i < emptyStars; i++) {
+      stars += '<svg class="related-star empty" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>';
+    }
+
+    return stars;
+  };
+
+  // Navigation
+  window.theme.relatedProducts.next = function() {
+    const totalPages = Math.ceil(window.theme.relatedProducts.products.length / window.theme.relatedProducts.config.productsPerPage);
+    if (window.theme.relatedProducts.currentPage < totalPages - 1) {
+      window.theme.relatedProducts.currentPage++;
+      window.theme.relatedProducts.render();
+      window.theme.relatedProducts.updateIndicators();
+      window.theme.relatedProducts.updateNavigationButtons();
+    }
+  };
+
+  window.theme.relatedProducts.previous = function() {
+    if (window.theme.relatedProducts.currentPage > 0) {
+      window.theme.relatedProducts.currentPage--;
+      window.theme.relatedProducts.render();
+      window.theme.relatedProducts.updateIndicators();
+      window.theme.relatedProducts.updateNavigationButtons();
+    }
+  };
+
+  // Update indicators
+  window.theme.relatedProducts.updateIndicators = function() {
+    const indicatorsContainer = document.getElementById('related-indicators');
+    const totalPages = Math.ceil(window.theme.relatedProducts.products.length / window.theme.relatedProducts.config.productsPerPage);
+
+    indicatorsContainer.innerHTML = '';
+
+    for (let i = 0; i < totalPages; i++) {
+      const indicator = document.createElement('div');
+      indicator.className = `related-indicator ${i === window.theme.relatedProducts.currentPage ? 'active' : ''}`;
+      indicator.onclick = () => {
+        window.theme.relatedProducts.currentPage = i;
+        window.theme.relatedProducts.render();
+        window.theme.relatedProducts.updateIndicators();
+        window.theme.relatedProducts.updateNavigationButtons();
+      };
+      indicatorsContainer.appendChild(indicator);
+    }
+  };
+
+  // Update navigation buttons
+  window.theme.relatedProducts.updateNavigationButtons = function() {
+    const totalPages = Math.ceil(window.theme.relatedProducts.products.length / window.theme.relatedProducts.config.productsPerPage);
+    const prevBtn = document.getElementById('related-prev');
+    const nextBtn = document.getElementById('related-next');
+
+    prevBtn.disabled = window.theme.relatedProducts.currentPage === 0;
+    nextBtn.disabled = window.theme.relatedProducts.currentPage === totalPages - 1;
+  };
+
+  // Auto-rotation
+  window.theme.relatedProducts.startAutoRotate = function() {
+    window.theme.relatedProducts.rotationInterval = setInterval(() => {
+      const totalPages = Math.ceil(window.theme.relatedProducts.products.length / window.theme.relatedProducts.config.productsPerPage);
+      window.theme.relatedProducts.currentPage = (window.theme.relatedProducts.currentPage + 1) % totalPages;
+      window.theme.relatedProducts.render();
+      window.theme.relatedProducts.updateIndicators();
+      window.theme.relatedProducts.updateNavigationButtons();
+    }, window.theme.relatedProducts.config.rotateInterval);
+  };
+
+  window.theme.relatedProducts.stopAutoRotate = function() {
+    if (window.theme.relatedProducts.rotationInterval) {
+      clearInterval(window.theme.relatedProducts.rotationInterval);
+      window.theme.relatedProducts.rotationInterval = null;
+    }
+  };
+
+  // Product actions
+  window.theme.relatedProducts.addToCart = function(productId) {
+    const product = window.theme.relatedProducts.products.find(p => p.id === productId);
+    if (product) {
+      // Simulate add to cart
+      window.theme.showNotification(`"${product.title}" {{ 'general.added_to_cart' | t }}`, 'success');
+      window.theme.updateCartCounter();
+    }
+  };
+
+  window.theme.relatedProducts.addToWishlist = function(productId) {
+    const product = window.theme.relatedProducts.products.find(p => p.id === productId);
+    if (product) {
+      window.theme.addToWishlist(productId, product);
+    }
+  };
+
+  window.theme.relatedProducts.quickView = function(productId) {
+    const product = window.theme.relatedProducts.products.find(p => p.id === productId);
+    if (product && window.theme.openQuickView) {
+      window.theme.openQuickView(productId);
+    }
+  };
+
+  window.theme.relatedProducts.viewDetails = function(productId) {
+    const product = window.theme.relatedProducts.products.find(p => p.id === productId);
+    if (product) {
+      window.location.href = product.url;
+    }
+  };
+
+  // Event listeners
+  window.theme.relatedProducts.setupEventListeners = function() {
+    // Pause auto-rotation on hover
+    const container = document.getElementById('related-products');
+    container.addEventListener('mouseenter', () => {
+      if (window.theme.relatedProducts.config.autoRotate) {
+        window.theme.relatedProducts.stopAutoRotate();
+      }
+    });
+
+    container.addEventListener('mouseleave', () => {
+      if (window.theme.relatedProducts.config.autoRotate) {
+        window.theme.relatedProducts.startAutoRotate();
+      }
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') {
+        window.theme.relatedProducts.previous();
+      } else if (e.key === 'ArrowRight') {
+        window.theme.relatedProducts.next();
+      }
+    });
+  };
+
+  // Initialize on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    if (document.getElementById('related-products')) {
+      window.theme.relatedProducts.init();
+    }
+  });
+</script>

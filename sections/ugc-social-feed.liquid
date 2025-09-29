@@ -1,0 +1,386 @@
+<style>
+  .ugc-feed {
+    background: linear-gradient(135deg, #fff8f0 0%, #fdf6ec 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ugc-feed::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23D4AF37' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+    animation: drift 20s infinite linear;
+    opacity: 0.3;
+  }
+
+  @keyframes drift {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    100% { transform: translate(-60px, -60px) rotate(360deg); }
+  }
+
+  .social-post {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .social-post:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  }
+
+  .post-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    display: flex;
+    align-items: flex-end;
+    padding: 1rem;
+  }
+
+  .social-post:hover .post-overlay {
+    opacity: 1;
+  }
+
+  .instagram-icon {
+    width: 24px;
+    height: 24px;
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  .loading-skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+    border-radius: 8px;
+  }
+
+  @keyframes loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  .cultural-pattern {
+    background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23D4AF37' fill-opacity='0.1'%3E%3Cpath d='M20 20 L25 15 L25 25 L15 25 L15 15 Z'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 40px 40px;
+  }
+</style>
+
+<div class="ugc-feed relative py-16 px-4">
+  <div class="max-w-7xl mx-auto">
+    <!-- Section Header -->
+    <div class="text-center mb-12 relative z-10">
+      <h2 class="text-4xl font-bold text-gray-900 mb-4">
+        {{ section.settings.title }}
+      </h2>
+      <p class="text-tamil tamil-text text-2xl text-[#6a1b1b] mb-6">
+        {{ section.settings.subtitle_tamil }}
+      </p>
+      <p class="text-lg text-gray-700 max-w-2xl mx-auto">
+        {{ section.settings.description }}
+      </p>
+    </div>
+
+    <!-- Social Feed Container -->
+    <div class="relative z-10">
+      <!-- Loading State -->
+      <div id="ugc-loading" class="hidden">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {% for i in (1..6) %}
+            <div class="loading-skeleton h-96"></div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Posts Grid -->
+      <div id="ugc-posts" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Default Placeholder Posts -->
+        {% for i in (1..6) %}
+          <div class="social-post default-post">
+            <div class="aspect-square bg-gradient-to-br from-[#6a1b1b] to-[#d4af37] flex items-center justify-center">
+              <div class="text-center text-white p-6">
+                <div class="instagram-icon mx-auto mb-4">IG</div>
+                <h3 class="font-bold text-lg mb-2">Community Style</h3>
+                <p class="text-sm opacity-90">Join our fashion community</p>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- Error State -->
+      <div id="ugc-error" class="hidden text-center py-12">
+        <div class="temple-border bg-white p-8 max-w-md mx-auto">
+          <h3 class="text-xl font-bold text-[#6a1b1b] mb-4">
+            {{ 'general.error' | t }}
+          </h3>
+          <p class="text-gray-700 mb-4">Unable to load social feed. Please try again later.</p>
+          <button onclick="window.theme.loadUGCFeed()" class="btn-primary">
+            Retry
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="text-center mt-12 relative z-10">
+      <div class="cultural-pattern temple-border bg-white p-8 max-w-2xl mx-auto">
+        <h3 class="text-2xl font-bold text-[#6a1b1b] mb-4">
+          {{ section.settings.cta_title }}
+        </h3>
+        <p class="text-gray-700 mb-6">
+          {{ section.settings.cta_description }}
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="{{ section.settings.instagram_url }}" target="_blank" rel="noopener" class="btn-primary inline-flex items-center gap-2">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+            </svg>
+            Follow @ravanfashion
+          </a>
+          <button onclick="window.theme.loadUGCFeed()" class="btn-secondary inline-flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+            </svg>
+            Refresh Feed
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- User Generated Content Guidelines -->
+    {% if section.settings.show_guidelines %}
+      <div class="mt-12 relative z-10">
+        <div class="bg-white/80 backdrop-blur-sm temple-border p-6">
+          <h4 class="font-bold text-[#6a1b1b] mb-3">{{ section.settings.guidelines_title }}</h4>
+          <ul class="space-y-2 text-sm text-gray-700">
+            {% for guideline in section.settings.guidelines_text | split: '|' %}
+              <li class="flex items-start gap-2">
+                <span class="text-[#d4af37] mt-1">•</span>
+                {{ guideline }}
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+  // UGC Social Feed Functionality
+  window.theme = window.theme || {};
+
+  window.theme.loadUGCFeed = async function() {
+    const container = document.getElementById('ugc-posts');
+    const loading = document.getElementById('ugc-loading');
+    const error = document.getElementById('ugc-error');
+
+    // Show loading state
+    loading.classList.remove('hidden');
+    error.classList.add('hidden');
+
+    try {
+      // Simulate API call - in real implementation, this would fetch from Instagram API
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      // Mock Instagram posts data
+      const mockPosts = [
+        {
+          id: '1',
+          imageUrl: 'https://picsum.photos/400/400?random=1',
+          caption: 'Traditional Tamil fashion meets modern style 🌟 #TamilHeritage #RavanFashion',
+          likes: 245,
+          comments: 18,
+          user: 'fashion_lover_tn'
+        },
+        {
+          id: '2',
+          imageUrl: 'https://picsum.photos/400/400?random=2',
+          caption: 'Festival season ready with our new collection ✨ #TamilFashion #CulturalStyle',
+          likes: 189,
+          comments: 12,
+          user: 'style_tamil'
+        },
+        {
+          id: '3',
+          imageUrl: 'https://picsum.photos/400/400?random=3',
+          caption: 'Heritage woven into every thread 🧵 #Handmade #TraditionalCraft',
+          likes: 312,
+          comments: 24,
+          user: 'heritage_wear'
+        },
+        {
+          id: '4',
+          imageUrl: 'https://picsum.photos/400/400?random=4',
+          caption: 'Contemporary designs with traditional roots 🌿 #ModernTamil #EthnicWear',
+          likes: 156,
+          comments: 9,
+          user: 'tamil_modern'
+        },
+        {
+          id: '5',
+          imageUrl: 'https://picsum.photos/400/400?random=5',
+          caption: 'Celebrating Tamil culture through fashion 🎭 #CulturalPride #RavanFashion',
+          likes: 278,
+          comments: 21,
+          user: 'cultural_fashion'
+        },
+        {
+          id: '6',
+          imageUrl: 'https://picsum.photos/400/400?random=6',
+          caption: 'Street style with heritage significance 🏙️ #TamilStreetwear #UrbanTraditional',
+          likes: 198,
+          comments: 15,
+          user: 'street_heritage'
+        }
+      ];
+
+      // Clear existing posts
+      container.innerHTML = '';
+
+      // Render posts
+      mockPosts.forEach(post => {
+        const postElement = document.createElement('div');
+        postElement.className = 'social-post';
+        postElement.innerHTML = `
+          <div class="relative aspect-square group cursor-pointer">
+            <img src="${post.imageUrl}" alt="${post.caption}" class="w-full h-full object-cover">
+            <div class="post-overlay">
+              <div class="text-white w-full">
+                <p class="text-sm font-medium mb-2 line-clamp-2">${post.caption}</p>
+                <div class="flex items-center justify-between text-xs">
+                  <div class="flex items-center gap-4">
+                    <span class="flex items-center gap-1">
+                      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                      </svg>
+                      ${post.likes}
+                    </span>
+                    <span class="flex items-center gap-1">
+                      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                      </svg>
+                      ${post.comments}
+                    </span>
+                  </div>
+                  <span class="text-xs opacity-75">@${post.user}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        container.appendChild(postElement);
+      });
+
+      // Hide loading
+      loading.classList.add('hidden');
+
+      // Add click handlers for posts
+      document.querySelectorAll('.social-post').forEach(post => {
+        post.addEventListener('click', function() {
+          const instagramUrl = '{{ section.settings.instagram_url }}';
+          if (instagramUrl) {
+            window.open(instagramUrl, '_blank');
+          }
+        });
+      });
+
+    } catch (error) {
+      console.error('Error loading UGC feed:', error);
+      loading.classList.add('hidden');
+      error.classList.remove('hidden');
+    }
+  };
+
+  // Auto-load feed on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    // Auto-refresh feed every 5 minutes
+    window.theme.loadUGCFeed();
+    setInterval(window.theme.loadUGCFeed, 300000);
+  });
+</script>
+
+{% schema %}
+{
+  "name": "UGC Social Feed",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Community Style"
+    },
+    {
+      "type": "text",
+      "id": "subtitle_tamil",
+      "label": "Subtitle (Tamil)",
+      "default": "சமூக பாணி"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "See how our community styles traditional Tamil fashion in their everyday lives. Share your looks with #RavanFashion for a chance to be featured."
+    },
+    {
+      "type": "text",
+      "id": "cta_title",
+      "label": "CTA Title",
+      "default": "Join Our Fashion Community"
+    },
+    {
+      "type": "textarea",
+      "id": "cta_description",
+      "label": "CTA Description",
+      "default": "Follow us on Instagram for daily inspiration, style tips, and exclusive behind-the-scenes content."
+    },
+    {
+      "type": "url",
+      "id": "instagram_url",
+      "label": "Instagram Profile URL",
+      "default": "https://instagram.com/ravanfashion"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_guidelines",
+      "label": "Show Content Guidelines",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "guidelines_title",
+      "label": "Guidelines Title",
+      "default": "Share Your Style"
+    },
+    {
+      "type": "textarea",
+      "id": "guidelines_text",
+      "label": "Guidelines Text (one per line, separated by |)",
+      "default": "Use #RavanFashion in your posts|Tag @ravanfashion for a feature|Show how you style our pieces|Celebrate Tamil heritage|Be respectful and inclusive|Have fun with fashion!"
+    }
+  ],
+  "presets": [
+    {
+      "name": "UGC Social Feed",
+      "category": "Social Media"
+    }
+  ]
+}
+{% endschema %}

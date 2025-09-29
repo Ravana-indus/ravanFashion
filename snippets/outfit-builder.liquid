@@ -1,0 +1,1178 @@
+{%- comment -%}
+Outfit Builder - Complete look builder with recommendations
+Allows users to create complete outfits with AI-powered recommendations
+{%- endcomment -%}
+
+<div class="outfit-builder" data-builder-id="outfit-creator">
+  <!-- Builder Header -->
+  <div class="builder-header text-center mb-8">
+    <div class="builder-icon mb-4">
+      <div class="w-20 h-20 mx-auto rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-3xl">
+        <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm12 2H4v8h12V6z" clip-rule="evenodd"/>
+        </svg>
+      </div>
+    </div>
+    <h3 class="text-2xl font-bold text-gray-800 mb-2" data-i18n="outfit_builder.title">Create Your Perfect Look</h3>
+    <p class="text-gray-600" data-i18n="outfit_builder.subtitle">Build complete outfits with AI-powered recommendations</p>
+  </div>
+
+  <!-- Main Builder Interface -->
+  <div class="builder-container max-w-7xl mx-auto">
+    <!-- Outfit Canvas -->
+    <div class="outfit-canvas mb-8">
+      <div class="bg-white rounded-lg shadow-lg p-8">
+        <div class="canvas-area relative bg-gray-50 rounded-lg min-h-[500px] flex items-center justify-center">
+          <!-- Empty State -->
+          <div id="empty-canvas" class="text-center">
+            <svg class="w-24 h-24 mx-auto mb-4 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm12 2H4v8h12V6z" clip-rule="evenodd"/>
+            </svg>
+            <h4 class="text-xl font-semibold text-gray-600 mb-2" data-i18n="outfit_builder.start_building">Start Building Your Look</h4>
+            <p class="text-gray-500 mb-4" data-i18n="outfit_builder.select_category">Select a category below to add items to your outfit</p>
+          </div>
+
+          <!-- Outfit Items -->
+          <div id="outfit-items" class="absolute inset-0 hidden">
+            <!-- Outfit items will be positioned here -->
+          </div>
+
+          <!-- Canvas Controls -->
+          <div class="canvas-controls absolute top-4 right-4 flex gap-2">
+            <button id="clear-canvas" class="bg-red-500 text-white p-2 rounded-lg hover:bg-red-600 transition-colors" title="Clear All">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
+              </svg>
+            </button>
+            <button id="save-outfit" class="bg-green-500 text-white p-2 rounded-lg hover:bg-green-600 transition-colors" title="Save Outfit">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Outfit Summary -->
+        <div id="outfit-summary" class="mt-6 p-4 bg-gray-50 rounded-lg hidden">
+          <h5 class="font-semibold mb-3" data-i18n="outfit_builder.outfit_summary">Outfit Summary</h5>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="summary-item">
+              <p class="text-sm text-gray-600" data-i18n="outfit_builder.total_items">Total Items</p>
+              <p class="text-lg font-semibold" id="total-items-count">0</p>
+            </div>
+            <div class="summary-item">
+              <p class="text-sm text-gray-600" data-i18n="outfit_builder.total_price">Total Price</p>
+              <p class="text-lg font-semibold" id="total-price">$0</p>
+            </div>
+            <div class="summary-item">
+              <p class="text-sm text-gray-600" data-i18n="outfit_builder.style_score">Style Score</p>
+              <p class="text-lg font-semibold" id="style-score">0%</p>
+            </div>
+            <div class="summary-item">
+              <p class="text-sm text-gray-600" data-i18n="outfit_builder.compatibility">Compatibility</p>
+              <p class="text-lg font-semibold" id="compatibility-score">0%</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category Selection -->
+    <div class="category-section mb-8">
+      <h4 class="text-lg font-semibold mb-4" data-i18n="outfit_builder.select_category">Select Category</h4>
+      <div class="category-grid grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+        <button class="category-card bg-white rounded-lg p-4 text-center hover:shadow-md transition-all duration-200 border-2 border-transparent hover:border-indigo-500" data-category="tops">
+          <div class="category-icon text-3xl mb-2">👕</div>
+          <p class="text-sm font-medium" data-i18n="outfit_builder.tops">Tops</p>
+        </button>
+        <button class="category-card bg-white rounded-lg p-4 text-center hover:shadow-md transition-all duration-200 border-2 border-transparent hover:border-indigo-500" data-category="bottoms">
+          <div class="category-icon text-3xl mb-2">👖</div>
+          <p class="text-sm font-medium" data-i18n="outfit_builder.bottoms">Bottoms</p>
+        </button>
+        <button class="category-card bg-white rounded-lg p-4 text-center hover:shadow-md transition-all duration-200 border-2 border-transparent hover:border-indigo-500" data-category="dresses">
+          <div class="category-icon text-3xl mb-2">👗</div>
+          <p class="text-sm font-medium" data-i18n="outfit_builder.dresses">Dresses</p>
+        </button>
+        <button class="category-card bg-white rounded-lg p-4 text-center hover:shadow-md transition-all duration-200 border-2 border-transparent hover:border-indigo-500" data-category="outerwear">
+          <div class="category-icon text-3xl mb-2">🧥</div>
+          <p class="text-sm font-medium" data-i18n="outfit_builder.outerwear">Outerwear</p>
+        </button>
+        <button class="category-card bg-white rounded-lg p-4 text-center hover:shadow-md transition-all duration-200 border-2 border-transparent hover:border-indigo-500" data-category="footwear">
+          <div class="category-icon text-3xl mb-2">👠</div>
+          <p class="text-sm font-medium" data-i18n="outfit_builder.footwear">Footwear</p>
+        </button>
+        <button class="category-card bg-white rounded-lg p-4 text-center hover:shadow-md transition-all duration-200 border-2 border-transparent hover:border-indigo-500" data-category="accessories">
+          <div class="category-icon text-3xl mb-2">👜</div>
+          <p class="text-sm font-medium" data-i18n="outfit_builder.accessories">Accessories</p>
+        </button>
+      </div>
+    </div>
+
+    <!-- Product Selection -->
+    <div id="product-selection" class="product-selection hidden mb-8">
+      <div class="flex items-center justify-between mb-4">
+        <h4 class="text-lg font-semibold" data-i18n="outfit_builder.select_items">Select Items</h4>
+        <div class="flex gap-2">
+          <button id="ai-recommend" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+            </svg>
+            <span data-i18n="outfit_builder.ai_recommend">AI Recommend</span>
+          </button>
+          <button id="close-selection" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors">
+            <span data-i18n="outfit_builder.close">Close</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="filters mb-6">
+        <div class="flex flex-wrap gap-2">
+          <button class="filter-btn bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm hover:bg-gray-200 transition-colors" data-filter="all">
+            <span data-i18n="outfit_builder.all">All</span>
+          </button>
+          <button class="filter-btn bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm hover:bg-gray-200 transition-colors" data-filter="traditional">
+            <span data-i18n="outfit_builder.traditional">Traditional</span>
+          </button>
+          <button class="filter-btn bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm hover:bg-gray-200 transition-colors" data-filter="modern">
+            <span data-i18n="outfit_builder.modern">Modern</span>
+          </button>
+          <button class="filter-btn bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm hover:bg-gray-200 transition-colors" data-filter="fusion">
+            <span data-i18n="outfit_builder.fusion">Fusion</span>
+          </button>
+          <button class="filter-btn bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm hover:bg-gray-200 transition-colors" data-filter="casual">
+            <span data-i18n="outfit_builder.casual">Casual</span>
+          </button>
+          <button class="filter-btn bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm hover:bg-gray-200 transition-colors" data-filter="formal">
+            <span data-i18n="outfit_builder.formal">Formal</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Product Grid -->
+      <div id="product-grid" class="product-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <!-- Products will be dynamically loaded here -->
+      </div>
+    </div>
+
+    <!-- AI Recommendations Panel -->
+    <div id="ai-recommendations" class="ai-recommendations hidden mb-8">
+      <div class="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-lg p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h4 class="text-lg font-semibold flex items-center gap-2">
+            <svg class="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.951-.69l1.07-3.292z"/>
+            </svg>
+            <span data-i18n="outfit_builder.ai_recommendations">AI Recommendations</span>
+          </h4>
+          <button id="close-recommendations" class="text-gray-500 hover:text-gray-700">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="recommendation-content">
+          <div class="recommendation-outfits grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- AI-recommended outfits will be shown here -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Saved Outfits -->
+    <div class="saved-outfits">
+      <h4 class="text-lg font-semibold mb-4" data-i18n="outfit_builder.saved_outfits">Your Saved Outfits</h4>
+      <div id="saved-outfits-grid" class="saved-outfits-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Saved outfits will be displayed here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Outfit Save Modal -->
+  <div id="save-outfit-modal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" data-i18n="outfit_builder.save_outfit">Save Outfit</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="outfit-save-form">
+            <div class="mb-3">
+              <label class="form-label" data-i18n="outfit_builder.outfit_name">Outfit Name</label>
+              <input type="text" class="form-control" id="outfit-name" placeholder="My Perfect Look" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label" data-i18n="outfit_builder.occasion">Occasion</label>
+              <select class="form-select" id="outfit-occasion">
+                <option value="casual" data-i18n="outfit_builder.casual">Casual</option>
+                <option value="work" data-i18n="outfit_builder.work">Work</option>
+                <option value="party" data-i18n="outfit_builder.party">Party</option>
+                <option value="cultural" data-i18n="outfit_builder.cultural">Cultural</option>
+                <option value="formal" data-i18n="outfit_builder.formal">Formal</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label" data-i18n="outfit_builder.tags">Tags</label>
+              <input type="text" class="form-control" id="outfit-tags" placeholder="summer, office, traditional">
+            </div>
+            <div class="mb-3">
+              <label class="form-label" data-i18n="outfit_builder.notes">Notes</label>
+              <textarea class="form-control" id="outfit-notes" rows="3" placeholder="Add any notes about this outfit..."></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-i18n="outfit_builder.cancel">Cancel</button>
+          <button type="button" class="btn btn-primary" id="confirm-save-outfit" data-i18n="outfit_builder.save">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.outfit-builder {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+.category-card {
+  transition: all 0.3s ease;
+}
+
+.category-card:hover {
+  transform: translateY(-4px);
+}
+
+.category-card.active {
+  border-color: #6366f1 !important;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0e7ff 100%);
+}
+
+.canvas-area {
+  background-image:
+    linear-gradient(45deg, #f8fafc 25%, transparent 25%),
+    linear-gradient(-45deg, #f8fafc 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #f8fafc 75%),
+    linear-gradient(-45deg, transparent 75%, #f8fafc 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+}
+
+.outfit-item {
+  position: absolute;
+  transition: all 0.3s ease;
+  cursor: move;
+}
+
+.outfit-item:hover {
+  transform: scale(1.05);
+  z-index: 10;
+}
+
+.outfit-item.selected {
+  box-shadow: 0 0 0 3px #6366f1;
+}
+
+.product-card {
+  transition: all 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.product-card.selected {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.filter-btn.active {
+  background: #6366f1;
+  color: white;
+}
+
+.recommendation-outfit {
+  transition: all 0.3s ease;
+}
+
+.recommendation-outfit:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.saved-outfit-card {
+  transition: all 0.3s ease;
+}
+
+.saved-outfit-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.score-bar {
+  transition: width 1s ease-in-out;
+}
+
+@media (max-width: 768px) {
+  .canvas-area {
+    min-height: 400px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .flex.gap-2 {
+    flex-direction: column;
+  }
+}
+</style>
+
+<script>
+class OutfitBuilder {
+  constructor(container) {
+    this.container = container;
+    this.currentCategory = null;
+    this.selectedItems = [];
+    this.outfitItems = [];
+    this.savedOutfits = this.loadSavedOutfits();
+
+    // Sample product data (in real implementation, this would come from Shopify)
+    this.products = {
+      tops: [
+        { id: 1, name: 'Silk Blouse', price: 89.99, image: '/products/silk-blouse.jpg', style: 'traditional', color: '#8B0000' },
+        { id: 2, name: 'Modern Crop Top', price: 45.99, image: '/products/crop-top.jpg', style: 'modern', color: '#FF69B4' },
+        { id: 3, name: 'Fusion Kurti', price: 65.99, image: '/products/fusion-kurti.jpg', style: 'fusion', color: '#4682B4' },
+        { id: 4, name: 'Casual T-Shirt', price: 29.99, image: '/products/tshirt.jpg', style: 'casual', color: '#32CD32' }
+      ],
+      bottoms: [
+        { id: 5, name: 'Silk Skirt', price: 79.99, image: '/products/silk-skirt.jpg', style: 'traditional', color: '#8B0000' },
+        { id: 6, name: 'Modern Jeans', price: 59.99, image: '/products/jeans.jpg', style: 'modern', color: '#4169E1' },
+        { id: 7, name: 'Palazzo Pants', price: 49.99, image: '/products/palazzo.jpg', style: 'fusion', color: '#DDA0DD' },
+        { id: 8, name: 'Casual Trousers', price: 39.99, image: '/products/trousers.jpg', style: 'casual', color: '#696969' }
+      ],
+      dresses: [
+        { id: 9, name: 'Traditional Saree', price: 199.99, image: '/products/saree.jpg', style: 'traditional', color: '#FFD700' },
+        { id: 10, name: 'Modern Dress', price: 89.99, image: '/products/modern-dress.jpg', style: 'modern', color: '#FF1493' },
+        { id: 11, name: 'Fusion Gown', price: 129.99, image: '/products/fusion-gown.jpg', style: 'fusion', color: '#9370DB' },
+        { id: 12, name: 'Casual Sundress', price: 69.99, image: '/products/sundress.jpg', style: 'casual', color: '#87CEEB' }
+      ],
+      outerwear: [
+        { id: 13, name: 'Traditional Shawl', price: 59.99, image: '/products/shawl.jpg', style: 'traditional', color: '#8B4513' },
+        { id: 14, name: 'Modern Jacket', price: 99.99, image: '/products/jacket.jpg', style: 'modern', color: '#2F4F4F' },
+        { id: 15, name: 'Fusion Cardigan', price: 79.99, image: '/products/cardigan.jpg', style: 'fusion', color: '#9370DB' },
+        { id: 16, name: 'Casual Hoodie', price: 49.99, image: '/products/hoodie.jpg', style: 'casual', color: '#696969' }
+      ],
+      footwear: [
+        { id: 17, name: 'Traditional Juttis', price: 39.99, image: '/products/juttis.jpg', style: 'traditional', color: '#8B4513' },
+        { id: 18, name: 'Modern Heels', price: 79.99, image: '/products/heels.jpg', style: 'modern', color: '#000000' },
+        { id: 19, name: 'Fusion Sandals', price: 59.99, image: '/products/sandals.jpg', style: 'fusion', color: '#DEB887' },
+        { id: 20, name: 'Casual Sneakers', price: 69.99, image: '/products/sneakers.jpg', style: 'casual', color: '#FFFFFF' }
+      ],
+      accessories: [
+        { id: 21, name: 'Traditional Jewelry', price: 129.99, image: '/products/jewelry.jpg', style: 'traditional', color: '#FFD700' },
+        { id: 22, name: 'Modern Handbag', price: 89.99, image: '/products/handbag.jpg', style: 'modern', color: '#000000' },
+        { id: 23, name: 'Fusion Scarf', price: 29.99, image: '/products/scarf.jpg', style: 'fusion', color: '#FF6347' },
+        { id: 24, name: 'Casual Cap', price: 19.99, image: '/products/cap.jpg', style: 'casual', color: '#4169E1' }
+      ]
+    };
+
+    this.init();
+  }
+
+  init() {
+    this.setupEventListeners();
+    this.displaySavedOutfits();
+  }
+
+  setupEventListeners() {
+    // Category selection
+    this.container.querySelectorAll('.category-card').forEach(card => {
+      card.addEventListener('click', () => this.selectCategory(card.dataset.category));
+    });
+
+    // Canvas controls
+    const clearBtn = document.getElementById('clear-canvas');
+    const saveBtn = document.getElementById('save-outfit');
+
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => this.clearCanvas());
+    }
+
+    if (saveBtn) {
+      saveBtn.addEventListener('click', () => this.showSaveModal());
+    }
+
+    // Product selection controls
+    const closeSelectionBtn = document.getElementById('close-selection');
+    const aiRecommendBtn = document.getElementById('ai-recommend');
+    const closeRecommendationsBtn = document.getElementById('close-recommendations');
+
+    if (closeSelectionBtn) {
+      closeSelectionBtn.addEventListener('click', () => this.closeProductSelection());
+    }
+
+    if (aiRecommendBtn) {
+      aiRecommendBtn.addEventListener('click', () => this.getAIRecommendations());
+    }
+
+    if (closeRecommendationsBtn) {
+      closeRecommendationsBtn.addEventListener('click', () => this.closeAIRecommendations());
+    }
+
+    // Filter buttons
+    this.container.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => this.filterProducts(btn.dataset.filter));
+    });
+
+    // Save outfit modal
+    const confirmSaveBtn = document.getElementById('confirm-save-outfit');
+    if (confirmSaveBtn) {
+      confirmSaveBtn.addEventListener('click', () => this.saveOutfit());
+    }
+  }
+
+  selectCategory(category) {
+    this.currentCategory = category;
+
+    // Update UI
+    this.container.querySelectorAll('.category-card').forEach(card => {
+      card.classList.remove('active');
+    });
+    this.container.querySelector(`[data-category="${category}"]`).classList.add('active');
+
+    // Show product selection
+    this.showProductSelection();
+  }
+
+  showProductSelection() {
+    const productSelection = document.getElementById('product-selection');
+    productSelection.classList.remove('hidden');
+
+    // Load products for current category
+    this.loadProducts(this.currentCategory);
+
+    // Scroll to product selection
+    productSelection.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  closeProductSelection() {
+    const productSelection = document.getElementById('product-selection');
+    productSelection.classList.add('hidden');
+
+    // Reset active category
+    this.container.querySelectorAll('.category-card').forEach(card => {
+      card.classList.remove('active');
+    });
+    this.currentCategory = null;
+  }
+
+  loadProducts(category) {
+    const productGrid = document.getElementById('product-grid');
+    const products = this.products[category] || [];
+
+    productGrid.innerHTML = products.map(product => `
+      <div class="product-card bg-white rounded-lg shadow-md overflow-hidden border-2 border-transparent cursor-pointer"
+           data-product-id="${product.id}">
+        <div class="product-image h-40 bg-gray-200 flex items-center justify-center">
+          <div class="text-4xl" style="color: ${product.color}">
+            ${this.getProductIcon(category)}
+          </div>
+        </div>
+        <div class="p-3">
+          <h6 class="font-medium text-sm mb-1">${product.name}</h6>
+          <p class="text-lg font-semibold text-indigo-600">$${product.price}</p>
+          <span class="inline-block px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-700">
+            ${product.style}
+          </span>
+        </div>
+      </div>
+    `).join('');
+
+    // Add click listeners
+    productGrid.querySelectorAll('.product-card').forEach(card => {
+      card.addEventListener('click', () => this.selectProduct(card.dataset.productId));
+    });
+  }
+
+  getProductIcon(category) {
+    const icons = {
+      tops: '👕',
+      bottoms: '👖',
+      dresses: '👗',
+      outerwear: '🧥',
+      footwear: '👠',
+      accessories: '👜'
+    };
+    return icons[category] || '📦';
+  }
+
+  selectProduct(productId) {
+    const product = this.findProductById(productId);
+    if (!product) return;
+
+    // Check if product already in outfit
+    if (this.outfitItems.find(item => item.id === productId)) {
+      this.showNotification('Item already in outfit!', 'warning');
+      return;
+    }
+
+    // Add to outfit
+    this.addToOutfit(product);
+
+    // Update UI
+    const productCard = this.container.querySelector(`[data-product-id="${productId}"]`);
+    if (productCard) {
+      productCard.classList.add('selected');
+    }
+  }
+
+  findProductById(productId) {
+    for (const category in this.products) {
+      const product = this.products[category].find(p => p.id == productId);
+      if (product) return product;
+    }
+    return null;
+  }
+
+  addToOutfit(product) {
+    const outfitItem = {
+      ...product,
+      position: this.calculateItemPosition(product.category),
+      category: this.getCategoryFromProduct(product)
+    };
+
+    this.outfitItems.push(outfitItem);
+    this.renderOutfitItem(outfitItem);
+    this.updateOutfitSummary();
+  }
+
+  calculateItemPosition(category) {
+    const positions = {
+      tops: { top: '20%', left: '50%', transform: 'translateX(-50%)' },
+      bottoms: { top: '40%', left: '50%', transform: 'translateX(-50%)' },
+      dresses: { top: '25%', left: '50%', transform: 'translateX(-50%)' },
+      outerwear: { top: '15%', left: '50%', transform: 'translateX(-50%)' },
+      footwear: { top: '70%', left: '50%', transform: 'translateX(-50%)' },
+      accessories: { top: '60%', left: '50%', transform: 'translateX(-50%)' }
+    };
+
+    return positions[category] || { top: '50%', left: '50%', transform: 'translate(-50%, -50%)' };
+  }
+
+  getCategoryFromProduct(product) {
+    for (const category in this.products) {
+      if (this.products[category].find(p => p.id === product.id)) {
+        return category;
+      }
+    }
+    return 'unknown';
+  }
+
+  renderOutfitItem(item) {
+    const outfitItemsContainer = document.getElementById('outfit-items');
+    const emptyCanvas = document.getElementById('empty-canvas');
+
+    // Hide empty canvas
+    emptyCanvas.classList.add('hidden');
+    outfitItemsContainer.classList.remove('hidden');
+
+    const itemElement = document.createElement('div');
+    itemElement.className = 'outfit-item bg-white rounded-lg shadow-lg p-3 cursor-move';
+    itemElement.dataset.itemId = item.id;
+    itemElement.style.cssText = `
+      top: ${item.position.top};
+      left: ${item.position.left};
+      transform: ${item.position.transform};
+    `;
+
+    itemElement.innerHTML = `
+      <div class="relative">
+        <div class="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center mb-2" style="color: ${item.color}">
+          <span class="text-2xl">${this.getProductIcon(item.category)}</span>
+        </div>
+        <button class="remove-item absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600">
+          ×
+        </button>
+        <p class="text-xs font-medium text-center">${item.name}</p>
+        <p class="text-xs text-indigo-600 text-center">$${item.price}</p>
+      </div>
+    `;
+
+    // Add remove functionality
+    itemElement.querySelector('.remove-item').addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.removeFromOutfit(item.id);
+    });
+
+    // Add drag functionality
+    this.makeDraggable(itemElement);
+
+    outfitItemsContainer.appendChild(itemElement);
+  }
+
+  removeFromOutfit(itemId) {
+    this.outfitItems = this.outfitItems.filter(item => item.id !== itemId);
+
+    // Remove from DOM
+    const itemElement = this.container.querySelector(`[data-item-id="${itemId}"]`);
+    if (itemElement) {
+      itemElement.remove();
+    }
+
+    // Update product card
+    const productCard = this.container.querySelector(`[data-product-id="${itemId}"]`);
+    if (productCard) {
+      productCard.classList.remove('selected');
+    }
+
+    this.updateOutfitSummary();
+
+    // Show empty canvas if no items
+    if (this.outfitItems.length === 0) {
+      document.getElementById('empty-canvas').classList.remove('hidden');
+      document.getElementById('outfit-items').classList.add('hidden');
+    }
+  }
+
+  makeDraggable(element) {
+    let isDragging = false;
+    let currentX;
+    let currentY;
+    let initialX;
+    let initialY;
+    let xOffset = 0;
+    let yOffset = 0;
+
+    element.addEventListener('mousedown', dragStart);
+    element.addEventListener('mouseup', dragEnd);
+    element.addEventListener('mousemove', drag);
+
+    function dragStart(e) {
+      initialX = e.clientX - xOffset;
+      initialY = e.clientY - yOffset;
+
+      if (e.target === element || element.contains(e.target)) {
+        isDragging = true;
+        element.style.zIndex = '1000';
+      }
+    }
+
+    function dragEnd(e) {
+      initialX = currentX;
+      initialY = currentY;
+      isDragging = false;
+      element.style.zIndex = '';
+    }
+
+    function drag(e) {
+      if (isDragging) {
+        e.preventDefault();
+        currentX = e.clientX - initialX;
+        currentY = e.clientY - initialY;
+
+        xOffset = currentX;
+        yOffset = currentY;
+
+        element.style.transform = `${element.style.transform} translate(${currentX}px, ${currentY}px)`;
+      }
+    }
+  }
+
+  updateOutfitSummary() {
+    const summary = document.getElementById('outfit-summary');
+    const totalItems = document.getElementById('total-items-count');
+    const totalPrice = document.getElementById('total-price');
+    const styleScore = document.getElementById('style-score');
+    const compatibilityScore = document.getElementById('compatibility-score');
+
+    if (this.outfitItems.length > 0) {
+      summary.classList.remove('hidden');
+
+      const itemCount = this.outfitItems.length;
+      const total = this.outfitItems.reduce((sum, item) => sum + item.price, 0);
+      const style = this.calculateStyleScore();
+      const compatibility = this.calculateCompatibilityScore();
+
+      totalItems.textContent = itemCount;
+      totalPrice.textContent = `$${total.toFixed(2)}`;
+      styleScore.textContent = `${style}%`;
+      compatibilityScore.textContent = `${compatibility}%`;
+
+      // Animate score bars
+      this.animateScore('style-score-bar', style);
+      this.animateScore('compatibility-score-bar', compatibility);
+    } else {
+      summary.classList.add('hidden');
+    }
+  }
+
+  calculateStyleScore() {
+    if (this.outfitItems.length === 0) return 0;
+
+    let score = 50; // Base score
+
+    // Bonus for style consistency
+    const styles = this.outfitItems.map(item => item.style);
+    const uniqueStyles = [...new Set(styles)];
+
+    if (uniqueStyles.length === 1) {
+      score += 30; // All items same style
+    } else if (uniqueStyles.length === 2) {
+      score += 20; // Two complementary styles
+    } else if (uniqueStyles.length === 3) {
+      score += 10; // Three styles (fusion)
+    }
+
+    // Bonus for complete outfit
+    const categories = this.outfitItems.map(item => item.category);
+    const hasTop = categories.includes('tops');
+    const hasBottom = categories.includes('bottoms');
+    const hasDress = categories.includes('dresses');
+    const hasFootwear = categories.includes('footwear');
+
+    if (hasDress || (hasTop && hasBottom)) {
+      score += 10;
+    }
+
+    if (hasFootwear) {
+      score += 5;
+    }
+
+    if (categories.includes('accessories')) {
+      score += 5;
+    }
+
+    return Math.min(100, Math.max(0, score));
+  }
+
+  calculateCompatibilityScore() {
+    if (this.outfitItems.length === 0) return 0;
+
+    let score = 60; // Base score
+
+    // Check color compatibility
+    const colors = this.outfitItems.map(item => item.color);
+    const compatibleColors = this.checkColorCompatibility(colors);
+
+    score += compatibleColors * 10;
+
+    // Check style compatibility
+    const styles = this.outfitItems.map(item => item.style);
+    const styleCompatibility = this.checkStyleCompatibility(styles);
+
+    score += styleCompatibility * 15;
+
+    // Check occasion appropriateness
+    const occasionCompatibility = this.checkOccasionCompatibility();
+    score += occasionCompatibility * 15;
+
+    return Math.min(100, Math.max(0, score));
+  }
+
+  checkColorCompatibility(colors) {
+    // Simple color compatibility check
+    if (colors.length <= 1) return 1;
+
+    // Neutral colors work with everything
+    const neutrals = ['#000000', '#FFFFFF', '#696969', '#2F4F4F'];
+    const hasNeutral = colors.some(color => neutrals.includes(color));
+
+    if (hasNeutral) return 0.8;
+
+    // Check for complementary colors (simplified)
+    return 0.6;
+  }
+
+  checkStyleCompatibility(styles) {
+    if (styles.length <= 1) return 1;
+
+    // Some styles work well together
+    const compatiblePairs = [
+      ['traditional', 'fusion'],
+      ['modern', 'fusion'],
+      ['casual', 'modern']
+    ];
+
+    for (let i = 0; i < styles.length - 1; i++) {
+      for (let j = i + 1; j < styles.length; j++) {
+        const pair = [styles[i], styles[j]].sort();
+        const isCompatible = compatiblePairs.some(compatiblePair =>
+          compatiblePair[0] === pair[0] && compatiblePair[1] === pair[1]
+        );
+
+        if (isCompatible) return 0.8;
+      }
+    }
+
+    return 0.4;
+  }
+
+  checkOccasionCompatibility() {
+    // Simplified occasion compatibility
+    // In real implementation, this would consider the selected occasion
+    return 0.7;
+  }
+
+  animateScore(elementId, score) {
+    const element = document.getElementById(elementId);
+    if (element) {
+      setTimeout(() => {
+        element.style.width = `${score}%`;
+      }, 100);
+    }
+  }
+
+  clearCanvas() {
+    this.outfitItems = [];
+
+    // Clear DOM
+    document.getElementById('outfit-items').innerHTML = '';
+    document.getElementById('outfit-items').classList.add('hidden');
+    document.getElementById('empty-canvas').classList.remove('hidden');
+    document.getElementById('outfit-summary').classList.add('hidden');
+
+    // Reset product selections
+    this.container.querySelectorAll('.product-card').forEach(card => {
+      card.classList.remove('selected');
+    });
+  }
+
+  filterProducts(filter) {
+    // Update filter buttons
+    this.container.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.classList.remove('active');
+    });
+    this.container.querySelector(`[data-filter="${filter}"]`).classList.add('active');
+
+    // Filter products
+    const productCards = this.container.querySelectorAll('.product-card');
+    productCards.forEach(card => {
+      const productId = card.dataset.productId;
+      const product = this.findProductById(productId);
+
+      if (filter === 'all' || product.style === filter) {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  getAIRecommendations() {
+    const recommendationsPanel = document.getElementById('ai-recommendations');
+    recommendationsPanel.classList.remove('hidden');
+
+    // Generate AI recommendations based on current outfit
+    const recommendations = this.generateRecommendations();
+
+    const recommendationGrid = recommendationsPanel.querySelector('.recommendation-outfits');
+    recommendationGrid.innerHTML = recommendations.map((rec, index) => `
+      <div class="recommendation-outfit bg-white rounded-lg p-4 cursor-pointer" data-recommendation="${index}">
+        <h6 class="font-semibold mb-2">${rec.name}</h6>
+        <p class="text-sm text-gray-600 mb-3">${rec.description}</p>
+        <div class="outfit-preview flex gap-2 mb-3">
+          ${rec.items.map(item => `
+            <div class="w-8 h-8 rounded bg-gray-100 flex items-center justify-center" style="color: ${item.color}">
+              <span class="text-sm">${this.getProductIcon(item.category)}</span>
+            </div>
+          `).join('')}
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="text-sm font-semibold">$${rec.totalPrice}</span>
+          <button class="text-sm bg-indigo-600 text-white px-3 py-1 rounded hover:bg-indigo-700">
+            Apply
+          </button>
+        </div>
+      </div>
+    `).join('');
+
+    // Add click listeners
+    recommendationGrid.querySelectorAll('.recommendation-outfit').forEach(outfit => {
+      outfit.addEventListener('click', () => this.applyRecommendation(outfit.dataset.recommendation));
+    });
+
+    // Scroll to recommendations
+    recommendationsPanel.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  generateRecommendations() {
+    // Generate contextual recommendations
+    const currentStyle = this.getCurrentOutfitStyle();
+    const recommendations = [];
+
+    if (currentStyle === 'traditional') {
+      recommendations.push({
+        name: 'Traditional Complete Look',
+        description: 'Authentic traditional ensemble',
+        items: [
+          { id: 1, name: 'Silk Blouse', category: 'tops', color: '#8B0000' },
+          { id: 5, name: 'Silk Skirt', category: 'bottoms', color: '#8B0000' },
+          { id: 17, name: 'Traditional Juttis', category: 'footwear', color: '#8B4513' },
+          { id: 21, name: 'Traditional Jewelry', category: 'accessories', color: '#FFD700' }
+        ],
+        totalPrice: 359.96
+      });
+    }
+
+    if (currentStyle === 'modern' || currentStyle === 'fusion') {
+      recommendations.push({
+        name: 'Modern Fusion Look',
+        description: 'Contemporary style with cultural elements',
+        items: [
+          { id: 3, name: 'Fusion Kurti', category: 'tops', color: '#4682B4' },
+          { id: 7, name: 'Palazzo Pants', category: 'bottoms', color: '#DDA0DD' },
+          { id: 19, name: 'Fusion Sandals', category: 'footwear', color: '#DEB887' },
+          { id: 23, name: 'Fusion Scarf', category: 'accessories', color: '#FF6347' }
+        ],
+        totalPrice: 204.96
+      });
+    }
+
+    // Add casual recommendation
+    recommendations.push({
+      name: 'Casual Everyday Look',
+      description: 'Comfortable and stylish for daily wear',
+      items: [
+        { id: 4, name: 'Casual T-Shirt', category: 'tops', color: '#32CD32' },
+        { id: 8, name: 'Casual Trousers', category: 'bottoms', color: '#696969' },
+        { id: 20, name: 'Casual Sneakers', category: 'footwear', color: '#FFFFFF' },
+        { id: 24, name: 'Casual Cap', category: 'accessories', color: '#4169E1' }
+      ],
+      totalPrice: 159.96
+    });
+
+    return recommendations;
+  }
+
+  getCurrentOutfitStyle() {
+    if (this.outfitItems.length === 0) return 'casual';
+
+    const styles = this.outfitItems.map(item => item.style);
+    const styleCounts = {};
+
+    styles.forEach(style => {
+      styleCounts[style] = (styleCounts[style] || 0) + 1;
+    });
+
+    return Object.keys(styleCounts).reduce((a, b) =>
+      styleCounts[a] > styleCounts[b] ? a : b
+    );
+  }
+
+  applyRecommendation(recommendationIndex) {
+    const recommendations = this.generateRecommendations();
+    const recommendation = recommendations[recommendationIndex];
+
+    if (!recommendation) return;
+
+    // Clear current outfit
+    this.clearCanvas();
+
+    // Add recommended items
+    recommendation.items.forEach(item => {
+      const product = this.findProductById(item.id);
+      if (product) {
+        this.addToOutfit(product);
+      }
+    });
+
+    this.showNotification('Recommendation applied!', 'success');
+    this.closeAIRecommendations();
+  }
+
+  closeAIRecommendations() {
+    const recommendationsPanel = document.getElementById('ai-recommendations');
+    recommendationsPanel.classList.add('hidden');
+  }
+
+  showSaveModal() {
+    if (this.outfitItems.length === 0) {
+      this.showNotification('Add items to your outfit first!', 'warning');
+      return;
+    }
+
+    const modal = document.getElementById('save-outfit-modal');
+    const bsModal = new bootstrap.Modal(modal);
+    bsModal.show();
+  }
+
+  saveOutfit() {
+    const name = document.getElementById('outfit-name').value;
+    const occasion = document.getElementById('outfit-occasion').value;
+    const tags = document.getElementById('outfit-tags').value;
+    const notes = document.getElementById('outfit-notes').value;
+
+    if (!name.trim()) {
+      this.showNotification('Please enter an outfit name!', 'warning');
+      return;
+    }
+
+    const outfit = {
+      id: Date.now(),
+      name: name.trim(),
+      occasion,
+      tags: tags.split(',').map(tag => tag.trim()).filter(tag => tag),
+      notes: notes.trim(),
+      items: [...this.outfitItems],
+      totalPrice: this.outfitItems.reduce((sum, item) => sum + item.price, 0),
+      styleScore: this.calculateStyleScore(),
+      compatibilityScore: this.calculateCompatibilityScore(),
+      createdAt: new Date().toISOString()
+    };
+
+    this.savedOutfits.push(outfit);
+    this.saveOutfitsToStorage();
+    this.displaySavedOutfits();
+
+    // Close modal
+    const modal = document.getElementById('save-outfit-modal');
+    const bsModal = bootstrap.Modal.getInstance(modal);
+    bsModal.hide();
+
+    // Reset form
+    document.getElementById('outfit-save-form').reset();
+
+    this.showNotification('Outfit saved successfully!', 'success');
+  }
+
+  loadSavedOutfits() {
+    const saved = localStorage.getItem('outfit-builder-saved-outfits');
+    return saved ? JSON.parse(saved) : [];
+  }
+
+  saveOutfitsToStorage() {
+    localStorage.setItem('outfit-builder-saved-outfits', JSON.stringify(this.savedOutfits));
+  }
+
+  displaySavedOutfits() {
+    const grid = document.getElementById('saved-outfits-grid');
+
+    if (this.savedOutfits.length === 0) {
+      grid.innerHTML = `
+        <div class="col-span-full text-center py-8">
+          <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm12 2H4v8h12V6z" clip-rule="evenodd"/>
+          </svg>
+          <p class="text-gray-500" data-i18n="outfit_builder.no_saved_outfits">No saved outfits yet</p>
+        </div>
+      `;
+      return;
+    }
+
+    grid.innerHTML = this.savedOutfits.map(outfit => `
+      <div class="saved-outfit-card bg-white rounded-lg shadow-md p-4">
+        <div class="flex items-center justify-between mb-3">
+          <h6 class="font-semibold">${outfit.name}</h6>
+          <button class="text-red-500 hover:text-red-700" onclick="window.theme.outfitBuilder.deleteOutfit(${outfit.id})">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
+            </svg>
+          </button>
+        </div>
+        <div class="outfit-preview flex gap-2 mb-3">
+          ${outfit.items.slice(0, 4).map(item => `
+            <div class="w-8 h-8 rounded bg-gray-100 flex items-center justify-center" style="color: ${item.color}">
+              <span class="text-sm">${this.getProductIcon(item.category)}</span>
+            </div>
+          `).join('')}
+          ${outfit.items.length > 4 ? `<span class="text-xs text-gray-500">+${outfit.items.length - 4}</span>` : ''}
+        </div>
+        <div class="flex items-center justify-between text-sm">
+          <span class="font-semibold">$${outfit.totalPrice.toFixed(2)}</span>
+          <div class="flex gap-1">
+            <span class="px-2 py-1 bg-gray-100 rounded">${outfit.occasion}</span>
+            <span class="px-2 py-1 bg-green-100 text-green-700 rounded">${outfit.styleScore}%</span>
+          </div>
+        </div>
+        <div class="mt-3 flex gap-2">
+          <button class="flex-1 bg-indigo-600 text-white px-3 py-1 rounded text-sm hover:bg-indigo-700"
+                  onclick="window.theme.outfitBuilder.loadOutfit(${outfit.id})">
+            Load
+          </button>
+          <button class="flex-1 bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700"
+                  onclick="window.theme.outfitBuilder.shareOutfit(${outfit.id})">
+            Share
+          </button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  deleteOutfit(outfitId) {
+    if (confirm('Are you sure you want to delete this outfit?')) {
+      this.savedOutfits = this.savedOutfits.filter(outfit => outfit.id !== outfitId);
+      this.saveOutfitsToStorage();
+      this.displaySavedOutfits();
+      this.showNotification('Outfit deleted successfully!', 'success');
+    }
+  }
+
+  loadOutfit(outfitId) {
+    const outfit = this.savedOutfits.find(o => o.id === outfitId);
+    if (!outfit) return;
+
+    // Clear current outfit
+    this.clearCanvas();
+
+    // Load outfit items
+    outfit.items.forEach(item => {
+      this.addToOutfit(item);
+    });
+
+    this.showNotification('Outfit loaded successfully!', 'success');
+
+    // Scroll to canvas
+    document.querySelector('.outfit-canvas').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  shareOutfit(outfitId) {
+    const outfit = this.savedOutfits.find(o => o.id === outfitId);
+    if (!outfit) return;
+
+    const shareText = `Check out my "${outfit.name}" outfit from Ravan Fashion! Total: $${outfit.totalPrice.toFixed(2)}, Style Score: ${outfit.styleScore}%`;
+    const shareUrl = window.location.href;
+
+    if (navigator.share) {
+      navigator.share({
+        title: outfit.name,
+        text: shareText,
+        url: shareUrl
+      });
+    } else {
+      // Fallback - copy to clipboard
+      navigator.clipboard.writeText(`${shareText}\n\n${shareUrl}`).then(() => {
+        this.showNotification('Outfit details copied to clipboard!', 'success');
+      });
+    }
+  }
+
+  showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 ${
+      type === 'success' ? 'bg-green-500 text-white' :
+      type === 'warning' ? 'bg-yellow-500 text-white' :
+      type === 'error' ? 'bg-red-500 text-white' :
+      'bg-blue-500 text-white'
+    }`;
+    notification.textContent = message;
+
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+      notification.remove();
+    }, 3000);
+  }
+}
+
+// Initialize Outfit Builder
+document.addEventListener('DOMContentLoaded', function() {
+  const builderContainer = document.querySelector('[data-builder-id="outfit-creator"]');
+  if (builderContainer) {
+    window.theme.outfitBuilder = new OutfitBuilder(builderContainer);
+  }
+});
+</script>

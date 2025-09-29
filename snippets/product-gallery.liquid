@@ -1,0 +1,1429 @@
+<style>
+  .product-gallery {
+    position: relative;
+    margin: 2rem 0;
+    background: white;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  }
+
+  .gallery-container {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    max-height: 80vh;
+  }
+
+  .gallery-main {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f9fafb;
+    overflow: hidden;
+  }
+
+  .gallery-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    cursor: zoom-in;
+    transition: transform 0.3s ease;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+  }
+
+  .gallery-image.zoomed {
+    cursor: grab;
+  }
+
+  .gallery-image.zoomed:active {
+    cursor: grabbing;
+  }
+
+  .gallery-video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #000;
+  }
+
+  .gallery-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #6b7280;
+  }
+
+  .loading-spinner {
+    width: 3rem;
+    height: 3rem;
+    border: 4px solid rgba(220, 38, 38, 0.3);
+    border-top: 4px solid #dc2626;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1rem;
+  }
+
+  .gallery-controls {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1rem;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  .gallery-btn {
+    width: 3rem;
+    height: 3rem;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    pointer-events: all;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  .gallery-btn:hover {
+    background: white;
+    transform: scale(1.1);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  }
+
+  .gallery-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .gallery-nav {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 2rem;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  .gallery-counter {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #374151;
+    min-width: 80px;
+    text-align: center;
+  }
+
+  .gallery-thumbnails {
+    display: flex;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: #f9fafb;
+    border-top: 1px solid #e5e7eb;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #dc2626 #f3f4f6;
+  }
+
+  .gallery-thumbnails::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .gallery-thumbnails::-webkit-scrollbar-track {
+    background: #f3f4f6;
+    border-radius: 3px;
+  }
+
+  .gallery-thumbnails::-webkit-scrollbar-thumb {
+    background: #dc2626;
+    border-radius: 3px;
+  }
+
+  .thumbnail {
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+    position: relative;
+  }
+
+  .thumbnail:hover {
+    transform: scale(1.05);
+    border-color: #dc2626;
+  }
+
+  .thumbnail.active {
+    border-color: #dc2626;
+    box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.2);
+  }
+
+  .thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .thumbnail.video-indicator::after {
+    content: '▶';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+  }
+
+  .gallery-toolbar {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    display: flex;
+    gap: 0.5rem;
+    z-index: 20;
+  }
+
+  .toolbar-btn {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  .toolbar-btn:hover {
+    background: white;
+    transform: scale(1.1);
+  }
+
+  .zoom-controls {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .zoom-controls.visible {
+    opacity: 1;
+  }
+
+  .zoom-btn {
+    width: 2rem;
+    height: 2rem;
+    border: none;
+    background: transparent;
+    color: #374151;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  .zoom-btn:hover {
+    background: #f3f4f6;
+    color: #dc2626;
+  }
+
+  .fullscreen-gallery {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 9999;
+    display: none;
+  }
+
+  .fullscreen-gallery.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .fullscreen-content {
+    position: relative;
+    width: 90%;
+    height: 90%;
+    max-width: 1200px;
+    max-height: 800px;
+  }
+
+  .gallery-error {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #6b7280;
+  }
+
+  .error-icon {
+    width: 4rem;
+    height: 4rem;
+    margin: 0 auto 1rem;
+    color: #ef4444;
+  }
+
+  .gallery-settings {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    display: none;
+    z-index: 30;
+    min-width: 250px;
+  }
+
+  .gallery-settings.active {
+    display: block;
+  }
+
+  .settings-title {
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: #374151;
+  }
+
+  .setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .setting-label {
+    font-size: 0.875rem;
+    color: #6b7280;
+  }
+
+  .setting-toggle {
+    position: relative;
+    width: 3rem;
+    height: 1.5rem;
+    background: #e5e7eb;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+
+  .setting-toggle.active {
+    background: #dc2626;
+  }
+
+  .setting-toggle-slider {
+    position: absolute;
+    top: 0.125rem;
+    left: 0.125rem;
+    width: 1.25rem;
+    height: 1.25rem;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .setting-toggle.active .setting-toggle-slider {
+    transform: translateX(1.5rem);
+  }
+
+  .gallery-hints {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+  }
+
+  .gallery-hints.visible {
+    opacity: 1;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideIn {
+    from { transform: translateX(-20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+
+  .gallery-transition-fade .gallery-image {
+    animation: fadeIn 0.3s ease;
+  }
+
+  .gallery-transition-slide .gallery-image {
+    animation: slideIn 0.3s ease;
+  }
+
+  /* Mobile responsiveness */
+  @media (max-width: 768px) {
+    .gallery-container {
+      height: 400px;
+    }
+
+    .gallery-controls {
+      padding: 0 0.5rem;
+    }
+
+    .gallery-btn {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+
+    .gallery-toolbar {
+      top: 0.5rem;
+      right: 0.5rem;
+    }
+
+    .toolbar-btn {
+      width: 2rem;
+      height: 2rem;
+    }
+
+    .gallery-thumbnails {
+      padding: 0.75rem;
+    }
+
+    .thumbnail {
+      width: 60px;
+      height: 60px;
+    }
+
+    .zoom-controls {
+      bottom: 0.5rem;
+      right: 0.5rem;
+    }
+
+    .zoom-btn {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .gallery-container {
+      height: 300px;
+    }
+
+    .gallery-nav {
+      bottom: 0.5rem;
+      padding: 0.25rem 0.75rem;
+    }
+
+    .gallery-counter {
+      font-size: 0.75rem;
+      min-width: 60px;
+    }
+
+    .thumbnail {
+      width: 50px;
+      height: 50px;
+    }
+  }
+
+  /* Accessibility */
+  .gallery-btn:focus,
+  .toolbar-btn:focus,
+  .zoom-btn:focus,
+  .thumbnail:focus,
+  .setting-toggle:focus {
+    outline: 2px solid #dc2626;
+    outline-offset: 2px;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>
+
+<div class="product-gallery" id="product-gallery" role="region" aria-label="{{ 'product_gallery.title' | t }}">
+  <!-- Gallery Container -->
+  <div class="gallery-container" id="gallery-container">
+    <!-- Main Display Area -->
+    <div class="gallery-main" id="gallery-main">
+      <!-- Loading State -->
+      <div class="gallery-loading" id="gallery-loading">
+        <div class="loading-spinner"></div>
+        {{ 'product_gallery.loading' | t }}
+      </div>
+
+      <!-- Error State -->
+      <div class="gallery-error" id="gallery-error" style="display: none;">
+        <svg class="error-icon" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+        </svg>
+        <p>{{ 'product_gallery.error_loading' | t }}</p>
+        <button class="gallery-btn" onclick="window.theme.productGallery.loadImages()" style="margin-top: 1rem;">
+          {{ 'product_gallery.retry' | t }}
+        </button>
+      </div>
+
+      <!-- Media Content -->
+      <div id="gallery-content" style="display: none;">
+        <!-- Images/Videos will be loaded here -->
+      </div>
+
+      <!-- Navigation Controls -->
+      <div class="gallery-controls" id="gallery-controls" style="display: none;">
+        <button class="gallery-btn" id="prev-btn" onclick="window.theme.productGallery.previous()" aria-label="{{ 'product_gallery.previous_image' | t }}">
+          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/>
+          </svg>
+        </button>
+        <button class="gallery-btn" id="next-btn" onclick="window.theme.productGallery.next()" aria-label="{{ 'product_gallery.next_image' | t }}">
+          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Navigation Counter -->
+      <div class="gallery-nav" id="gallery-nav" style="display: none;">
+        <button class="gallery-btn" onclick="window.theme.productGallery.previous()" style="width: 2rem; height: 2rem;">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/>
+          </svg>
+        </button>
+        <span class="gallery-counter" id="gallery-counter">1 / 1</span>
+        <button class="gallery-btn" onclick="window.theme.productGallery.next()" style="width: 2rem; height: 2rem;">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="gallery-toolbar" id="gallery-toolbar" style="display: none;">
+        <button class="toolbar-btn" onclick="window.theme.productGallery.toggleSettings()" aria-label="{{ 'product_gallery.gallery_settings' | t }}">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
+          </svg>
+        </button>
+        <button class="toolbar-btn" onclick="window.theme.productGallery.toggleFullscreen()" aria-label="{{ 'product_gallery.fullscreen' | t }}">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h4a1 1 0 010 2H6.414l2.293 2.293a1 1 0 11-1.414 1.414L5 6.414V8a1 1 0 01-2 0V4zm9 1a1 1 0 110-2h4a1 1 0 011 1v4a1 1 0 11-2 0V6.414l-2.293 2.293a1 1 0 11-1.414-1.414L13.586 5H12zm-9 9a1 1 0 012 0v1.586l2.293-2.293a1 1 0 111.414 1.414L6.414 15H8a1 1 0 110 2H4a1 1 0 01-1-1v-4zm13-1a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 110-2h1.586l-2.293-2.293a1 1 0 111.414-1.414L15 13.586V12a1 1 0 011-1z" clip-rule="evenodd"/>
+          </svg>
+        </button>
+        <button class="toolbar-btn" onclick="window.theme.productGallery.downloadImage()" aria-label="{{ 'product_gallery.download_image' | t }}">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Zoom Controls -->
+      <div class="zoom-controls" id="zoom-controls">
+        <button class="zoom-btn" onclick="window.theme.productGallery.zoomIn()" aria-label="{{ 'product_gallery.zoom_in' | t }}">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"/>
+          </svg>
+        </button>
+        <button class="zoom-btn" onclick="window.theme.productGallery.zoomOut()" aria-label="{{ 'product_gallery.zoom_out' | t }}">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clip-rule="evenodd"/>
+          </svg>
+        </button>
+        <button class="zoom-btn" onclick="window.theme.productGallery.resetZoom()" aria-label="{{ 'product_gallery.reset_zoom' | t }}">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Settings Panel -->
+      <div class="gallery-settings" id="gallery-settings">
+        <h4 class="settings-title">{{ 'product_gallery.gallery_settings' | t }}</h4>
+        <div class="setting-item">
+          <span class="setting-label">{{ 'product_gallery.autoplay_videos' | t }}</span>
+          <div class="setting-toggle" id="autoplay-toggle" onclick="window.theme.productGallery.toggleSetting('autoplay')">
+            <div class="setting-toggle-slider"></div>
+          </div>
+        </div>
+        <div class="setting-item">
+          <span class="setting-label">{{ 'product_gallery.loop_videos' | t }}</span>
+          <div class="setting-toggle" id="loop-toggle" onclick="window.theme.productGallery.toggleSetting('loop')">
+            <div class="setting-toggle-slider"></div>
+          </div>
+        </div>
+        <div class="setting-item">
+          <span class="setting-label">{{ 'product_gallery.show_thumbnails' | t }}</span>
+          <div class="setting-toggle active" id="thumbnails-toggle" onclick="window.theme.productGallery.toggleSetting('thumbnails')">
+            <div class="setting-toggle-slider"></div>
+          </div>
+        </div>
+        <div class="setting-item">
+          <span class="setting-label">{{ 'product_gallery.enable_zoom' | t }}</span>
+          <div class="setting-toggle active" id="zoom-toggle" onclick="window.theme.productGallery.toggleSetting('zoom')">
+            <div class="setting-toggle-slider"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hints -->
+      <div class="gallery-hints" id="gallery-hints">
+        {{ 'product_gallery.zoom_hint' | t }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Thumbnails -->
+  <div class="gallery-thumbnails" id="gallery-thumbnails" style="display: none;">
+    <!-- Thumbnails will be loaded here -->
+  </div>
+
+  <!-- Fullscreen Gallery -->
+  <div class="fullscreen-gallery" id="fullscreen-gallery">
+    <div class="fullscreen-content" id="fullscreen-content">
+      <!-- Fullscreen content will be cloned here -->
+    </div>
+    <button class="toolbar-btn" onclick="window.theme.productGallery.exitFullscreen()" style="position: absolute; top: 1rem; right: 1rem; z-index: 10000;">
+      <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Screen reader announcements -->
+  <div aria-live="polite" class="sr-only" id="gallery-announcements"></div>
+</div>
+
+<script>
+  // Product Gallery System
+  window.theme = window.theme || {};
+  window.theme.productGallery = window.theme.productGallery || {};
+
+  // Configuration
+  window.theme.productGallery.config = {
+    zoomStep: 0.25,
+    maxZoom: 3,
+    minZoom: 1,
+    transitionDuration: 300,
+    keyboardNavigation: true,
+    touchGestures: true,
+    preloadImages: true,
+    imageQuality: 'auto',
+    transitionEffect: 'fade',
+    autoplayVideos: false,
+    loopVideos: true,
+    showThumbnails: true,
+    enableZoom: true
+  };
+
+  // State
+  window.theme.productGallery.currentIndex = 0;
+  window.theme.productGallery.mediaItems = [];
+  window.theme.productGallery.isZoomed = false;
+  window.theme.productGallery.zoomLevel = 1;
+  window.theme.productGallery.isDragging = false;
+  window.theme.productGallery.dragStart = { x: 0, y: 0 };
+  window.theme.productGallery.imageOffset = { x: 0, y: 0 };
+  window.theme.productGallery.isFullscreen = false;
+  window.theme.productGallery.settings = {
+    autoplay: false,
+    loop: true,
+    thumbnails: true,
+    zoom: true
+  };
+
+  // Mock product media data (in real implementation, this would come from Shopify product data)
+  window.theme.productGallery.mockMedia = [
+    {
+      type: 'image',
+      src: 'https://picsum.photos/seed/saree-main/800/600.jpg',
+      thumbnail: 'https://picsum.photos/seed/saree-main/150/150.jpg',
+      alt: 'Traditional Kanjivaram Saree - Front View',
+      title: 'Main Product Image',
+      variant: null
+    },
+    {
+      type: 'image',
+      src: 'https://picsum.photos/seed/saree-back/800/600.jpg',
+      thumbnail: 'https://picsum.photos/seed/saree-back/150/150.jpg',
+      alt: 'Traditional Kanjivaram Saree - Back View',
+      title: 'Back View',
+      variant: null
+    },
+    {
+      type: 'image',
+      src: 'https://picsum.photos/seed/saree-detail/800/600.jpg',
+      thumbnail: 'https://picsum.photos/seed/saree-detail/150/150.jpg',
+      alt: 'Traditional Kanjivaram Saree - Detail View',
+      title: 'Detail View',
+      variant: null
+    },
+    {
+      type: 'video',
+      src: 'https://www.w3schools.com/html/mov_bbb.mp4',
+      thumbnail: 'https://picsum.photos/seed/saree-video/150/150.jpg',
+      alt: 'Product Video',
+      title: 'Product Demonstration',
+      variant: null
+    },
+    {
+      type: 'image',
+      src: 'https://picsum.photos/seed/saree-model/800/600.jpg',
+      thumbnail: 'https://picsum.photos/seed/saree-model/150/150.jpg',
+      alt: 'Traditional Kanjivaram Saree - Model View',
+      title: 'Model View',
+      variant: null
+    },
+    {
+      type: 'image',
+      src: 'https://picsum.photos/seed/saree-lifestyle/800/600.jpg',
+      thumbnail: 'https://picsum.photos/seed/saree-lifestyle/150/150.jpg',
+      alt: 'Traditional Kanjivaram Saree - Lifestyle View',
+      title: 'Lifestyle View',
+      variant: null
+    }
+  ];
+
+  // Initialize gallery
+  window.theme.productGallery.init = function(productMedia = null) {
+    window.theme.productGallery.mediaItems = productMedia || window.theme.productGallery.mockMedia;
+    window.theme.productGallery.loadImages();
+    window.theme.productGallery.setupEventListeners();
+    window.theme.productGallery.setupKeyboardNavigation();
+    window.theme.productGallery.setupTouchGestures();
+    window.theme.productGallery.preloadAdjacentImages();
+  };
+
+  // Load images
+  window.theme.productGallery.loadImages = function() {
+    const loading = document.getElementById('gallery-loading');
+    const error = document.getElementById('gallery-error');
+    const content = document.getElementById('gallery-content');
+    const controls = document.getElementById('gallery-controls');
+    const nav = document.getElementById('gallery-nav');
+    const toolbar = document.getElementById('gallery-toolbar');
+    const thumbnails = document.getElementById('gallery-thumbnails');
+
+    if (window.theme.productGallery.mediaItems.length === 0) {
+      window.theme.productGallery.showError();
+      return;
+    }
+
+    // Show loading
+    loading.style.display = 'block';
+    error.style.display = 'none';
+    content.style.display = 'none';
+    controls.style.display = 'none';
+    nav.style.display = 'none';
+    toolbar.style.display = 'none';
+    thumbnails.style.display = 'none';
+
+    // Load first image
+    window.theme.productGallery.loadMediaItem(0, function() {
+      loading.style.display = 'none';
+      content.style.display = 'flex';
+      controls.style.display = 'flex';
+      nav.style.display = 'flex';
+      toolbar.style.display = 'flex';
+
+      if (window.theme.productGallery.settings.thumbnails) {
+        thumbnails.style.display = 'flex';
+        window.theme.productGallery.renderThumbnails();
+      }
+
+      window.theme.productGallery.updateNavigation();
+      window.theme.productGallery.announceToScreenReader('{{ 'product_gallery.gallery_loaded' | t }}');
+    });
+  };
+
+  // Load media item
+  window.theme.productGallery.loadMediaItem = function(index, callback) {
+    const item = window.theme.productGallery.mediaItems[index];
+    const content = document.getElementById('gallery-content');
+
+    if (!item) {
+      window.theme.productGallery.showError();
+      return;
+    }
+
+    // Clear previous content
+    content.innerHTML = '';
+    content.className = 'gallery-main gallery-transition-' + window.theme.productGallery.config.transitionEffect;
+
+    if (item.type === 'image') {
+      const img = document.createElement('img');
+      img.src = item.src;
+      img.alt = item.alt;
+      img.className = 'gallery-image';
+      img.draggable = false;
+
+      img.onload = function() {
+        window.theme.productGallery.resetZoom();
+        if (callback) callback();
+      };
+
+      img.onerror = function() {
+        window.theme.productGallery.showError();
+      };
+
+      content.appendChild(img);
+      window.theme.productGallery.setupImageZoom(img);
+
+    } else if (item.type === 'video') {
+      const video = document.createElement('video');
+      video.src = item.src;
+      video.className = 'gallery-video';
+      video.controls = true;
+      video.playsInline = true;
+
+      if (window.theme.productGallery.settings.autoplay) {
+        video.autoplay = true;
+        video.muted = true;
+      }
+
+      if (window.theme.productGallery.settings.loop) {
+        video.loop = true;
+      }
+
+      video.onloadeddata = function() {
+        if (callback) callback();
+      };
+
+      video.onerror = function() {
+        window.theme.productGallery.showError();
+      };
+
+      content.appendChild(video);
+    }
+
+    window.theme.productGallery.currentIndex = index;
+  };
+
+  // Setup image zoom
+  window.theme.productGallery.setupImageZoom = function(img) {
+    if (!window.theme.productGallery.settings.enableZoom) return;
+
+    let scale = 1;
+    let offsetX = 0;
+    let offsetY = 0;
+    let isDragging = false;
+    let startX, startY;
+
+    img.addEventListener('click', function(e) {
+      if (scale === 1) {
+        // Zoom in
+        const rect = img.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        scale = 2;
+        offsetX = -(x * scale - rect.width / 2);
+        offsetY = -(y * scale - rect.height / 2);
+
+        img.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
+        img.classList.add('zoomed');
+
+        document.getElementById('zoom-controls').classList.add('visible');
+        document.getElementById('gallery-hints').classList.add('visible');
+
+        window.theme.productGallery.isZoomed = true;
+        window.theme.productGallery.zoomLevel = scale;
+        window.theme.productGallery.imageOffset = { x: offsetX, y: offsetY };
+      } else {
+        // Zoom out
+        window.theme.productGallery.resetZoom();
+      }
+    });
+
+    // Mouse drag for panning
+    img.addEventListener('mousedown', function(e) {
+      if (scale > 1) {
+        isDragging = true;
+        startX = e.clientX - offsetX;
+        startY = e.clientY - offsetY;
+        img.style.cursor = 'grabbing';
+        e.preventDefault();
+      }
+    });
+
+    document.addEventListener('mousemove', function(e) {
+      if (isDragging && scale > 1) {
+        offsetX = e.clientX - startX;
+        offsetY = e.clientY - startY;
+        img.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
+        window.theme.productGallery.imageOffset = { x: offsetX, y: offsetY };
+      }
+    });
+
+    document.addEventListener('mouseup', function() {
+      if (isDragging) {
+        isDragging = false;
+        img.style.cursor = 'grab';
+      }
+    });
+
+    // Mouse wheel zoom
+    img.addEventListener('wheel', function(e) {
+      e.preventDefault();
+
+      const delta = e.deltaY > 0 ? -window.theme.productGallery.config.zoomStep : window.theme.productGallery.config.zoomStep;
+      const newScale = Math.max(window.theme.productGallery.config.minZoom,
+                                  Math.min(window.theme.productGallery.config.maxZoom, scale + delta));
+
+      if (newScale !== scale) {
+        const rect = img.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        const scaleRatio = newScale / scale;
+        offsetX = x - (x - offsetX) * scaleRatio;
+        offsetY = y - (y - offsetY) * scaleRatio;
+
+        scale = newScale;
+        img.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
+
+        if (scale > 1) {
+          img.classList.add('zoomed');
+          document.getElementById('zoom-controls').classList.add('visible');
+          document.getElementById('gallery-hints').classList.add('visible');
+          window.theme.productGallery.isZoomed = true;
+        } else {
+          img.classList.remove('zoomed');
+          document.getElementById('zoom-controls').classList.remove('visible');
+          document.getElementById('gallery-hints').classList.remove('visible');
+          window.theme.productGallery.isZoomed = false;
+        }
+
+        window.theme.productGallery.zoomLevel = scale;
+        window.theme.productGallery.imageOffset = { x: offsetX, y: offsetY };
+      }
+    });
+  };
+
+  // Reset zoom
+  window.theme.productGallery.resetZoom = function() {
+    const img = document.querySelector('.gallery-image');
+    if (img) {
+      img.style.transform = 'scale(1) translate(0px, 0px)';
+      img.classList.remove('zoomed');
+    }
+
+    document.getElementById('zoom-controls').classList.remove('visible');
+    document.getElementById('gallery-hints').classList.remove('visible');
+
+    window.theme.productGallery.isZoomed = false;
+    window.theme.productGallery.zoomLevel = 1;
+    window.theme.productGallery.imageOffset = { x: 0, y: 0 };
+  };
+
+  // Zoom controls
+  window.theme.productGallery.zoomIn = function() {
+    const img = document.querySelector('.gallery-image');
+    if (!img || !window.theme.productGallery.settings.enableZoom) return;
+
+    const newScale = Math.min(window.theme.productGallery.config.maxZoom,
+                               window.theme.productGallery.zoomLevel + window.theme.productGallery.config.zoomStep);
+
+    if (newScale > window.theme.productGallery.zoomLevel) {
+      const centerX = img.offsetWidth / 2;
+      const centerY = img.offsetHeight / 2;
+
+      const scaleRatio = newScale / window.theme.productGallery.zoomLevel;
+      const offsetX = centerX - (centerX - window.theme.productGallery.imageOffset.x) * scaleRatio;
+      const offsetY = centerY - (centerY - window.theme.productGallery.imageOffset.y) * scaleRatio;
+
+      img.style.transform = `scale(${newScale}) translate(${offsetX}px, ${offsetY}px)`;
+      img.classList.add('zoomed');
+
+      document.getElementById('zoom-controls').classList.add('visible');
+      document.getElementById('gallery-hints').classList.add('visible');
+
+      window.theme.productGallery.isZoomed = true;
+      window.theme.productGallery.zoomLevel = newScale;
+      window.theme.productGallery.imageOffset = { x: offsetX, y: offsetY };
+    }
+  };
+
+  window.theme.productGallery.zoomOut = function() {
+    const img = document.querySelector('.gallery-image');
+    if (!img || !window.theme.productGallery.settings.enableZoom) return;
+
+    const newScale = Math.max(window.theme.productGallery.config.minZoom,
+                               window.theme.productGallery.zoomLevel - window.theme.productGallery.config.zoomStep);
+
+    if (newScale < window.theme.productGallery.zoomLevel) {
+      const centerX = img.offsetWidth / 2;
+      const centerY = img.offsetHeight / 2;
+
+      const scaleRatio = newScale / window.theme.productGallery.zoomLevel;
+      const offsetX = centerX - (centerX - window.theme.productGallery.imageOffset.x) * scaleRatio;
+      const offsetY = centerY - (centerY - window.theme.productGallery.imageOffset.y) * scaleRatio;
+
+      img.style.transform = `scale(${newScale}) translate(${offsetX}px, ${offsetY}px)`;
+
+      if (newScale <= 1) {
+        img.classList.remove('zoomed');
+        document.getElementById('zoom-controls').classList.remove('visible');
+        document.getElementById('gallery-hints').classList.remove('visible');
+        window.theme.productGallery.isZoomed = false;
+      }
+
+      window.theme.productGallery.zoomLevel = newScale;
+      window.theme.productGallery.imageOffset = { x: offsetX, y: offsetY };
+    }
+  };
+
+  // Navigation
+  window.theme.productGallery.next = function() {
+    if (window.theme.productGallery.currentIndex < window.theme.productGallery.mediaItems.length - 1) {
+      window.theme.productGallery.goToIndex(window.theme.productGallery.currentIndex + 1);
+    }
+  };
+
+  window.theme.productGallery.previous = function() {
+    if (window.theme.productGallery.currentIndex > 0) {
+      window.theme.productGallery.goToIndex(window.theme.productGallery.currentIndex - 1);
+    }
+  };
+
+  window.theme.productGallery.goToIndex = function(index) {
+    if (index >= 0 && index < window.theme.productGallery.mediaItems.length) {
+      window.theme.productGallery.loadMediaItem(index, function() {
+        window.theme.productGallery.updateNavigation();
+        window.theme.productGallery.updateThumbnails();
+        window.theme.productGallery.preloadAdjacentImages();
+      });
+    }
+  };
+
+  // Update navigation
+  window.theme.productGallery.updateNavigation = function() {
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const counter = document.getElementById('gallery-counter');
+
+    if (prevBtn) {
+      prevBtn.disabled = window.theme.productGallery.currentIndex === 0;
+    }
+
+    if (nextBtn) {
+      nextBtn.disabled = window.theme.productGallery.currentIndex === window.theme.productGallery.mediaItems.length - 1;
+    }
+
+    if (counter) {
+      counter.textContent = `${window.theme.productGallery.currentIndex + 1} / ${window.theme.productGallery.mediaItems.length}`;
+    }
+  };
+
+  // Render thumbnails
+  window.theme.productGallery.renderThumbnails = function() {
+    const container = document.getElementById('gallery-thumbnails');
+    container.innerHTML = '';
+
+    window.theme.productGallery.mediaItems.forEach((item, index) => {
+      const thumbnail = document.createElement('div');
+      thumbnail.className = 'thumbnail';
+      if (index === window.theme.productGallery.currentIndex) {
+        thumbnail.classList.add('active');
+      }
+
+      if (item.type === 'video') {
+        thumbnail.classList.add('video-indicator');
+      }
+
+      const img = document.createElement('img');
+      img.src = item.thumbnail;
+      img.alt = item.alt;
+      img.loading = 'lazy';
+
+      thumbnail.appendChild(img);
+      thumbnail.addEventListener('click', () => window.theme.productGallery.goToIndex(index));
+      thumbnail.setAttribute('aria-label', `{{ 'product_gallery.thumbnail' | t }} ${index + 1}`);
+
+      container.appendChild(thumbnail);
+    });
+  };
+
+  // Update thumbnails
+  window.theme.productGallery.updateThumbnails = function() {
+    const thumbnails = document.querySelectorAll('.thumbnail');
+    thumbnails.forEach((thumb, index) => {
+      if (index === window.theme.productGallery.currentIndex) {
+        thumb.classList.add('active');
+      } else {
+        thumb.classList.remove('active');
+      }
+    });
+
+    // Scroll thumbnail into view
+    const activeThumb = thumbnails[window.theme.productGallery.currentIndex];
+    if (activeThumb) {
+      activeThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+  };
+
+  // Preload adjacent images
+  window.theme.productGallery.preloadAdjacentImages = function() {
+    if (!window.theme.productGallery.config.preloadImages) return;
+
+    const currentIndex = window.theme.productGallery.currentIndex;
+    const prevIndex = currentIndex > 0 ? currentIndex - 1 : null;
+    const nextIndex = currentIndex < window.theme.productGallery.mediaItems.length - 1 ? currentIndex + 1 : null;
+
+    if (prevIndex !== null) {
+      const prevItem = window.theme.productGallery.mediaItems[prevIndex];
+      if (prevItem.type === 'image') {
+        const img = new Image();
+        img.src = prevItem.src;
+      }
+    }
+
+    if (nextIndex !== null) {
+      const nextItem = window.theme.productGallery.mediaItems[nextIndex];
+      if (nextItem.type === 'image') {
+        const img = new Image();
+        img.src = nextItem.src;
+      }
+    }
+  };
+
+  // Settings
+  window.theme.productGallery.toggleSettings = function() {
+    const settings = document.getElementById('gallery-settings');
+    settings.classList.toggle('active');
+  };
+
+  window.theme.productGallery.toggleSetting = function(setting) {
+    window.theme.productGallery.settings[setting] = !window.theme.productGallery.settings[setting];
+
+    const toggle = document.getElementById(`${setting}-toggle`);
+    if (toggle) {
+      toggle.classList.toggle('active');
+    }
+
+    // Apply settings
+    switch (setting) {
+      case 'thumbnails':
+        const thumbnails = document.getElementById('gallery-thumbnails');
+        if (thumbnails) {
+          thumbnails.style.display = window.theme.productGallery.settings.thumbnails ? 'flex' : 'none';
+        }
+        break;
+      case 'zoom':
+        // Zoom setting is checked on zoom attempts
+        break;
+    }
+  };
+
+  // Fullscreen
+  window.theme.productGallery.toggleFullscreen = function() {
+    if (!window.theme.productGallery.isFullscreen) {
+      window.theme.productGallery.enterFullscreen();
+    } else {
+      window.theme.productGallery.exitFullscreen();
+    }
+  };
+
+  window.theme.productGallery.enterFullscreen = function() {
+    const fullscreenGallery = document.getElementById('fullscreen-gallery');
+    const fullscreenContent = document.getElementById('fullscreen-content');
+    const originalContent = document.getElementById('gallery-content');
+
+    fullscreenContent.innerHTML = originalContent.innerHTML;
+    fullscreenGallery.classList.add('active');
+    window.theme.productGallery.isFullscreen = true;
+
+    // Setup fullscreen-specific event listeners
+    window.theme.productGallery.setupFullscreenControls();
+  };
+
+  window.theme.productGallery.exitFullscreen = function() {
+    const fullscreenGallery = document.getElementById('fullscreen-gallery');
+    fullscreenGallery.classList.remove('active');
+    window.theme.productGallery.isFullscreen = false;
+  };
+
+  window.theme.productGallery.setupFullscreenControls = function() {
+    // Keyboard navigation for fullscreen
+    const handleFullscreenKeydown = function(e) {
+      if (!window.theme.productGallery.isFullscreen) return;
+
+      switch (e.key) {
+        case 'Escape':
+          window.theme.productGallery.exitFullscreen();
+          break;
+        case 'ArrowLeft':
+          window.theme.productGallery.previous();
+          break;
+        case 'ArrowRight':
+          window.theme.productGallery.next();
+          break;
+      }
+    };
+
+    document.addEventListener('keydown', handleFullscreenKeydown);
+
+    // Cleanup on exit
+    setTimeout(() => {
+      document.removeEventListener('keydown', handleFullscreenKeydown);
+    }, 100);
+  };
+
+  // Download image
+  window.theme.productGallery.downloadImage = function() {
+    const currentItem = window.theme.productGallery.mediaItems[window.theme.productGallery.currentIndex];
+    if (currentItem && currentItem.type === 'image') {
+      const link = document.createElement('a');
+      link.href = currentItem.src;
+      link.download = currentItem.title || 'product-image.jpg';
+      link.target = '_blank';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
+
+  // Error handling
+  window.theme.productGallery.showError = function() {
+    const loading = document.getElementById('gallery-loading');
+    const error = document.getElementById('gallery-error');
+    const content = document.getElementById('gallery-content');
+    const controls = document.getElementById('gallery-controls');
+    const nav = document.getElementById('gallery-nav');
+    const toolbar = document.getElementById('gallery-toolbar');
+    const thumbnails = document.getElementById('gallery-thumbnails');
+
+    loading.style.display = 'none';
+    error.style.display = 'block';
+    content.style.display = 'none';
+    controls.style.display = 'none';
+    nav.style.display = 'none';
+    toolbar.style.display = 'none';
+    thumbnails.style.display = 'none';
+  };
+
+  // Keyboard navigation
+  window.theme.productGallery.setupKeyboardNavigation = function() {
+    if (!window.theme.productGallery.config.keyboardNavigation) return;
+
+    document.addEventListener('keydown', function(e) {
+      // Only handle gallery navigation when gallery is focused or visible
+      const gallery = document.getElementById('product-gallery');
+      if (!gallery || !document.activeElement.closest('#product-gallery')) return;
+
+      switch (e.key) {
+        case 'ArrowLeft':
+          e.preventDefault();
+          window.theme.productGallery.previous();
+          break;
+        case 'ArrowRight':
+          e.preventDefault();
+          window.theme.productGallery.next();
+          break;
+        case 'Escape':
+          if (window.theme.productGallery.isFullscreen) {
+            window.theme.productGallery.exitFullscreen();
+          } else if (window.theme.productGallery.isZoomed) {
+            window.theme.productGallery.resetZoom();
+          }
+          break;
+        case '+':
+        case '=':
+          e.preventDefault();
+          window.theme.productGallery.zoomIn();
+          break;
+        case '-':
+        case '_':
+          e.preventDefault();
+          window.theme.productGallery.zoomOut();
+          break;
+        case '0':
+          e.preventDefault();
+          window.theme.productGallery.resetZoom();
+          break;
+        case 'f':
+        case 'F':
+          if (e.ctrlKey || e.metaKey) {
+            e.preventDefault();
+            window.theme.productGallery.toggleFullscreen();
+          }
+          break;
+      }
+    });
+  };
+
+  // Touch gestures
+  window.theme.productGallery.setupTouchGestures = function() {
+    if (!window.theme.productGallery.config.touchGestures) return;
+
+    const container = document.getElementById('gallery-container');
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchEndX = 0;
+    let touchEndY = 0;
+
+    container.addEventListener('touchstart', function(e) {
+      touchStartX = e.changedTouches[0].screenX;
+      touchStartY = e.changedTouches[0].screenY;
+    }, false);
+
+    container.addEventListener('touchend', function(e) {
+      touchEndX = e.changedTouches[0].screenX;
+      touchEndY = e.changedTouches[0].screenY;
+      window.theme.productGallery.handleSwipe();
+    }, false);
+
+    window.theme.productGallery.handleSwipe = function() {
+      const deltaX = touchEndX - touchStartX;
+      const deltaY = touchEndY - touchStartY;
+      const minSwipeDistance = 50;
+
+      if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > minSwipeDistance) {
+        if (deltaX > 0) {
+          window.theme.productGallery.previous();
+        } else {
+          window.theme.productGallery.next();
+        }
+      }
+    };
+
+    // Pinch to zoom
+    let initialDistance = 0;
+
+    container.addEventListener('touchstart', function(e) {
+      if (e.touches.length === 2) {
+        initialDistance = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+      }
+    });
+
+    container.addEventListener('touchmove', function(e) {
+      if (e.touches.length === 2 && window.theme.productGallery.settings.enableZoom) {
+        e.preventDefault();
+
+        const currentDistance = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+
+        const scale = currentDistance / initialDistance;
+
+        if (scale > 1.1) {
+          window.theme.productGallery.zoomIn();
+        } else if (scale < 0.9) {
+          window.theme.productGallery.zoomOut();
+        }
+      }
+    });
+  };
+
+  // Setup event listeners
+  window.theme.productGallery.setupEventListeners = function() {
+    // Click outside to close settings
+    document.addEventListener('click', function(e) {
+      const settings = document.getElementById('gallery-settings');
+      const settingsBtn = e.target.closest('[onclick*="toggleSettings"]');
+
+      if (settings && !settings.contains(e.target) && !settingsBtn) {
+        settings.classList.remove('active');
+      }
+    });
+
+    // Handle window resize
+    window.addEventListener('resize', function() {
+      if (window.theme.productGallery.isZoomed) {
+        window.theme.productGallery.resetZoom();
+      }
+    });
+
+    // Prevent context menu on gallery images
+    document.addEventListener('contextmenu', function(e) {
+      if (e.target.closest('.gallery-image')) {
+        e.preventDefault();
+      }
+    });
+  };
+
+  // Screen reader announcements
+  window.theme.productGallery.announceToScreenReader = function(message) {
+    const announcements = document.getElementById('gallery-announcements');
+    if (announcements) {
+      announcements.textContent = message;
+      setTimeout(() => {
+        announcements.textContent = '';
+      }, 1000);
+    }
+  };
+
+  // Initialize when DOM is loaded
+  document.addEventListener('DOMContentLoaded', function() {
+    if (document.getElementById('product-gallery')) {
+      window.theme.productGallery.init();
+    }
+  });
+</script>

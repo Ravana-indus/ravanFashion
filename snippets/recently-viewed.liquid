@@ -1,0 +1,784 @@
+<style>
+  .recently-viewed {
+    margin-top: 3rem;
+    padding: 2rem 0;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border-radius: 1rem;
+  }
+
+  .recently-viewed.dark-theme {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    color: white;
+  }
+
+  .recently-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .recently-header h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1e40af;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+
+  .recently-header .tamil-subtitle {
+    font-size: 1rem;
+    color: #3730a3;
+    font-weight: 500;
+  }
+
+  .recently-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .recently-product-card {
+    background: white;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    border: 2px solid transparent;
+    cursor: pointer;
+  }
+
+  .recently-product-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(30, 64, 175, 0.15);
+    border-color: #1e40af;
+  }
+
+  .recently-product-image {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 1;
+  }
+
+  .recently-product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .recently-product-card:hover .recently-product-image img {
+    transform: scale(1.05);
+  }
+
+  .recently-remove-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 1.75rem;
+    height: 1.75rem;
+    background: rgba(239, 68, 68, 0.9);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: all 0.2s ease;
+    z-index: 2;
+  }
+
+  .recently-product-card:hover .recently-remove-btn {
+    opacity: 1;
+  }
+
+  .recently-remove-btn:hover {
+    background: #dc2626;
+    transform: scale(1.1);
+  }
+
+  .recently-time-badge {
+    position: absolute;
+    bottom: 0.5rem;
+    left: 0.5rem;
+    background: rgba(30, 64, 175, 0.9);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  .recently-product-info {
+    padding: 1rem;
+  }
+
+  .recently-product-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+    height: 2.6rem;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .recently-product-price {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1e40af;
+    margin-bottom: 0.5rem;
+  }
+
+  .recently-product-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .recently-stars {
+    display: flex;
+    gap: 0.125rem;
+  }
+
+  .recently-star {
+    width: 0.875rem;
+    height: 0.875rem;
+    fill: #fbbf24;
+  }
+
+  .recently-star.empty {
+    fill: #e5e7eb;
+  }
+
+  .recently-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .recently-quick-btn {
+    flex: 1;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 0.375rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+  }
+
+  .recently-add-to-cart {
+    background: #1e40af;
+    color: white;
+  }
+
+  .recently-add-to-cart:hover {
+    background: #1e3a8a;
+  }
+
+  .recently-view-details {
+    background: white;
+    color: #1e40af;
+    border: 1px solid #1e40af;
+  }
+
+  .recently-view-details:hover {
+    background: #1e40af;
+    color: white;
+  }
+
+  .recently-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .recently-clear-btn {
+    padding: 0.75rem 1.5rem;
+    background: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .recently-clear-btn:hover {
+    background: #dc2626;
+  }
+
+  .recently-settings-btn {
+    padding: 0.75rem 1.5rem;
+    background: #6b7280;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .recently-settings-btn:hover {
+    background: #4b5563;
+  }
+
+  .recently-empty {
+    text-align: center;
+    padding: 3rem;
+    color: #6b7280;
+  }
+
+  .recently-empty svg {
+    width: 4rem;
+    height: 4rem;
+    margin: 0 auto 1rem;
+    opacity: 0.3;
+  }
+
+  .recently-empty h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.5rem;
+  }
+
+  .recently-settings {
+    background: white;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    margin-top: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .recently-settings h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 1rem;
+  }
+
+  .recently-setting {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .recently-setting:last-child {
+    border-bottom: none;
+  }
+
+  .recently-setting-label {
+    font-weight: 500;
+    color: #374151;
+  }
+
+  .recently-setting-control {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .recently-toggle {
+    position: relative;
+    width: 3rem;
+    height: 1.5rem;
+    background: #e5e7eb;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+
+  .recently-toggle.active {
+    background: #1e40af;
+  }
+
+  .recently-toggle-slider {
+    position: absolute;
+    top: 0.125rem;
+    left: 0.125rem;
+    width: 1.25rem;
+    height: 1.25rem;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .recently-toggle.active .recently-toggle-slider {
+    transform: translateX(1.5rem);
+  }
+
+  .recently-select {
+    padding: 0.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    background: white;
+    cursor: pointer;
+  }
+
+  .recently-privacy-notice {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #fef3c7;
+    border: 1px solid #f59e0b;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    color: #92400e;
+  }
+
+  @media (max-width: 768px) {
+    .recently-viewed {
+      margin-top: 2rem;
+      padding: 1.5rem 0;
+    }
+
+    .recently-header h2 {
+      font-size: 1.5rem;
+    }
+
+    .recently-grid {
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .recently-product-info {
+      padding: 0.75rem;
+    }
+
+    .recently-controls {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .recently-clear-btn,
+    .recently-settings-btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+</style>
+
+<div class="recently-viewed" id="recently-viewed">
+  <div class="recently-header">
+    <h2>
+      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+        <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+      </svg>
+      {{ 'recently_viewed.title' | t }}
+    </h2>
+    <div class="tamil-subtitle">{{ 'recently_viewed.subtitle_tamil' | t }}</div>
+  </div>
+
+  <!-- Products Grid -->
+  <div id="recently-grid" class="recently-grid">
+    <!-- Products will be dynamically loaded here -->
+  </div>
+
+  <!-- Empty State -->
+  <div id="recently-empty" class="recently-empty">
+    <svg fill="currentColor" viewBox="0 0 20 20">
+      <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+      <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+    </svg>
+    <h3>{{ 'recently_viewed.no_products' | t }}</h3>
+    <p>{{ 'recently_viewed.start_browsing' | t }}</p>
+  </div>
+
+  <!-- Settings Panel (Initially Hidden) -->
+  <div id="recently-settings" class="recently-settings" style="display: none;">
+    <h3>{{ 'recently_viewed.settings' | t }}</h3>
+
+    <div class="recently-setting">
+      <span class="recently-setting-label">{{ 'recently_viewed.enable_tracking' | t }}</span>
+      <div class="recently-setting-control">
+        <div class="recently-toggle active" id="tracking-toggle" onclick="window.theme.recentlyViewed.toggleTracking()">
+          <div class="recently-toggle-slider"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="recently-setting">
+      <span class="recently-setting-label">{{ 'recently_viewed.max_products' | t }}</span>
+      <div class="recently-setting-control">
+        <select class="recently-select" id="max-products" onchange="window.theme.recentlyViewed.updateMaxProducts(this.value)">
+          <option value="5">5</option>
+          <option value="10" selected>10</option>
+          <option value="15">15</option>
+          <option value="20">20</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="recently-setting">
+      <span class="recently-setting-label">{{ 'recently_viewed.expiration_days' | t }}</span>
+      <div class="recently-setting-control">
+        <select class="recently-select" id="expiration-days" onchange="window.theme.recentlyViewed.updateExpirationDays(this.value)">
+          <option value="1">1 {{ 'recently_viewed.day' | t }}</option>
+          <option value="3">3 {{ 'recently_viewed.days' | t }}</option>
+          <option value="7" selected>7 {{ 'recently_viewed.days' | t }}</option>
+          <option value="14">14 {{ 'recently_viewed.days' | t }}</option>
+          <option value="30">30 {{ 'recently_viewed.days' | t }}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="recently-privacy-notice">
+      {{ 'recently_viewed.privacy_notice' | t }}
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div id="recently-controls" class="recently-controls" style="display: none;">
+    <button class="recently-clear-btn" onclick="window.theme.recentlyViewed.clearHistory()">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+      </svg>
+      {{ 'recently_viewed.clear_history' | t }}
+    </button>
+    <button class="recently-settings-btn" onclick="window.theme.recentlyViewed.toggleSettings()">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+      </svg>
+      {{ 'recently_viewed.settings' | t }}
+    </button>
+  </div>
+</div>
+
+<script>
+  // Recently Viewed Products System
+  window.theme = window.theme || {};
+  window.theme.recentlyViewed = window.theme.recentlyViewed || {};
+
+  // Configuration
+  window.theme.recentlyViewed.config = {
+    maxProducts: 10,
+    expirationDays: 7,
+    storageKey: 'ravan-recently-viewed',
+    enableTracking: true,
+    autoTrack: true
+  };
+
+  // State
+  window.theme.recentlyViewed.products = [];
+
+  // Initialize recently viewed
+  window.theme.recentlyViewed.init = function() {
+    window.theme.recentlyViewed.loadProducts();
+    window.theme.recentlyViewed.render();
+    window.theme.recentlyViewed.setupAutoTracking();
+    window.theme.recentlyViewed.cleanupExpiredProducts();
+  };
+
+  // Load products from localStorage
+  window.theme.recentlyViewed.loadProducts = function() {
+    try {
+      const stored = localStorage.getItem(window.theme.recentlyViewed.config.storageKey);
+      if (stored) {
+        const data = JSON.parse(stored);
+        window.theme.recentlyViewed.products = data.products || [];
+        window.theme.recentlyViewed.config.maxProducts = data.config?.maxProducts || 10;
+        window.theme.recentlyViewed.config.expirationDays = data.config?.expirationDays || 7;
+        window.theme.recentlyViewed.config.enableTracking = data.config?.enableTracking !== false;
+
+        // Update UI controls
+        document.getElementById('max-products').value = window.theme.recentlyViewed.config.maxProducts;
+        document.getElementById('expiration-days').value = window.theme.recentlyViewed.config.expirationDays;
+        document.getElementById('tracking-toggle').classList.toggle('active', window.theme.recentlyViewed.config.enableTracking);
+      }
+    } catch (error) {
+      console.warn('Failed to load recently viewed products:', error);
+      window.theme.recentlyViewed.products = [];
+    }
+  };
+
+  // Save products to localStorage
+  window.theme.recentlyViewed.saveProducts = function() {
+    try {
+      const data = {
+        products: window.theme.recentlyViewed.products,
+        config: {
+          maxProducts: window.theme.recentlyViewed.config.maxProducts,
+          expirationDays: window.theme.recentlyViewed.config.expirationDays,
+          enableTracking: window.theme.recentlyViewed.config.enableTracking
+        }
+      };
+      localStorage.setItem(window.theme.recentlyViewed.config.storageKey, JSON.stringify(data));
+    } catch (error) {
+      console.warn('Failed to save recently viewed products:', error);
+    }
+  };
+
+  // Add product to recently viewed
+  window.theme.recentlyViewed.addProduct = function(productData) {
+    if (!window.theme.recentlyViewed.config.enableTracking) return;
+
+    // Remove if already exists
+    window.theme.recentlyViewed.products = window.theme.recentlyViewed.products.filter(
+      p => p.id !== productData.id
+    );
+
+    // Add to beginning
+    window.theme.recentlyViewed.products.unshift({
+      ...productData,
+      viewedAt: Date.now()
+    });
+
+    // Limit to max products
+    window.theme.recentlyViewed.products = window.theme.recentlyViewed.products.slice(
+      0, window.theme.recentlyViewed.config.maxProducts
+    );
+
+    window.theme.recentlyViewed.saveProducts();
+    window.theme.recentlyViewed.render();
+  };
+
+  // Remove product from recently viewed
+  window.theme.recentlyViewed.removeProduct = function(productId) {
+    window.theme.recentlyViewed.products = window.theme.recentlyViewed.products.filter(
+      p => p.id !== productId
+    );
+    window.theme.recentlyViewed.saveProducts();
+    window.theme.recentlyViewed.render();
+  };
+
+  // Clear history
+  window.theme.recentlyViewed.clearHistory = function() {
+    if (confirm('{{ 'recently_viewed.confirm_clear' | t }}')) {
+      window.theme.recentlyViewed.products = [];
+      window.theme.recentlyViewed.saveProducts();
+      window.theme.recentlyViewed.render();
+      window.theme.showNotification('{{ 'recently_viewed.history_cleared' | t }}', 'success');
+    }
+  };
+
+  // Clean up expired products
+  window.theme.recentlyViewed.cleanupExpiredProducts = function() {
+    const expirationTime = window.theme.recentlyViewed.config.expirationDays * 24 * 60 * 60 * 1000;
+    const now = Date.now();
+
+    window.theme.recentlyViewed.products = window.theme.recentlyViewed.products.filter(
+      product => (now - product.viewedAt) < expirationTime
+    );
+
+    window.theme.recentlyViewed.saveProducts();
+  };
+
+  // Render products
+  window.theme.recentlyViewed.render = function() {
+    const container = document.getElementById('recently-grid');
+    const emptyState = document.getElementById('recently-empty');
+    const controls = document.getElementById('recently-controls');
+
+    if (window.theme.recentlyViewed.products.length === 0) {
+      container.style.display = 'none';
+      emptyState.style.display = 'block';
+      controls.style.display = 'none';
+      return;
+    }
+
+    container.style.display = 'grid';
+    emptyState.style.display = 'none';
+    controls.style.display = 'flex';
+
+    container.innerHTML = window.theme.recentlyViewed.products.map(product => {
+      const timeAgo = window.theme.recentlyViewed.getTimeAgo(product.viewedAt);
+
+      return `
+        <div class="recently-product-card">
+          <div class="recently-product-image">
+            <img src="${product.image}" alt="${product.title}" loading="lazy">
+
+            <button class="recently-remove-btn" onclick="window.theme.recentlyViewed.removeProduct(${product.id})" title="{{ 'recently_viewed.remove' | t }}">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </button>
+
+            <div class="recently-time-badge">${timeAgo}</div>
+          </div>
+
+          <div class="recently-product-info">
+            <h3 class="recently-product-title">${product.title}</h3>
+
+            <div class="recently-product-price">₹${product.price.toLocaleString()}</div>
+
+            ${product.rating ? `
+              <div class="recently-product-rating">
+                <div class="recently-stars">
+                  ${window.theme.recentlyViewed.renderStars(product.rating)}
+                </div>
+              </div>
+            ` : ''}
+
+            <div class="recently-actions">
+              <button class="recently-quick-btn recently-add-to-cart" onclick="window.theme.recentlyViewed.addToCart(${product.id})">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+              </button>
+              <button class="recently-quick-btn recently-view-details" onclick="window.theme.recentlyViewed.viewDetails(${product.id})">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  };
+
+  // Render star rating
+  window.theme.recentlyViewed.renderStars = function(rating) {
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 !== 0;
+    const emptyStars = 5 - Math.ceil(rating);
+
+    let stars = '';
+
+    for (let i = 0; i < fullStars; i++) {
+      stars += '<svg class="recently-star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>';
+    }
+
+    if (hasHalfStar) {
+      stars += '<svg class="recently-star" fill="currentColor" viewBox="0 0 20 20"><defs><linearGradient id="half2"><stop offset="50%" stop-color="currentColor"/><stop offset="50%" stop-color="#e5e7eb"/></linearGradient></defs><path fill="url(#half2)" d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>';
+    }
+
+    for (let i = 0; i < emptyStars; i++) {
+      stars += '<svg class="recently-star empty" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>';
+    }
+
+    return stars;
+  };
+
+  // Get time ago string
+  window.theme.recentlyViewed.getTimeAgo = function(timestamp) {
+    const now = Date.now();
+    const diff = now - timestamp;
+    const minutes = Math.floor(diff / (1000 * 60));
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+    if (minutes < 1) return '{{ 'recently_viewed.just_now' | t }}';
+    if (minutes < 60) return `${minutes} {{ 'recently_viewed.minutes_ago' | t }}`;
+    if (hours < 24) return `${hours} {{ 'recently_viewed.hours_ago' | t }}`;
+    if (days < 7) return `${days} {{ 'recently_viewed.days_ago' | t }}`;
+
+    return `${Math.ceil(days / 7)} {{ 'recently_viewed.weeks_ago' | t }}`;
+  };
+
+  // Product actions
+  window.theme.recentlyViewed.addToCart = function(productId) {
+    const product = window.theme.recentlyViewed.products.find(p => p.id === productId);
+    if (product) {
+      window.theme.showNotification(`"${product.title}" {{ 'general.added_to_cart' | t }}`, 'success');
+      window.theme.updateCartCounter();
+    }
+  };
+
+  window.theme.recentlyViewed.viewDetails = function(productId) {
+    const product = window.theme.recentlyViewed.products.find(p => p.id === productId);
+    if (product) {
+      window.location.href = product.url;
+    }
+  };
+
+  // Settings
+  window.theme.recentlyViewed.toggleSettings = function() {
+    const settings = document.getElementById('recently-settings');
+    settings.style.display = settings.style.display === 'none' ? 'block' : 'none';
+  };
+
+  window.theme.recentlyViewed.toggleTracking = function() {
+    const toggle = document.getElementById('tracking-toggle');
+    window.theme.recentlyViewed.config.enableTracking = !window.theme.recentlyViewed.config.enableTracking;
+    toggle.classList.toggle('active', window.theme.recentlyViewed.config.enableTracking);
+    window.theme.recentlyViewed.saveProducts();
+  };
+
+  window.theme.recentlyViewed.updateMaxProducts = function(value) {
+    window.theme.recentlyViewed.config.maxProducts = parseInt(value);
+    window.theme.recentlyViewed.products = window.theme.recentlyViewed.products.slice(0, window.theme.recentlyViewed.config.maxProducts);
+    window.theme.recentlyViewed.saveProducts();
+    window.theme.recentlyViewed.render();
+  };
+
+  window.theme.recentlyViewed.updateExpirationDays = function(value) {
+    window.theme.recentlyViewed.config.expirationDays = parseInt(value);
+    window.theme.recentlyViewed.saveProducts();
+    window.theme.recentlyViewed.cleanupExpiredProducts();
+    window.theme.recentlyViewed.render();
+  };
+
+  // Auto-tracking setup
+  window.theme.recentlyViewed.setupAutoTracking = function() {
+    if (!window.theme.recentlyViewed.config.autoTracking) return;
+
+    // Track product page views
+    if (window.theme.recentlyViewed.config.enableTracking && window.location.pathname.includes('/products/')) {
+      const productId = window.theme.recentlyViewed.extractProductIdFromURL();
+      if (productId) {
+        // Simulate product data (in real implementation, this would come from Shopify)
+        const mockProductData = {
+          id: productId,
+          title: document.title.split(' - ')[0] || 'Product Title',
+          price: 2999,
+          image: 'https://picsum.photos/400/400?random=' + productId,
+          url: window.location.pathname,
+          rating: 4.5 + Math.random() * 0.5
+        };
+
+        // Add small delay to ensure it's a genuine page view
+        setTimeout(() => {
+          window.theme.recentlyViewed.addProduct(mockProductData);
+        }, 1000);
+      }
+    }
+  };
+
+  // Extract product ID from URL
+  window.theme.recentlyViewed.extractProductIdFromURL = function() {
+    const match = window.location.pathname.match(/\/products\/(\d+)/);
+    return match ? parseInt(match[1]) : null;
+  };
+
+  // Public method to manually add products
+  window.theme.recentlyViewed.trackProduct = function(productData) {
+    window.theme.recentlyViewed.addProduct(productData);
+  };
+
+  // Initialize on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    if (document.getElementById('recently-viewed')) {
+      window.theme.recentlyViewed.init();
+    }
+  });
+</script>

@@ -1,0 +1,678 @@
+<style>
+  .quick-view-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    padding: 2rem;
+  }
+
+  .quick-view-modal.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .quick-view-content {
+    background: white;
+    border-radius: 16px;
+    max-width: 900px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    transform: scale(0.8);
+    transition: transform 0.3s ease;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  }
+
+  .quick-view-modal.active .quick-view-content {
+    transform: scale(1);
+  }
+
+  .close-quick-view {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 3rem;
+    height: 3rem;
+    background: white;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+  }
+
+  .close-quick-view:hover {
+    background: #6a1b1b;
+    color: white;
+    transform: rotate(90deg);
+  }
+
+  .quick-view-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    padding: 2rem;
+  }
+
+  .quick-view-images {
+    position: relative;
+  }
+
+  .main-image {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+  }
+
+  .thumbnail-list {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+
+  .thumbnail {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .thumbnail:hover,
+  .thumbnail.active {
+    border-color: #6a1b1b;
+  }
+
+  .quick-view-details h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+  }
+
+  .quick-view-vendor {
+    color: #6b7280;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+  }
+
+  .quick-view-price {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .price-current {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #6a1b1b;
+  }
+
+  .price-original {
+    font-size: 1.125rem;
+    color: #9ca3af;
+    text-decoration: line-through;
+  }
+
+  .price-savings {
+    background: #dc2626;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .variant-selector {
+    margin-bottom: 1.5rem;
+  }
+
+  .variant-label {
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  .variant-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .variant-option {
+    padding: 0.5rem 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 0.5rem;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.875rem;
+  }
+
+  .variant-option:hover {
+    border-color: #6a1b1b;
+  }
+
+  .variant-option.selected {
+    background: #6a1b1b;
+    color: white;
+    border-color: #6a1b1b;
+  }
+
+  .variant-option.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .quantity-selector {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .quantity-input {
+    width: 80px;
+    padding: 0.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    text-align: center;
+    font-size: 1rem;
+  }
+
+  .quantity-controls {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .quantity-btn {
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid #d1d5db;
+    background: white;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  .quantity-btn:hover {
+    background: #6a1b1b;
+    color: white;
+    border-color: #6a1b1b;
+  }
+
+  .product-actions {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .add-to-cart-btn {
+    flex: 1;
+    padding: 1rem;
+    background: #6a1b1b;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .add-to-cart-btn:hover {
+    background: #7c1e1e;
+  }
+
+  .add-to-cart-btn:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+  }
+
+  .wishlist-btn {
+    padding: 1rem;
+    border: 2px solid #d1d5db;
+    background: white;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .wishlist-btn:hover {
+    border-color: #6a1b1b;
+    color: #6a1b1b;
+  }
+
+  .wishlist-btn.active {
+    background: #dc2626;
+    color: white;
+    border-color: #dc2626;
+  }
+
+  .product-badges {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    z-index: 5;
+  }
+
+  .badge {
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .badge-sale {
+    background: #dc2626;
+    color: white;
+  }
+
+  .badge-new {
+    background: #10b981;
+    color: white;
+  }
+
+  .product-description {
+    color: #6b7280;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .product-features {
+    background: #f9fafb;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .feature-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    color: #4b5563;
+  }
+
+  .feature-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .feature-icon {
+    width: 1rem;
+    height: 1rem;
+    color: #10b981;
+  }
+
+  .loading-spinner {
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  @media (max-width: 768px) {
+    .quick-view-body {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      padding: 1rem;
+    }
+
+    .quick-view-content {
+      margin: 1rem;
+      max-height: 95vh;
+    }
+
+    .close-quick-view {
+      top: 0.5rem;
+      right: 0.5rem;
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+  }
+</style>
+
+<!-- Quick View Modal -->
+<div id="quick-view-modal" class="quick-view-modal">
+  <div class="quick-view-content">
+    <button class="close-quick-view" onclick="window.theme.closeQuickView()">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+
+    <div id="quick-view-loading" class="hidden text-center py-12">
+      <div class="loading-spinner mx-auto mb-4"></div>
+      <p class="text-gray-600">{{ 'general.loading' | t }}</p>
+    </div>
+
+    <div id="quick-view-body" class="quick-view-body hidden">
+      <!-- Product content will be dynamically loaded here -->
+    </div>
+  </div>
+</div>
+
+<script>
+  // Quick View Modal System
+  window.theme = window.theme || {};
+
+  window.theme.currentQuickViewProduct = null;
+
+  window.theme.openQuickView = async function(productId) {
+    const modal = document.getElementById('quick-view-modal');
+    const loading = document.getElementById('quick-view-loading');
+    const body = document.getElementById('quick-view-body');
+
+    // Show modal and loading state
+    modal.classList.add('active');
+    loading.classList.remove('hidden');
+    body.classList.add('hidden');
+
+    // Prevent body scroll
+    document.body.style.overflow = 'hidden';
+
+    try {
+      // Simulate product data fetch (in real implementation, this would be an API call)
+      await new Promise(resolve => setTimeout(resolve, 800));
+
+      // Mock product data
+      const mockProduct = {
+        id: productId,
+        title: 'Traditional Tamil Silk Saree',
+        vendor: 'Ravan Fashion',
+        price: 8999,
+        compareAtPrice: 12999,
+        description: 'Exquisite traditional Tamil silk saree with intricate gold zari work. Perfect for weddings and special occasions. Handwoven by master craftsmen using traditional techniques passed down through generations.',
+        images: [
+          'https://picsum.photos/600/600?random=1',
+          'https://picsum.photos/600/600?random=2',
+          'https://picsum.photos/600/600?random=3',
+          'https://picsum.photos/600/600?random=4'
+        ],
+        variants: [
+          { id: 1, name: 'Color', values: ['Red', 'Blue', 'Green', 'Gold'], available: true },
+          { id: 2, name: 'Size', values: ['S', 'M', 'L', 'XL'], available: true }
+        ],
+        features: [
+          '100% Pure Silk',
+          'Handwoven',
+          'Traditional Gold Zari',
+          '6.5 Meters Length',
+          'Blouse Piece Included',
+          'Dry Clean Only'
+        ],
+        badges: ['sale', 'new'],
+        available: true
+      };
+
+      window.theme.currentQuickViewProduct = mockProduct;
+      window.theme.renderQuickView(mockProduct);
+
+    } catch (error) {
+      console.error('Error loading quick view product:', error);
+      window.theme.closeQuickView();
+    }
+  };
+
+  window.theme.renderQuickView = function(product) {
+    const body = document.getElementById('quick-view-body');
+    const loading = document.getElementById('quick-view-loading');
+
+    const savingsPercentage = Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100);
+
+    body.innerHTML = `
+      <!-- Product Images -->
+      <div class="quick-view-images">
+        <div class="product-badges">
+          ${product.badges.includes('sale') ? `<span class="badge badge-sale">{{ 'badges.sale' | t }}</span>` : ''}
+          ${product.badges.includes('new') ? `<span class="badge badge-new">{{ 'badges.new' | t }}</span>` : ''}
+        </div>
+        <img src="${product.images[0]}" alt="${product.title}" class="main-image" id="quick-view-main-image">
+        <div class="thumbnail-list">
+          ${product.images.map((img, index) => `
+            <img src="${img}" alt="${product.title}" class="thumbnail ${index === 0 ? 'active' : ''}" onclick="window.theme.changeQuickViewImage('${img}', this)">
+          `).join('')}
+        </div>
+      </div>
+
+      <!-- Product Details -->
+      <div class="quick-view-details">
+        <div class="quick-view-vendor">${product.vendor}</div>
+        <h2>${product.title}</h2>
+
+        <div class="quick-view-price">
+          <span class="price-current">₹${product.price.toLocaleString()}</span>
+          ${product.compareAtPrice ? `<span class="price-original">₹${product.compareAtPrice.toLocaleString()}</span>` : ''}
+          ${savingsPercentage > 0 ? `<span class="price-savings">Save ${savingsPercentage}%</span>` : ''}
+        </div>
+
+        <!-- Variant Selectors -->
+        ${product.variants.map(variant => `
+          <div class="variant-selector">
+            <label class="variant-label">${variant.name}</label>
+            <div class="variant-options">
+              ${variant.values.map(value => `
+                <button class="variant-option" data-variant="${variant.name}" data-value="${value}" onclick="window.theme.selectQuickViewVariant('${variant.name}', '${value}', this)">
+                  ${value}
+                </button>
+              `).join('')}
+            </div>
+          </div>
+        `).join('')}
+
+        <!-- Quantity Selector -->
+        <div class="quantity-selector">
+          <label class="variant-label">{{ 'product.quantity' | t }}</label>
+          <input type="number" class="quantity-input" value="1" min="1" max="10" id="quick-view-quantity">
+          <div class="quantity-controls">
+            <button class="quantity-btn" onclick="window.theme.changeQuickViewQuantity(1)">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/>
+              </svg>
+            </button>
+            <button class="quantity-btn" onclick="window.theme.changeQuickViewQuantity(-1)">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Product Actions -->
+        <div class="product-actions">
+          <button class="add-to-cart-btn" onclick="window.theme.addToCartFromQuickView()" ${!product.available ? 'disabled' : ''}>
+            <span class="button-text">${product.available ? '{{ 'product.add_to_cart' | t }}' : '{{ 'product.sold_out' | t }}'}</span>
+          </button>
+          <button class="wishlist-btn" onclick="window.theme.toggleQuickViewWishlist(this)">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Product Description -->
+        <div class="product-description">
+          ${product.description}
+        </div>
+
+        <!-- Product Features -->
+        <div class="product-features">
+          ${product.features.map(feature => `
+            <div class="feature-item">
+              <svg class="feature-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+              </svg>
+              ${feature}
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+
+    // Hide loading and show content
+    loading.classList.add('hidden');
+    body.classList.remove('hidden');
+  };
+
+  window.theme.changeQuickViewImage = function(imageSrc, thumbnail) {
+    const mainImage = document.getElementById('quick-view-main-image');
+
+    // Update active thumbnail
+    document.querySelectorAll('.thumbnail').forEach(thumb => {
+      thumb.classList.remove('active');
+    });
+    thumbnail.classList.add('active');
+
+    // Update main image with fade effect
+    mainImage.style.opacity = '0';
+    setTimeout(() => {
+      mainImage.src = imageSrc;
+      mainImage.style.opacity = '1';
+    }, 200);
+  };
+
+  window.theme.selectQuickViewVariant = function(variantName, value, button) {
+    // Update button states
+    button.parentElement.querySelectorAll('.variant-option').forEach(opt => {
+      opt.classList.remove('selected');
+    });
+    button.classList.add('selected');
+
+    // Store selected variant
+    if (!window.theme.selectedVariants) {
+      window.theme.selectedVariants = {};
+    }
+    window.theme.selectedVariants[variantName] = value;
+
+    console.log('Selected variant:', variantName, value);
+  };
+
+  window.theme.changeQuickViewQuantity = function(change) {
+    const input = document.getElementById('quick-view-quantity');
+    const newValue = parseInt(input.value) + change;
+
+    if (newValue >= 1 && newValue <= 10) {
+      input.value = newValue;
+    }
+  };
+
+  window.theme.addToCartFromQuickView = function() {
+    if (!window.theme.currentQuickViewProduct) return;
+
+    const button = event.target.closest('.add-to-cart-btn');
+    const buttonText = button.querySelector('.button-text');
+    const quantity = parseInt(document.getElementById('quick-view-quantity').value);
+
+    // Show loading state
+    button.disabled = true;
+    buttonText.innerHTML = '<div class="loading-spinner"></div>';
+
+    // Simulate API call
+    setTimeout(() => {
+      // Success state
+      buttonText.textContent = '{{ 'general.added' | t }}!';
+      button.style.background = '#10b981';
+
+      // Update cart counter
+      window.theme.updateCartCounter();
+
+      // Close modal after delay
+      setTimeout(() => {
+        window.theme.closeQuickView();
+        // Reset button
+        button.disabled = false;
+        buttonText.textContent = '{{ 'product.add_to_cart' | t }}';
+        button.style.background = '';
+      }, 1500);
+    }, 1000);
+  };
+
+  window.theme.toggleQuickViewWishlist = function(button) {
+    button.classList.toggle('active');
+
+    if (button.classList.contains('active')) {
+      button.style.color = 'white';
+    } else {
+      button.style.color = '';
+    }
+
+    console.log('Toggled wishlist for product:', window.theme.currentQuickViewProduct?.id);
+  };
+
+  window.theme.closeQuickView = function() {
+    const modal = document.getElementById('quick-view-modal');
+    modal.classList.remove('active');
+
+    // Restore body scroll
+    document.body.style.overflow = '';
+
+    // Reset modal content
+    setTimeout(() => {
+      document.getElementById('quick-view-loading').classList.add('hidden');
+      document.getElementById('quick-view-body').classList.add('hidden');
+      document.getElementById('quick-view-body').innerHTML = '';
+      window.theme.currentQuickViewProduct = null;
+      window.theme.selectedVariants = {};
+    }, 300);
+  };
+
+  // Close modal on background click
+  document.getElementById('quick-view-modal').addEventListener('click', function(e) {
+    if (e.target === this) {
+      window.theme.closeQuickView();
+    }
+  });
+
+  // Close modal on escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && document.getElementById('quick-view-modal').classList.contains('active')) {
+      window.theme.closeQuickView();
+    }
+  });
+</script>

@@ -1,0 +1,281 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Tamil Typography Base Styles */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Tamil:wght@400;700&display=swap');
+
+/* Shopify Theme Compatibility */
+@tailwind base;
+
+/* Custom Base Styles for Shopify */
+@layer base {
+  /* Reset any conflicting styles */
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  body {
+    font-family:
+      'Inter',
+      system-ui,
+      -apple-system,
+      sans-serif;
+    color: #2c1810;
+    background-color: #fff8f0;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Tamil Typography Base */
+  .tamil-text {
+    font-family: 'Noto Sans Tamil', 'Latha', serif;
+    line-height: 1.6;
+  }
+
+  /* Cultural Design Elements */
+  .temple-border {
+    border: 2px solid #d4af37;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  .silk-background {
+    background-color: #f5f5dc;
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='silk' x='0' y='0' width='20' height='20' patternUnits='userSpaceOnUse'%3E%3Crect width='20' height='20' fill='%23F5F5DC'/%3E%3Ccircle cx='10' cy='10' r='1' fill='%23D4AF37' opacity='0.3'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100' height='100' fill='url(%23silk)'/%3E%3C/svg%3E");
+  }
+}
+
+/* Component Styles */
+@layer components {
+  /* Primary Button - Using standard Tailwind classes */
+  .btn-primary {
+    background-color: #6a1b1b;
+    color: white;
+    font-weight: 500;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+    transform: scale(1);
+  }
+
+  .btn-primary:hover {
+    background-color: #8b0000;
+    transform: scale(1.05);
+  }
+
+  .btn-primary:focus {
+    outline: 2px solid #6a1b1b;
+    outline-offset: 2px;
+  }
+
+  /* Secondary Button */
+  .btn-secondary {
+    background-color: #d4af37;
+    color: white;
+    font-weight: 500;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+  }
+
+  .btn-secondary:hover {
+    background-color: #ffd700;
+  }
+
+  .btn-secondary:focus {
+    outline: 2px solid #d4af37;
+    outline-offset: 2px;
+  }
+
+  /* Cultural Accent Button */
+  .btn-cultural {
+    background-color: #d4af37;
+    color: #1c1c1c;
+    font-weight: 500;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    border: 2px solid #d4af37;
+    transition: all 0.2s;
+  }
+
+  .btn-cultural:hover {
+    background-color: #ffd700;
+  }
+
+  .btn-cultural:focus {
+    outline: 2px solid #d4af37;
+    outline-offset: 2px;
+  }
+
+  /* Product Card */
+  .product-card {
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+
+  .product-card:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    transform: scale(1.05);
+  }
+
+  /* Collection Grid Item */
+  .collection-item {
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    border-radius: 0.5rem;
+  }
+
+  .collection-item::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.5), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .collection-item:hover::before {
+    opacity: 1;
+  }
+
+  /* Hero Section */
+  .hero-section {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .hero-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23D4AF37' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.1;
+  }
+
+  /* Tamil Proverb Box */
+  .proverb-box {
+    background-color: #fdf6ec;
+    border-left: 4px solid #d4af37;
+    padding: 1.5rem;
+    border-radius: 0 0.5rem 0.5rem 0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Newsletter Form */
+  .newsletter-form {
+    background-color: #6a1b1b;
+    color: white;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Language Toggle */
+  .lang-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: white;
+    border-radius: 9999px;
+    padding: 0.5rem 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border: 2px solid #d4af37;
+  }
+
+  .lang-toggle button {
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+
+  .lang-toggle button.active {
+    background-color: #d4af37;
+    color: white;
+  }
+
+  .lang-toggle button:not(.active) {
+    color: #4b5563;
+  }
+
+  .lang-toggle button:not(.active):hover {
+    background-color: #f3f4f6;
+  }
+}
+
+/* Utility Classes */
+@layer utilities {
+  /* Cultural Animations */
+  .animate-diya {
+    animation: flicker 3s ease-in-out infinite;
+  }
+
+  @keyframes flicker {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.8;
+    }
+  }
+
+  /* Responsive Tamil Text */
+  .text-tamil-responsive {
+    font-size: clamp(1rem, 4vw, 1.5rem);
+  }
+
+  /* Cultural Spacing */
+  .spacing-tamil {
+    padding: 1rem 2rem;
+  }
+
+  /* Accessibility Focus Styles */
+  .focus-cultural:focus {
+    outline: 2px solid #d4af37;
+    outline-offset: 2px;
+  }
+
+  /* Mobile-first Responsive Helpers */
+  @media (max-width: 768px) {
+    .mobile-full-width {
+      width: 100%;
+      max-width: 100%;
+    }
+
+    .mobile-stack {
+      flex-direction: column;
+    }
+  }
+}
+
+/* Print Styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .print-break-before {
+    page-break-before: always;
+  }
+}

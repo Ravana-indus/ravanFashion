@@ -1,0 +1,44 @@
+<div class="py-12 px-4">
+  <div class="container mx-auto">
+    <div class="max-w-2xl mx-auto">
+      {% render 'countdown-timer',
+        target_date: section.settings.target_date,
+        title: section.settings.title,
+        subtitle: section.settings.subtitle
+      %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Countdown Timer",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Festival Special"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Limited Time Offer"
+    },
+    {
+      "type": "text",
+      "id": "target_date",
+      "label": "Target Date",
+      "info": "Format: YYYY-MM-DDTHH:MM:SS (e.g., 2024-12-31T23:59:59)",
+      "default": "2024-12-31T23:59:59"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Countdown Timer",
+      "category": "Promotional"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,1165 @@
+{%- comment -%}
+Virtual Stylist - AI-powered fashion advice system
+Provides personalized fashion recommendations, style analysis, and outfit suggestions
+{%- endcomment -%}
+
+<div class="virtual-stylist" data-product-id="{{ product.id }}" data-section-id="virtual-stylist">
+  <!-- Stylist Header -->
+  <div class="stylist-header text-center mb-8">
+    <div class="stylist-avatar mb-4">
+      <div class="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-4xl">
+        <svg class="w-12 h-12" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+        </svg>
+      </div>
+    </div>
+    <h3 class="text-2xl font-bold text-gray-800 mb-2" data-i18n="virtual_stylist.title">Your Personal Fashion AI</h3>
+    <p class="text-gray-600" data-i18n="virtual_stylist.subtitle">Get expert style advice tailored to your preferences</p>
+  </div>
+
+  <!-- Main Stylist Interface -->
+  <div class="stylist-interface max-w-4xl mx-auto">
+    <!-- Chat Container -->
+    <div class="stylist-chat bg-white rounded-lg shadow-lg border border-gray-200 mb-6">
+      <div class="chat-header bg-gradient-to-r from-purple-600 to-pink-600 text-white p-4 rounded-t-lg">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="online-indicator">
+              <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+            </div>
+            <span class="font-semibold" data-i18n="virtual_stylist.online">Fashion AI Assistant</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-sm opacity-75" data-i18n="virtual_stylist.response_time">Typically responds in 2-3 seconds</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-messages h-96 overflow-y-auto p-4 space-y-4" id="stylist-messages">
+        <!-- Welcome Message -->
+        <div class="message ai-message">
+          <div class="flex gap-3">
+            <div class="message-avatar">
+              <div class="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-sm">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                </svg>
+              </div>
+            </div>
+            <div class="message-content flex-1">
+              <div class="bg-gray-100 rounded-lg p-3">
+                <p class="text-sm font-medium text-purple-600 mb-1" data-i18n="virtual_stylist.ai_name">Maya, Fashion AI</p>
+                <p class="text-gray-800" data-i18n="virtual_stylist.welcome">Welcome! I'm your personal fashion assistant. I can help you with:</p>
+                <ul class="mt-2 space-y-1 text-sm text-gray-600">
+                  <li>• <span data-i18n="virtual_stylist.help_1">Personalized outfit recommendations</span></li>
+                  <li>• <span data-i18n="virtual_stylist.help_2">Style analysis for your body type</span></li>
+                  <li>• <span data-i18n="virtual_stylist.help_3">Color coordination advice</span></li>
+                  <li>• <span data-i18n="virtual_stylist.help_4">Seasonal fashion trends</span></li>
+                  <li>• <span data-i18n="virtual_stylist.help_5">Cultural outfit suggestions</span></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="quick-actions border-t border-gray-200 p-4">
+        <div class="flex flex-wrap gap-2 mb-3">
+          <button class="quick-action-btn bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm hover:bg-purple-200 transition-colors" data-action="outfit-suggestion">
+            <span data-i18n="virtual_stylist.quick_outfit">Outfit Ideas</span>
+          </button>
+          <button class="quick-action-btn bg-pink-100 text-pink-700 px-3 py-1 rounded-full text-sm hover:bg-pink-200 transition-colors" data-action="style-analysis">
+            <span data-i18n="virtual_stylist.quick_analysis">Style Analysis</span>
+          </button>
+          <button class="quick-action-btn bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm hover:bg-blue-200 transition-colors" data-action="color-advice">
+            <span data-i18n="virtual_stylist.quick_color">Color Tips</span>
+          </button>
+          <button class="quick-action-btn bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm hover:bg-green-200 transition-colors" data-action="cultural-style">
+            <span data-i18n="virtual_stylist.quick_cultural">Cultural Style</span>
+          </button>
+        </div>
+
+        <!-- Input Area -->
+        <div class="input-area flex gap-2">
+          <input
+            type="text"
+            id="stylist-input"
+            class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+            placeholder="Ask me anything about fashion..."
+            data-i18n-placeholder="virtual_stylist.placeholder"
+          >
+          <button
+            id="stylist-send"
+            class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Style Analysis Dashboard -->
+    <div class="style-dashboard hidden">
+      <div class="grid md:grid-cols-2 gap-6">
+        <!-- Body Type Analysis -->
+        <div class="analysis-card bg-white rounded-lg shadow-md p-6">
+          <h4 class="text-lg font-semibold mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+            </svg>
+            <span data-i18n="virtual_stylist.body_analysis">Body Type Analysis</span>
+          </h4>
+          <div class="body-type-result">
+            <div class="flex items-center gap-4 mb-4">
+              <div class="body-type-icon w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center">
+                <svg class="w-8 h-8 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                  <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+                </svg>
+              </div>
+              <div>
+                <p class="font-medium text-gray-800" data-body-type="hourglass">Hourglass Figure</p>
+                <p class="text-sm text-gray-600" data-i18n="virtual_stylist.body_description">Balanced proportions with defined waist</p>
+              </div>
+            </div>
+            <div class="recommendations space-y-2">
+              <p class="text-sm font-medium text-gray-700" data-i18n="virtual_stylist.recommended_styles">Recommended Styles:</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs">Wrap Dresses</span>
+                <span class="bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs">Fitted Tops</span>
+                <span class="bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs">High-Waisted Bottoms</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Color Analysis -->
+        <div class="analysis-card bg-white rounded-lg shadow-md p-6">
+          <h4 class="text-lg font-semibold mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5 text-pink-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M4 2a2 2 0 00-2 2v11a3 3 0 106 0V4a2 2 0 00-2-2H4zm1 14a1 1 0 100-2 1 1 0 000 2zm5-1.757l4.9-4.9a2 2 0 000-2.828L13.485 5.1a2 2 0 00-2.828 0L10 5.757v8.486zM16 18H9.071l6-6H16a2 2 0 012 2v2a2 2 0 01-2 2z" clip-rule="evenodd"/>
+            </svg>
+            <span data-i18n="virtual_stylist.color_analysis">Color Analysis</span>
+          </h4>
+          <div class="color-palette">
+            <div class="grid grid-cols-4 gap-2 mb-4">
+              <div class="color-swatch w-12 h-12 rounded-lg bg-red-600"></div>
+              <div class="color-swatch w-12 h-12 rounded-lg bg-blue-600"></div>
+              <div class="color-swatch w-12 h-12 rounded-lg bg-green-600"></div>
+              <div class="color-swatch w-12 h-12 rounded-lg bg-purple-600"></div>
+            </div>
+            <p class="text-sm text-gray-700 mb-2" data-i18n="virtual_stylist.season_palette">Season: Autumn Warm</p>
+            <div class="color-recommendations space-y-1">
+              <p class="text-xs text-gray-600">Best colors: Rich reds, warm browns, olive greens</p>
+              <p class="text-xs text-gray-600">Avoid: Bright whites, cool pastels</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Style Preferences -->
+        <div class="analysis-card bg-white rounded-lg shadow-md p-6">
+          <h4 class="text-lg font-semibold mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+            </svg>
+            <span data-i18n="virtual_stylist.style_preferences">Style Preferences</span>
+          </h4>
+          <div class="style-tags">
+            <div class="flex flex-wrap gap-2">
+              <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs">Modern Traditional</span>
+              <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs">Comfort First</span>
+              <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs">Cultural Fusion</span>
+              <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs">Professional Chic</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cultural Style -->
+        <div class="analysis-card bg-white rounded-lg shadow-md p-6">
+          <h4 class="text-lg font-semibold mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M3 5a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2h-2.22l.123.489.804.804A1 1 0 0115 15H5a1 1 0 01-.707-1.707l.804-.804L5.22 13H5a2 2 0 01-2-2V5zm5.771 7H5V5h10v7H8.771z" clip-rule="evenodd"/>
+            </svg>
+            <span data-i18n="virtual_stylist.cultural_style">Cultural Style</span>
+          </h4>
+          <div class="cultural-recommendations">
+            <p class="text-sm text-gray-700 mb-2" data-i18n="virtual_stylist.traditional_modern">Traditional Modern Fusion</p>
+            <div class="space-y-2">
+              <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                </svg>
+                <span class="text-sm text-gray-600" data-i18n="virtual_stylist.silk_sarees">Silk Sarees with Modern Blouses</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                </svg>
+                <span class="text-sm text-gray-600" data-i18n="virtual_stylist.kurti_jeans">Kurtis with Jeans for Casual Look</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                </svg>
+                <span class="text-sm text-gray-600" data-i18n="virtual_stylist.traditional_jewelry">Traditional Jewelry with Western Outfits</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Outfit Suggestions -->
+    <div class="outfit-suggestions hidden mt-8">
+      <h4 class="text-xl font-semibold mb-6 text-center" data-i18n="virtual_stylist.outfit_ideas">Outfit Ideas for You</h4>
+      <div class="grid md:grid-cols-3 gap-6" id="outfit-grid">
+        <!-- Outfit cards will be dynamically inserted here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Style Profile Modal -->
+  <div class="modal fade" id="style-profile-modal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" data-i18n="virtual_stylist.profile_title">Complete Your Style Profile</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="style-profile-form">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label" data-i18n="virtual_stylist.body_shape">Body Shape</label>
+                <select class="form-select" name="bodyShape">
+                  <option value="">Select...</option>
+                  <option value="hourglass">Hourglass</option>
+                  <option value="pear">Pear</option>
+                  <option value="apple">Apple</option>
+                  <option value="rectangle">Rectangle</option>
+                  <option value="inverted-triangle">Inverted Triangle</option>
+                </select>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label" data-i18n="virtual_stylist.skin_tone">Skin Tone</label>
+                <select class="form-select" name="skinTone">
+                  <option value="">Select...</option>
+                  <option value="fair">Fair</option>
+                  <option value="light">Light</option>
+                  <option value="medium">Medium</option>
+                  <option value="olive">Olive</option>
+                  <option value="tan">Tan</option>
+                  <option value="dark">Dark</option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label" data-i18n="virtual_stylist.style_preference">Style Preference</label>
+                <select class="form-select" name="stylePreference">
+                  <option value="">Select...</option>
+                  <option value="traditional">Traditional</option>
+                  <option value="modern">Modern</option>
+                  <option value="fusion">Fusion</option>
+                  <option value="bohemian">Bohemian</option>
+                  <option value="minimalist">Minimalist</option>
+                  <option value="vintage">Vintage</option>
+                </select>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label" data-i18n="virtual_stylist.occasion">Primary Occasion</label>
+                <select class="form-select" name="occasion">
+                  <option value="">Select...</option>
+                  <option value="casual">Casual Daily Wear</option>
+                  <option value="work">Work/Professional</option>
+                  <option value="party">Party/Events</option>
+                  <option value="cultural">Cultural/Religious</option>
+                  <option value="formal">Formal Occasions</option>
+                </select>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label" data-i18n="virtual_stylist.favorite_colors">Favorite Colors</label>
+              <div class="color-preferences">
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="checkbox" name="colors" value="red" id="color-red">
+                  <label class="form-check-label" for="color-red">Red</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="checkbox" name="colors" value="blue" id="color-blue">
+                  <label class="form-check-label" for="color-blue">Blue</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="checkbox" name="colors" value="green" id="color-green">
+                  <label class="form-check-label" for="color-green">Green</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="checkbox" name="colors" value="purple" id="color-purple">
+                  <label class="form-check-label" for="color-purple">Purple</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="checkbox" name="colors" value="pink" id="color-pink">
+                  <label class="form-check-label" for="color-pink">Pink</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="checkbox" name="colors" value="orange" id="color-orange">
+                  <label class="form-check-label" for="color-orange">Orange</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="checkbox" name="colors" value="yellow" id="color-yellow">
+                  <label class="form-check-label" for="color-yellow">Yellow</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="checkbox" name="colors" value="black" id="color-black">
+                  <label class="form-check-label" for="color-black">Black</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="checkbox" name="colors" value="white" id="color-white">
+                  <label class="form-check-label" for="color-white">White</label>
+                </div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label" data-i18n="virtual_stylist.style_goals">Style Goals</label>
+              <textarea class="form-control" name="styleGoals" rows="3" placeholder="Tell me about your style goals..."></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-i18n="virtual_stylist.cancel">Cancel</button>
+          <button type="button" class="btn btn-primary" id="save-style-profile" data-i18n="virtual_stylist.save_profile">Save Profile</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.virtual-stylist {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+.stylist-chat {
+  min-height: 500px;
+}
+
+.chat-messages {
+  background: linear-gradient(to bottom, #fafafa, #ffffff);
+}
+
+.message {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message-avatar {
+  flex-shrink: 0;
+}
+
+.user-message .message-content {
+  justify-content: flex-end;
+}
+
+.user-message .message-bubble {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.ai-message .message-bubble {
+  background: #f3f4f6;
+  color: #1f2937;
+}
+
+.quick-action-btn {
+  transition: all 0.2s ease;
+}
+
+.quick-action-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.analysis-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.analysis-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.color-swatch {
+  transition: transform 0.2s ease;
+}
+
+.color-swatch:hover {
+  transform: scale(1.1);
+}
+
+.outfit-card {
+  transition: all 0.3s ease;
+}
+
+.outfit-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.typing-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.typing-indicator span {
+  width: 8px;
+  height: 8px;
+  background: #6b7280;
+  border-radius: 50%;
+  animation: typing 1.4s infinite;
+}
+
+.typing-indicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typing {
+  0%, 60%, 100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-10px);
+  }
+}
+
+@media (max-width: 768px) {
+  .stylist-chat {
+    min-height: 400px;
+  }
+
+  .chat-messages {
+    height: 300px;
+  }
+
+  .quick-actions {
+    justify-content: center;
+  }
+}
+</style>
+
+<script>
+class VirtualStylist {
+  constructor(container) {
+    this.container = container;
+    this.productId = container.dataset.productId;
+    this.messagesContainer = container.querySelector('#stylist-messages');
+    this.inputField = container.querySelector('#stylist-input');
+    this.sendButton = container.querySelector('#stylist-send');
+    this.dashboard = container.querySelector('.style-dashboard');
+    this.outfitGrid = container.querySelector('#outfit-grid');
+
+    this.conversationHistory = [];
+    this.userProfile = this.loadUserProfile();
+    this.isProcessing = false;
+
+    this.init();
+  }
+
+  init() {
+    this.setupEventListeners();
+    this.checkUserProfile();
+    this.loadConversationHistory();
+  }
+
+  setupEventListeners() {
+    // Send message
+    this.sendButton.addEventListener('click', () => this.sendMessage());
+    this.inputField.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        this.sendMessage();
+      }
+    });
+
+    // Quick actions
+    this.container.querySelectorAll('.quick-action-btn').forEach(btn => {
+      btn.addEventListener('click', () => this.handleQuickAction(btn.dataset.action));
+    });
+
+    // Style profile
+    const saveProfileBtn = document.getElementById('save-style-profile');
+    if (saveProfileBtn) {
+      saveProfileBtn.addEventListener('click', () => this.saveStyleProfile());
+    }
+  }
+
+  async sendMessage() {
+    const message = this.inputField.value.trim();
+    if (!message || this.isProcessing) return;
+
+    this.addMessage(message, 'user');
+    this.inputField.value = '';
+    this.isProcessing = true;
+    this.sendButton.disabled = true;
+
+    // Show typing indicator
+    this.showTypingIndicator();
+
+    try {
+      const response = await this.processMessage(message);
+      this.hideTypingIndicator();
+      this.addMessage(response, 'ai');
+    } catch (error) {
+      console.error('Error processing message:', error);
+      this.hideTypingIndicator();
+      this.addMessage('I apologize, but I encountered an error. Please try again.', 'ai');
+    }
+
+    this.isProcessing = false;
+    this.sendButton.disabled = false;
+    this.inputField.focus();
+  }
+
+  async processMessage(message) {
+    // Simulate AI processing with realistic response time
+    await new Promise(resolve => setTimeout(resolve, 1500 + Math.random() * 1000));
+
+    const lowerMessage = message.toLowerCase();
+
+    // Check for outfit requests
+    if (lowerMessage.includes('outfit') || lowerMessage.includes('wear') || lowerMessage.includes('dress')) {
+      return await this.generateOutfitSuggestion(message);
+    }
+
+    // Check for style analysis
+    if (lowerMessage.includes('style') || lowerMessage.includes('look') || lowerMessage.includes('fashion')) {
+      return await this.generateStyleAdvice(message);
+    }
+
+    // Check for color advice
+    if (lowerMessage.includes('color') || lowerMessage.includes('shade') || lowerMessage.includes('tone')) {
+      return await this.generateColorAdvice(message);
+    }
+
+    // Check for cultural style
+    if (lowerMessage.includes('cultural') || lowerMessage.includes('traditional') || lowerMessage.includes('tamil')) {
+      return await this.generateCulturalAdvice(message);
+    }
+
+    // Check for body type advice
+    if (lowerMessage.includes('body') || lowerMessage.includes('shape') || lowerMessage.includes('figure')) {
+      return await this.generateBodyTypeAdvice(message);
+    }
+
+    // Default response
+    return this.generateGeneralAdvice(message);
+  }
+
+  async generateOutfitSuggestion(message) {
+    const userProfile = this.userProfile;
+    const suggestions = [
+      {
+        title: "Modern Fusion Look",
+        description: "Contemporary silhouettes with traditional Tamil elements",
+        items: ["Embroidered Kurti", "Slim Fit Jeans", "Statement Jewelry", "Jutti Footwear"],
+        colors: ["#8B4513", "#FF6347", "#FFD700"],
+        occasion: "Casual Outing"
+      },
+      {
+        title: "Professional Elegance",
+        description: "Office-ready ensemble with cultural touches",
+        items: ["Silk Blouse", "Tailored Pants", "Minimal Jewelry", "Block Heels"],
+        colors: ["#2F4F4F", "#800080", "#C0C0C0"],
+        occasion: "Work/Professional"
+      },
+      {
+        title: "Festive Glamour",
+        description: "Traditional attire with modern accessories",
+        items: ["Designer Saree", "Embroidered Blouse", "Gold Jewelry", "Heeled Sandals"],
+        colors: ["#FF1493", "#FFD700", "#8B0000"],
+        occasion: "Festival/Party"
+      }
+    ];
+
+    const suggestion = suggestions[Math.floor(Math.random() * suggestions.length)];
+
+    // Show outfit suggestions
+    this.showOutfitSuggestions([suggestion]);
+
+    return `Based on your preferences, I'd recommend the "${suggestion.title}" for ${suggestion.occasion.toLowerCase()}.
+
+${suggestion.description}
+
+**Key Pieces:**
+${suggestion.items.map(item => `• ${item}`).join('\n')}
+
+**Color Palette:** Rich, vibrant colors that complement your skin tone.
+
+Would you like me to suggest accessories or alternatives for this look?`;
+  }
+
+  async generateStyleAdvice(message) {
+    const userProfile = this.userProfile;
+
+    if (!userProfile.bodyShape && !userProfile.stylePreference) {
+      return `I'd love to give you personalized style advice! To provide the best recommendations, could you tell me a bit about your preferences?
+
+You can share:
+• Your body shape (hourglass, pear, apple, etc.)
+• Style preference (traditional, modern, fusion, etc.)
+• Favorite colors
+• Typical occasions you dress for
+
+Or click "Style Analysis" above for a quick assessment!`;
+    }
+
+    const advice = {
+      bodyShape: userProfile.bodyShape || 'versatile',
+      style: userProfile.stylePreference || 'fusion',
+      colors: userProfile.colors || ['purple', 'blue']
+    };
+
+    return `Based on your ${advice.bodyShape} body shape and ${advice.style} style preference, here's my advice:
+
+**What Works Best:**
+• **Tops:** Wrap styles and V-necks elongate your torso beautifully
+• **Bottoms:** High-waisted options create a balanced silhouette
+• **Colors:** ${advice.colors.join(' and ')} complement your skin tone perfectly
+• **Fabrics:** Silk and cotton blends offer both comfort and elegance
+
+**Style Tips:**
+• Layer traditional pieces with modern outerwear
+• Invest in quality basics that can be dressed up or down
+• Don't be afraid to mix patterns and textures
+• Accessorize thoughtfully - one statement piece per outfit
+
+**Cultural Touch:**
+Consider incorporating traditional Tamil jewelry or embroidery details into modern silhouettes for that perfect fusion look!`;
+  }
+
+  async generateColorAdvice(message) {
+    const userProfile = this.userProfile;
+    const skinTone = userProfile.skinTone || 'medium';
+
+    const colorPalettes = {
+      fair: {
+        season: 'Winter',
+        colors: ['#000080', '#8B0000', '#2F4F4F', '#800080'],
+        avoid: ['#FFFFE0', '#F0E68C', '#DEB887']
+      },
+      light: {
+        season: 'Summer',
+        colors: ['#4682B4', '#20B2AA', '#9370DB', '#FF69B4'],
+        avoid: ['#FF4500', '#FF8C00', '#FFD700']
+      },
+      medium: {
+        season: 'Autumn',
+        colors: ['#8B4513', '#CD853F', '#556B2F', '#B22222'],
+        avoid: ['#E0FFFF', '#F0FFFF', '#FFFACD']
+      },
+      olive: {
+        season: 'Spring',
+        colors: ['#228B22', '#32CD32', '#FF6347', '#FFD700'],
+        avoid: ['#800080', '#4B0082', '#8B008B']
+      },
+      tan: {
+        season: 'Autumn',
+        colors: ['#D2691E', '#A0522D', '#8B4513', '#FF6347'],
+        avoid: ['#F0F8FF', '#E6E6FA', '#FFF0F5']
+      },
+      dark: {
+        season: 'Winter',
+        colors: ['#FF1493', '#FF69B4', '#00CED1', '#FFD700'],
+        avoid: ['#F5F5DC', '#FAEBD7', '#FFE4B5']
+      }
+    };
+
+    const palette = colorPalettes[skinTone] || colorPalettes.medium;
+
+    // Update color analysis in dashboard
+    this.updateColorAnalysis(palette);
+
+    return `Your perfect color palette is **${palette.season}**! Here's what works best for you:
+
+**Your Best Colors:**
+${palette.colors.map(color => `• ${color}`).join('\n')}
+
+**Colors to Avoid:**
+${palette.avoid.map(color => `• ${color}`).join('\n')}
+
+**Styling Tips:**
+• Use your best colors near your face for maximum impact
+• Mix neutral bases with your best accent colors
+• Consider the occasion - deeper colors for formal events, brighter for casual
+• Don't forget about accessories in your perfect shades!
+
+**Cultural Note:** Traditional Tamil colors like marigold yellow, deep red, and royal blue work beautifully with your palette.`;
+  }
+
+  async generateCulturalAdvice(message) {
+    const userProfile = this.userProfile;
+
+    return `Embracing Tamil cultural fashion while maintaining modern style is a beautiful approach! Here are some authentic fusion ideas:
+
+**Traditional Elements to Incorporate:**
+• **Kalamkari Prints:** Hand-painted or printed fabrics with mythological motifs
+• **Temple Jewelry:** Traditional gold pieces with contemporary outfits
+• **Silk Fabrics:** Kanjivaram or Mysore silk in modern silhouettes
+• **Floral Motifs:** Jasmine and lotus designs in accessories
+
+**Modern Fusion Ideas:**
+• Silk saree blouse with jeans or trousers
+• Traditional jewelry with Western dresses
+• Kurti paired with palazzo pants
+• Block-printed dupattas with simple tops
+
+**Occasion-Specific Suggestions:**
+• **Daily Wear:** Cotton kurtis with leggings, minimal jewelry
+• **Work:** Silk blouse with tailored pants, traditional watch
+• **Festivals:** Full traditional attire with modern accessories
+• **Casual Outings:** Fusion wear with comfortable footwear
+
+**Color Wisdom:**
+Traditional Tamil fashion celebrates rich, vibrant colors. Don't shy away from deep reds, royal blues, and golden yellows - they're not just beautiful, they carry cultural significance!
+
+Would you like specific outfit suggestions for a particular occasion?`;
+  }
+
+  async generateBodyTypeAdvice(message) {
+    if (!this.userProfile.bodyShape) {
+      return `For personalized body type advice, I'd recommend completing your style profile first.
+
+However, here are some universal styling tips that work for most body types:
+
+**General Principles:**
+• Emphasize your favorite features
+• Create balance with proportions
+• Choose fabrics that drape well
+• Fit is more important than size
+
+**Quick Assessment:**
+Would you like me to help you determine your body type? I can guide you through some simple measurements, or you can tell me about your proportions and I'll provide targeted advice.
+
+Common body types include:
+• Hourglass (balanced bust/hips, defined waist)
+• Pear (narrow shoulders, wider hips)
+• Apple (wider midsection, slimmer legs)
+• Rectangle (similar measurements throughout)
+• Inverted Triangle (wider shoulders, narrower hips)
+
+Which sounds most like you?`;
+    }
+
+    const bodyShape = this.userProfile.bodyShape;
+    const advice = {
+      hourglass: {
+        strengths: "Balanced proportions with defined waist",
+        recommendations: [
+          "Wrap dresses and tops accentuate your waist beautifully",
+          "Fitted pieces highlight your natural curves",
+          "High-waisted bottoms enhance your silhouette",
+          "Avoid shapeless clothing that hides your waist"
+        ]
+      },
+      pear: {
+        strengths: "Narrow upper body, wider hips and thighs",
+        recommendations: [
+          "Draw attention upward with statement necklines",
+          "Dark-colored bottoms minimize hip width",
+          "A-line skirts create balanced proportions",
+          "Structured shoulders balance your lower body"
+        ]
+      },
+      apple: {
+        strengths: "Broader upper body, slimmer legs",
+        recommendations: [
+          "Empire waist styles flow over your midsection",
+          "V-necks elongate your torso",
+          "Show off your great legs with shorter hemlines",
+          "Avoid high necklines and tight waistbands"
+        ]
+      },
+      rectangle: {
+        strengths: "Athletic build with balanced measurements",
+        recommendations: [
+          "Create curves with peplum tops and ruffles",
+          "Belted styles define your waist",
+          "Asymmetrical designs add visual interest",
+          "Layering creates dimension and shape"
+        ]
+      },
+      'inverted-triangle': {
+        strengths: "Broader shoulders, narrower hips",
+        recommendations: [
+          "Draw attention to your lower body with bright colors",
+          "Scoop and sweetheart necklines soften shoulder width",
+          "Full skirts balance your proportions",
+          "Avoid shoulder pads and structured shoulders"
+        ]
+      }
+    };
+
+    const shapeAdvice = advice[bodyShape] || advice.rectangle;
+
+    // Update body type analysis in dashboard
+    this.updateBodyTypeAnalysis(bodyShape);
+
+    return `Your ${bodyShape.replace('-', ' ')} body type has beautiful ${shapeAdvice.strengths.toLowerCase()}!
+
+**What Works Best For You:**
+${shapeAdvice.recommendations.map(rec => `• ${rec}`).join('\n')}
+
+**Cultural Styling Tips:**
+Traditional Tamil clothing often features draping and layering that can be very flattering for your body type. Consider:
+• Sarees with well-fitted blouses
+• Anarkali suits for special occasions
+• Layered kurti sets
+• Traditional draping techniques that accentuate your best features
+
+**Key Takeaway:** The most important thing is that you feel confident and comfortable in what you wear. These are guidelines, not rules!`;
+  }
+
+  generateGeneralAdvice(message) {
+    const generalAdvice = [
+      "Invest in quality basics that can be mixed and matched.",
+      "Consider the occasion when choosing your outfit.",
+      "Don't be afraid to experiment with colors and patterns.",
+      "Accessories can transform a simple outfit.",
+      "Comfort is key - if you're not comfortable, it shows.",
+      "Tailoring makes a huge difference in how clothes fit.",
+      "Build a capsule wardrobe with versatile pieces.",
+      "Consider your lifestyle when shopping for clothes."
+    ];
+
+    const randomAdvice = generalAdvice[Math.floor(Math.random() * generalAdvice.length)];
+
+    return `That's a great question! Here's my fashion advice:
+
+${randomAdvice}
+
+Since I'm still learning about your personal style, here are some quick questions to help me give you better recommendations:
+
+• What's your go-to outfit for a casual day?
+• Do you prefer traditional, modern, or fusion styles?
+• What colors do you feel most confident in?
+• What occasions do you typically dress for?
+
+The more I know about your preferences, the better I can help you look and feel your best!`;
+  }
+
+  addMessage(content, sender) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${sender}-message`;
+
+    const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    if (sender === 'user') {
+      messageDiv.innerHTML = `
+        <div class="flex gap-3 justify-end">
+          <div class="message-content">
+            <div class="bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg p-3 max-w-xs">
+              <p class="text-sm">${this.escapeHtml(content)}</p>
+            </div>
+            <p class="text-xs text-gray-500 mt-1 text-right">${timestamp}</p>
+          </div>
+          <div class="message-avatar">
+            <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 text-sm">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      `;
+    } else {
+      messageDiv.innerHTML = `
+        <div class="flex gap-3">
+          <div class="message-avatar">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-sm">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+          </div>
+          <div class="message-content flex-1">
+            <div class="bg-gray-100 rounded-lg p-3 max-w-md">
+              <p class="text-sm font-medium text-purple-600 mb-1">Maya, Fashion AI</p>
+              <p class="text-gray-800 text-sm whitespace-pre-line">${this.escapeHtml(content)}</p>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">${timestamp}</p>
+          </div>
+        </div>
+      `;
+    }
+
+    this.messagesContainer.appendChild(messageDiv);
+    this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+
+    // Save to conversation history
+    this.conversationHistory.push({
+      content,
+      sender,
+      timestamp: new Date().toISOString()
+    });
+
+    this.saveConversationHistory();
+  }
+
+  showTypingIndicator() {
+    const typingDiv = document.createElement('div');
+    typingDiv.className = 'message ai-message typing-message';
+    typingDiv.id = 'typing-indicator';
+
+    typingDiv.innerHTML = `
+      <div class="flex gap-3">
+        <div class="message-avatar">
+          <div class="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-sm">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+        </div>
+        <div class="message-content flex-1">
+          <div class="bg-gray-100 rounded-lg p-3">
+            <div class="typing-indicator">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    this.messagesContainer.appendChild(typingDiv);
+    this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+  }
+
+  hideTypingIndicator() {
+    const typingIndicator = document.getElementById('typing-indicator');
+    if (typingIndicator) {
+      typingIndicator.remove();
+    }
+  }
+
+  handleQuickAction(action) {
+    switch (action) {
+      case 'outfit-suggestion':
+        this.inputField.value = "Can you suggest an outfit for me?";
+        this.sendMessage();
+        break;
+      case 'style-analysis':
+        this.showStyleAnalysis();
+        break;
+      case 'color-advice':
+        this.inputField.value = "What colors work best for me?";
+        this.sendMessage();
+        break;
+      case 'cultural-style':
+        this.inputField.value = "How can I incorporate traditional Tamil elements into modern fashion?";
+        this.sendMessage();
+        break;
+    }
+  }
+
+  showStyleAnalysis() {
+    this.dashboard.classList.remove('hidden');
+    this.dashboard.scrollIntoView({ behavior: 'smooth' });
+
+    // Update dashboard with user profile data
+    if (this.userProfile.bodyShape) {
+      this.updateBodyTypeAnalysis(this.userProfile.bodyShape);
+    }
+
+    if (this.userProfile.skinTone) {
+      this.updateColorAnalysis(this.userProfile.skinTone);
+    }
+
+    if (this.userProfile.stylePreference) {
+      this.updateStylePreferences(this.userProfile.stylePreference);
+    }
+  }
+
+  updateBodyTypeAnalysis(bodyShape) {
+    const bodyTypeElement = this.dashboard.querySelector('[data-body-type]');
+    if (bodyTypeElement) {
+      bodyTypeElement.textContent = bodyShape.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
+    }
+  }
+
+  updateColorAnalysis(skinTone) {
+    const palette = {
+      fair: ['#E6E6FA', '#DDA0DD', '#9370DB', '#8B008B'],
+      light: ['#87CEEB', '#4682B4', '#191970', '#000080'],
+      medium: ['#F0E68C', '#DAA520', '#B8860B', '#8B6914'],
+      olive: ['#98FB98', '#3CB371', '#228B22', '#006400'],
+      tan: ['#FFA07A', '#FA8072', '#CD5C5C', '#8B0000'],
+      dark: ['#FFB6C1', '#FF69B4', '#FF1493', '#C71585']
+    };
+
+    const colors = palette[skinTone] || palette.medium;
+    const colorSwatches = this.dashboard.querySelectorAll('.color-swatch');
+
+    colors.forEach((color, index) => {
+      if (colorSwatches[index]) {
+        colorSwatches[index].style.backgroundColor = color;
+      }
+    });
+  }
+
+  updateStylePreferences(stylePreference) {
+    const styleTags = this.dashboard.querySelector('.style-tags');
+    if (styleTags) {
+      const preferences = {
+        traditional: ['Traditional', 'Cultural', 'Classic', 'Elegant'],
+        modern: ['Contemporary', 'Minimalist', 'Clean Lines', 'Urban'],
+        fusion: ['Fusion', 'Eclectic', 'Mixed Styles', 'Innovative'],
+        bohemian: ['Bohemian', 'Free-spirited', 'Artistic', 'Flowing'],
+        minimalist: ['Minimalist', 'Simple', 'Clean', 'Understated'],
+        vintage: ['Vintage', 'Retro', 'Classic', 'Timeless']
+      };
+
+      const tags = preferences[stylePreference] || preferences.fusion;
+      styleTags.innerHTML = tags.map(tag =>
+        `<span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs">${tag}</span>`
+      ).join('');
+    }
+  }
+
+  showOutfitSuggestions(suggestions) {
+    this.outfitGrid.parentElement.classList.remove('hidden');
+
+    this.outfitGrid.innerHTML = suggestions.map(outfit => `
+      <div class="outfit-card bg-white rounded-lg shadow-md overflow-hidden">
+        <div class="outfit-image h-48 bg-gradient-to-br from-purple-200 to-pink-200 flex items-center justify-center">
+          <svg class="w-16 h-16 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm12 2H4v8h12V6z" clip-rule="evenodd"/>
+          </svg>
+        </div>
+        <div class="p-4">
+          <h5 class="font-semibold mb-2">${outfit.title}</h5>
+          <p class="text-sm text-gray-600 mb-3">${outfit.description}</p>
+          <div class="mb-3">
+            <p class="text-xs font-medium text-gray-700 mb-1">Key Pieces:</p>
+            <div class="space-y-1">
+              ${outfit.items.map(item => `<p class="text-xs text-gray-600">• ${item}</p>`).join('')}
+            </div>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded">${outfit.occasion}</span>
+            <button class="text-purple-600 hover:text-purple-800 text-sm font-medium" onclick="window.theme.virtualStylist.saveOutfit('${outfit.title}')">
+              Save Look
+            </button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  checkUserProfile() {
+    if (!this.userProfile.bodyShape || !this.userProfile.skinTone) {
+      // Show profile modal after a short delay
+      setTimeout(() => {
+        const modal = document.getElementById('style-profile-modal');
+        if (modal && !localStorage.getItem('style-profile-dismissed')) {
+          const bsModal = new bootstrap.Modal(modal);
+          bsModal.show();
+        }
+      }, 3000);
+    }
+  }
+
+  saveStyleProfile() {
+    const form = document.getElementById('style-profile-form');
+    const formData = new FormData(form);
+
+    this.userProfile = {
+      bodyShape: formData.get('bodyShape'),
+      skinTone: formData.get('skinTone'),
+      stylePreference: formData.get('stylePreference'),
+      occasion: formData.get('occasion'),
+      colors: formData.getAll('colors'),
+      styleGoals: formData.get('styleGoals'),
+      updatedAt: new Date().toISOString()
+    };
+
+    localStorage.setItem('virtual-stylist-profile', JSON.stringify(this.userProfile));
+
+    // Hide modal
+    const modal = document.getElementById('style-profile-modal');
+    const bsModal = bootstrap.Modal.getInstance(modal);
+    bsModal.hide();
+
+    // Show confirmation
+    this.addMessage('Great! I\'ve saved your style profile. Now I can give you more personalized advice. What would you like to know?', 'ai');
+  }
+
+  loadUserProfile() {
+    const saved = localStorage.getItem('virtual-stylist-profile');
+    return saved ? JSON.parse(saved) : {};
+  }
+
+  saveConversationHistory() {
+    // Keep only last 50 messages
+    const recent = this.conversationHistory.slice(-50);
+    localStorage.setItem('virtual-stylist-conversation', JSON.stringify(recent));
+  }
+
+  loadConversationHistory() {
+    const saved = localStorage.getItem('virtual-stylist-conversation');
+    if (saved) {
+      this.conversationHistory = JSON.parse(saved);
+
+      // Show last few messages in UI
+      const recent = this.conversationHistory.slice(-5);
+      recent.forEach(msg => {
+        this.addMessage(msg.content, msg.sender);
+      });
+    }
+  }
+
+  saveOutfit(outfitTitle) {
+    let savedOutfits = JSON.parse(localStorage.getItem('virtual-stylist-outfits') || '[]');
+    savedOutfits.push({
+      title: outfitTitle,
+      savedAt: new Date().toISOString()
+    });
+    localStorage.setItem('virtual-stylist-outfits', JSON.stringify(savedOutfits));
+
+    this.addMessage(`I've saved "${outfitTitle}" to your style inspiration board!`, 'ai');
+  }
+
+  escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+}
+
+// Initialize Virtual Stylist
+document.addEventListener('DOMContentLoaded', function() {
+  const stylistContainer = document.querySelector('[data-section-id="virtual-stylist"]');
+  if (stylistContainer) {
+    window.theme.virtualStylist = new VirtualStylist(stylistContainer);
+  }
+});
+</script>

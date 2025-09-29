@@ -1,0 +1,1476 @@
+{%- comment -%}
+Size Predictor Snippet
+AI-powered size recommendation system with measurements, fit analysis, and personalized suggestions
+{%- endcomment -%}
+
+<div class="size-predictor" data-section-id="{{ section.id }}" data-product-id="{{ product.id }}">
+  <!-- Size Predictor Container -->
+  <div class="predictor-container bg-white rounded-lg shadow-lg overflow-hidden">
+
+    <!-- Header -->
+    <div class="predictor-header bg-gradient-to-r from-purple-600 to-blue-600 text-white p-6">
+      <div class="max-w-4xl mx-auto text-center">
+        <h2 class="text-2xl font-bold mb-2">{{ 'products.size_predictor.ai_size_recommendation' | t }}</h2>
+        <p class="text-purple-100">{{ 'products.size_predictor.perfect_fit_guaranteed' | t }}</p>
+        <div class="mt-4 flex justify-center gap-4 text-sm">
+          <div class="flex items-center gap-1">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+            </svg>
+            {{ 'products.size_predictor.ml_algorithm' | t }}
+          </div>
+          <div class="flex items-center gap-1">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+            </svg>
+            {{ 'products.size_predictor.body_analysis' | t }}
+          </div>
+          <div class="flex items-center gap-1">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+            </svg>
+            {{ 'products.size_predictor.style_matching' | t }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="max-w-4xl mx-auto p-6">
+      <!-- Step Progress Indicator -->
+      <div class="step-progress mb-8">
+        <div class="flex items-center justify-between">
+          <div class="step flex-1 text-center" data-step="1">
+            <div class="step-circle w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center mx-auto mb-2 text-sm font-medium">1</div>
+            <div class="step-label text-sm font-medium text-gray-700">{{ 'products.size_predictor.measurements' | t }}</div>
+          </div>
+          <div class="step-connector flex-1 h-1 bg-gray-300 mx-2"></div>
+          <div class="step flex-1 text-center" data-step="2">
+            <div class="step-circle w-8 h-8 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center mx-auto mb-2 text-sm font-medium">2</div>
+            <div class="step-label text-sm font-medium text-gray-500">{{ 'products.size_predictor.preferences' | t }}</div>
+          </div>
+          <div class="step-connector flex-1 h-1 bg-gray-300 mx-2"></div>
+          <div class="step flex-1 text-center" data-step="3">
+            <div class="step-circle w-8 h-8 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center mx-auto mb-2 text-sm font-medium">3</div>
+            <div class="step-label text-sm font-medium text-gray-500">{{ 'products.size_predictor.recommendations' | t }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 1: Measurements -->
+      <div class="step-content active" data-step-content="1">
+        <div class="bg-blue-50 rounded-lg p-6 mb-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"/>
+            </svg>
+            {{ 'products.size_predictor.enter_measurements' | t }}
+          </h3>
+          <p class="text-sm text-gray-600 mb-4">{{ 'products.size_predictor.measurement_instructions' | t }}</p>
+
+          <!-- Gender Selection -->
+          <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-2">{{ 'products.size_predictor.gender' | t }}</label>
+            <div class="gender-options flex gap-4">
+              <button class="gender-option flex-1 p-4 border-2 border-gray-200 rounded-lg hover:border-purple-400 transition-all text-center" data-gender="female">
+                <svg class="w-8 h-8 mx-auto mb-2 text-pink-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/>
+                </svg>
+                <div class="font-medium">{{ 'products.size_predictor.women' | t }}</div>
+              </button>
+              <button class="gender-option flex-1 p-4 border-2 border-gray-200 rounded-lg hover:border-purple-400 transition-all text-center" data-gender="male">
+                <svg class="w-8 h-8 mx-auto mb-2 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/>
+                </svg>
+                <div class="font-medium">{{ 'products.size_predictor.men' | t }}</div>
+              </button>
+              <button class="gender-option flex-1 p-4 border-2 border-gray-200 rounded-lg hover:border-purple-400 transition-all text-center" data-gender="unisex">
+                <svg class="w-8 h-8 mx-auto mb-2 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                  <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"/>
+                </svg>
+                <div class="font-medium">{{ 'products.size_predictor.unisex' | t }}</div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Measurement Input -->
+          <div class="measurements-grid grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Height -->
+            <div class="measurement-group">
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                {{ 'products.size_predictor.height' | t }}
+                <span class="text-gray-500">({{ 'products.size_predictor.cm' | t }})</span>
+              </label>
+              <input type="number" id="height" class="measurement-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-transparent" placeholder="165" min="120" max="220">
+              <div class="measurement-guide mt-2 text-xs text-gray-500">
+                <svg class="w-4 h-4 inline-block mr-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"/>
+                </svg>
+                {{ 'products.size_predictor.height_guide' | t }}
+              </div>
+            </div>
+
+            <!-- Weight -->
+            <div class="measurement-group">
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                {{ 'products.size_predictor.weight' | t }}
+                <span class="text-gray-500">({{ 'products.size_predictor.kg' | t }})</span>
+              </label>
+              <input type="number" id="weight" class="measurement-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-transparent" placeholder="65" min="30" max="200">
+              <div class="measurement-guide mt-2 text-xs text-gray-500">
+                <svg class="w-4 h-4 inline-block mr-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"/>
+                </svg>
+                {{ 'products.size_predictor.weight_guide' | t }}
+              </div>
+            </div>
+
+            <!-- Chest/Bust -->
+            <div class="measurement-group">
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                <span class="chest-label">{{ 'products.size_predictor.chest' | t }}</span>
+                <span class="text-gray-500">({{ 'products.size_predictor.cm' | t }})</span>
+              </label>
+              <input type="number" id="chest" class="measurement-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-transparent" placeholder="90" min="70" max="150">
+              <div class="measurement-guide mt-2 text-xs text-gray-500">
+                <svg class="w-4 h-4 inline-block mr-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"/>
+                </svg>
+                <span class="chest-guide">{{ 'products.size_predictor.chest_guide' | t }}</span>
+              </div>
+            </div>
+
+            <!-- Waist -->
+            <div class="measurement-group">
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                {{ 'products.size_predictor.waist' | t }}
+                <span class="text-gray-500">({{ 'products.size_predictor.cm' | t }})</span>
+              </label>
+              <input type="number" id="waist" class="measurement-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-transparent" placeholder="75" min="60" max="140">
+              <div class="measurement-guide mt-2 text-xs text-gray-500">
+                <svg class="w-4 h-4 inline-block mr-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"/>
+                </svg>
+                {{ 'products.size_predictor.waist_guide' | t }}
+              </div>
+            </div>
+
+            <!-- Hips (for women) -->
+            <div class="measurement-group hips-group" style="display: none;">
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                {{ 'products.size_predictor.hips' | t }}
+                <span class="text-gray-500">({{ 'products.size_predictor.cm' | t }})</span>
+              </label>
+              <input type="number" id="hips" class="measurement-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-transparent" placeholder="95" min="80" max="160">
+              <div class="measurement-guide mt-2 text-xs text-gray-500">
+                <svg class="w-4 h-4 inline-block mr-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"/>
+                </svg>
+                {{ 'products.size_predictor.hips_guide' | t }}
+              </div>
+            </div>
+
+            <!-- Body Type -->
+            <div class="measurement-group">
+              <label class="block text-sm font-medium text-gray-700 mb-2">{{ 'products.size_predictor.body_type' | t }}</label>
+              <select id="body-type" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-transparent">
+                <option value="">{{ 'products.size_predictor.select_body_type' | t }}</option>
+                <option value="ectomorph">{{ 'products.size_predictor.ectomorph' | t }} - {{ 'products.size_predictor.lean_slender' | t }}</option>
+                <option value="mesomorph">{{ 'products.size_predictor.mesomorph' | t }} - {{ 'products.size_predictor.athletic_muscular' | t }}</option>
+                <option value="endomorph">{{ 'products.size_predictor.endomorph' | t }} - {{ 'products.size_predictor.curvy_fuller' | t }}</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Size System -->
+          <div class="mt-6">
+            <label class="block text-sm font-medium text-gray-700 mb-2">{{ 'products.size_predictor.preferred_size_system' | t }}</label>
+            <div class="size-system-options flex gap-4">
+              <button class="size-system-option px-4 py-2 border-2 border-gray-200 rounded-lg hover:border-purple-400 transition-all" data-system="EU">{{ 'products.size_predictor.european' | t }}</button>
+              <button class="size-system-option px-4 py-2 border-2 border-gray-200 rounded-lg hover:border-purple-400 transition-all" data-system="US">{{ 'products.size_predictor.us' | t }}</button>
+              <button class="size-system-option px-4 py-2 border-2 border-gray-200 rounded-lg hover:border-purple-400 transition-all" data-system="UK">{{ 'products.size_predictor.uk' | t }}</button>
+              <button class="size-system-option px-4 py-2 border-2 border-gray-200 rounded-lg hover:border-purple-400 transition-all active" data-system="INT">{{ 'products.size_predictor.international' | t }}</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-end">
+          <button class="next-step-btn bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors" data-next-step="2">
+            {{ 'products.size_predictor.next_preferences' | t }}
+            <svg class="w-4 h-4 inline-block ml-1" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 2: Preferences -->
+      <div class="step-content" data-step-content="2" style="display: none;">
+        <div class="bg-purple-50 rounded-lg p-6 mb-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/>
+            </svg>
+            {{ 'products.size_predictor.your_preferences' | t }}
+          </h3>
+          <p class="text-sm text-gray-600 mb-4">{{ 'products.size_predictor.preferences_help' | t }}</p>
+
+          <!-- Fit Preference -->
+          <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-3">{{ 'products.size_predictor.preferred_fit' | t }}</label>
+            <div class="fit-options grid grid-cols-2 md:grid-cols-4 gap-3">
+              <button class="fit-option p-4 border-2 border-gray-200 rounded-lg hover:border-purple-400 transition-all text-center" data-fit="tight">
+                <div class="fit-icon text-2xl mb-2">👗</div>
+                <div class="font-medium">{{ 'products.size_predictor.tight' | t }}</div>
+                <div class="text-xs text-gray-500">{{ 'products.size_predictor.snug_fit' | t }}</div>
+              </button>
+              <button class="fit-option p-4 border-2 border-gray-200 rounded-lg hover:border-purple-400 transition-all text-center active" data-fit="regular">
+                <div class="fit-icon text-2xl mb-2">👔</div>
+                <div class="font-medium">{{ 'products.size_predictor.regular' | t }}</div>
+                <div class="text-xs text-gray-500">{{ 'products.size_predictor.standard_fit' | t }}</div>
+              </button>
+              <button class="fit-option p-4 border-2 border-gray-200 rounded-lg hover:border-purple-400 transition-all text-center" data-fit="loose">
+                <div class="fit-icon text-2xl mb-2">👕</div>
+                <div class="font-medium">{{ 'products.size_predictor.loose' | t }}</div>
+                <div class="text-xs text-gray-500">{{ 'products.size_predictor.relaxed_fit' | t }}</div>
+              </button>
+              <button class="fit-option p-4 border-2 border-gray-200 rounded-lg hover:border-purple-400 transition-all text-center" data-fit="oversized">
+                <div class="fit-icon text-2xl mb-2">🧥</div>
+                <div class="font-medium">{{ 'products.size_predictor.oversized' | t }}</div>
+                <div class="text-xs text-gray-500">{{ 'products.size_predictor.extra_room' | t }}</div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Comfort Priority -->
+          <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-3">{{ 'products.size_predictor.comfort_priority' | t }}</label>
+            <div class="comfort-options space-y-3">
+              <div class="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:border-purple-400 transition-all">
+                <div>
+                  <div class="font-medium">{{ 'products.size_predictor.breathability' | t }}</div>
+                  <div class="text-sm text-gray-500">{{ 'products.size_predictor.air_circulation' | t }}</div>
+                </div>
+                <input type="range" class="comfort-slider w-24" data-comfort="breathability" min="1" max="5" value="3">
+              </div>
+              <div class="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:border-purple-400 transition-all">
+                <div>
+                  <div class="font-medium">{{ 'products.size_predictor.freedom_movement' | t }}</div>
+                  <div class="text-sm text-gray-500">{{ 'products.size_predictor.range_motion' | t }}</div>
+                </div>
+                <input type="range" class="comfort-slider w-24" data-comfort="movement" min="1" max="5" value="3">
+              </div>
+              <div class="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:border-purple-400 transition-all">
+                <div>
+                  <div class="font-medium">{{ 'products.size_predictor.style_appearance' | t }}</div>
+                  <div class="text-sm text-gray-500">{{ 'products.size_predictor.look_fit' | t }}</div>
+                </div>
+                <input type="range" class="comfort-slider w-24" data-comfort="style" min="1" max="5" value="3">
+              </div>
+            </div>
+          </div>
+
+          <!-- Typical Issues -->
+          <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-3">{{ 'products.size_predictor.common_issues' | t }}</label>
+            <div class="issues-grid grid grid-cols-1 md:grid-cols-2 gap-3">
+              <label class="issue-option flex items-center p-3 border border-gray-200 rounded-lg hover:border-purple-400 transition-all cursor-pointer">
+                <input type="checkbox" class="issue-checkbox mr-3" data-issue="shoulders-tight">
+                <span>{{ 'products.size_predictor.shoulders_tight' | t }}</span>
+              </label>
+              <label class="issue-option flex items-center p-3 border border-gray-200 rounded-lg hover:border-purple-400 transition-all cursor-pointer">
+                <input type="checkbox" class="issue-checkbox mr-3" data-issue="sleeves-long">
+                <span>{{ 'products.size_predictor.sleeves_long' | t }}</span>
+              </label>
+              <label class="issue-option flex items-center p-3 border border-gray-200 rounded-lg hover:border-purple-400 transition-all cursor-pointer">
+                <input type="checkbox" class="issue-checkbox mr-3" data-issue="waist-loose">
+                <span>{{ 'products.size_predictor.waist_loose' | t }}</span>
+              </label>
+              <label class="issue-option flex items-center p-3 border border-gray-200 rounded-lg hover:border-purple-400 transition-all cursor-pointer">
+                <input type="checkbox" class="issue-checkbox mr-3" data-issue="length-short">
+                <span>{{ 'products.size_predictor.length_short' | t }}</span>
+              </label>
+              <label class="issue-option flex items-center p-3 border border-gray-200 rounded-lg hover:border-purple-400 transition-all cursor-pointer">
+                <input type="checkbox" class="issue-checkbox mr-3" data-issue="chest-tight">
+                <span>{{ 'products.size_predictor.chest_tight' | t }}</span>
+              </label>
+              <label class="issue-option flex items-center p-3 border border-gray-200 rounded-lg hover:border-purple-400 transition-all cursor-pointer">
+                <input type="checkbox" class="issue-checkbox mr-3" data-issue="hips-tight">
+                <span>{{ 'products.size_predictor.hips_tight' | t }}</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Fabric Preference -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-3">{{ 'products.size_predictor.fabric_preference' | t }}</label>
+            <div class="fabric-options grid grid-cols-2 md:grid-cols-4 gap-3">
+              <button class="fabric-option p-3 border-2 border-gray-200 rounded-lg hover:border-purple-400 transition-all text-center active" data-fabric="stretch">
+                <div class="text-2xl mb-1">🧵</div>
+                <div class="text-sm">{{ 'products.size_predictor.stretch' | t }}</div>
+              </button>
+              <button class="fabric-option p-3 border-2 border-gray-200 rounded-lg hover:border-purple-400 transition-all text-center" data-fabric="structured">
+                <div class="text-2xl mb-1">👔</div>
+                <div class="text-sm">{{ 'products.size_predictor.structured' | t }}</div>
+              </button>
+              <button class="fabric-option p-3 border-2 border-gray-200 rounded-lg hover:border-purple-400 transition-all text-center" data-fabric="flowing">
+                <div class="text-2xl mb-1">👗</div>
+                <div class="text-sm">{{ 'products.size_predictor.flowing' | t }}</div>
+              </button>
+              <button class="fabric-option p-3 border-2 border-gray-200 rounded-lg hover:border-purple-400 transition-all text-center" data-fabric="heavy">
+                <div class="text-2xl mb-1">🧥</div>
+                <div class="text-sm">{{ 'products.size_predictor.heavy' | t }}</div>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-between">
+          <button class="prev-step-btn bg-gray-200 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-300 transition-colors" data-prev-step="1">
+            <svg class="w-4 h-4 inline-block mr-1" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"/>
+            </svg>
+            {{ 'products.size_predictor.back_measurements' | t }}
+          </button>
+          <button class="next-step-btn bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors" data-next-step="3">
+            {{ 'products.size_predictor.get_recommendations' | t }}
+            <svg class="w-4 h-4 inline-block ml-1" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 3: Recommendations -->
+      <div class="step-content" data-step-content="3" style="display: none;">
+        <div class="recommendations-container">
+          <!-- AI Processing -->
+          <div class="ai-processing text-center py-8" id="ai-processing">
+            <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-purple-600 mx-auto mb-4"></div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ 'products.size_predictor.analyzing_measurements' | t }}</h3>
+            <p class="text-gray-600">{{ 'products.size_predictor.ai_algorithm_working' | t }}</p>
+            <div class="processing-steps mt-4 text-left max-w-md mx-auto text-sm">
+              <div class="step-indicator flex items-center mb-2">
+                <div class="step-dot w-2 h-2 bg-purple-600 rounded-full mr-2"></div>
+                <span class="processing-step">{{ 'products.size_predictor.calculating_body_ratios' | t }}</span>
+              </div>
+              <div class="step-indicator flex items-center mb-2">
+                <div class="step-dot w-2 h-2 bg-gray-300 rounded-full mr-2"></div>
+                <span class="processing-step">{{ 'products.size_predictor.analyzing_fabric_properties' | t }}</span>
+              </div>
+              <div class="step-indicator flex items-center mb-2">
+                <div class="step-dot w-2 h-2 bg-gray-300 rounded-full mr-2"></div>
+                <span class="processing-step">{{ 'products.size_predictor.matching_style_preferences' | t }}</span>
+              </div>
+              <div class="step-indicator flex items-center">
+                <div class="step-dot w-2 h-2 bg-gray-300 rounded-full mr-2"></div>
+                <span class="processing-step">{{ 'products.size_predictor.generating_recommendations' | t }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Results -->
+          <div class="results-content hidden" id="results-content">
+            <!-- Primary Recommendation -->
+            <div class="primary-recommendation bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-6 mb-6 border-2 border-green-200">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+                  <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+                  </svg>
+                  {{ 'products.size_predictor.recommended_size' | t }}
+                </h3>
+                <div class="confidence-badge bg-green-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+                  {{ 'products.size_predictor.high_confidence' | t }}
+                </div>
+              </div>
+
+              <div class="recommended-size-display">
+                <div class="size-value text-4xl font-bold text-green-600 mb-2" id="recommended-size">M</div>
+                <div class="size-details grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                  <div class="text-center">
+                    <div class="text-gray-600">{{ 'products.size_predictor.eu_size' | t }}</div>
+                    <div class="font-medium" id="eu-size">38</div>
+                  </div>
+                  <div class="text-center">
+                    <div class="text-gray-600">{{ 'products.size_predictor.us_size' | t }}</div>
+                    <div class="font-medium" id="us-size">6</div>
+                  </div>
+                  <div class="text-center">
+                    <div class="text-gray-600">{{ 'products.size_predictor.uk_size' | t }}</div>
+                    <div class="font-medium" id="uk-size">10</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="recommendation-reason mt-4 p-4 bg-white rounded-lg">
+                <h4 class="font-medium text-gray-900 mb-2">{{ 'products.size_predictor.why_this_size' | t }}</h4>
+                <p class="text-sm text-gray-600" id="recommendation-explanation">
+                  Based on your measurements and preferences, our AI recommends size M for optimal comfort and fit.
+                </p>
+              </div>
+            </div>
+
+            <!-- Size Options -->
+            <div class="size-options-grid grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              <!-- Size Small -->
+              <div class="size-option-card border-2 border-gray-200 rounded-lg p-4 hover:border-purple-400 transition-all">
+                <div class="text-center">
+                  <div class="size-label text-lg font-medium text-gray-900">S</div>
+                  <div class="size-fit-indicator text-xs mb-3">
+                    <div class="fit-meter bg-gray-200 rounded-full h-2 mb-1">
+                      <div class="fit-level bg-yellow-400 h-2 rounded-full" style="width: 60%"></div>
+                    </div>
+                    <span class="text-yellow-600">{{ 'products.size_predictor.snug_fit' | t }}</span>
+                  </div>
+                  <div class="size-details text-xs text-gray-600 space-y-1">
+                    <div>{{ 'products.size_predictor.chest' | t }}: 86-90cm</div>
+                    <div>{{ 'products.size_predictor.waist' | t }}: 70-74cm</div>
+                  </div>
+                  <button class="select-size-btn mt-3 w-full py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm">
+                    {{ 'products.size_predictor.select_size' | t }}
+                  </button>
+                </div>
+              </div>
+
+              <!-- Size Medium (Recommended) -->
+              <div class="size-option-card border-2 border-green-500 bg-green-50 rounded-lg p-4">
+                <div class="text-center">
+                  <div class="size-label text-lg font-medium text-gray-900 flex items-center justify-center gap-1">
+                    M
+                    <svg class="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+                    </svg>
+                  </div>
+                  <div class="size-fit-indicator text-xs mb-3">
+                    <div class="fit-meter bg-gray-200 rounded-full h-2 mb-1">
+                      <div class="fit-level bg-green-500 h-2 rounded-full" style="width: 85%"></div>
+                    </div>
+                    <span class="text-green-600 font-medium">{{ 'products.size_predictor.perfect_fit' | t }}</span>
+                  </div>
+                  <div class="size-details text-xs text-gray-600 space-y-1">
+                    <div>{{ 'products.size_predictor.chest' | t }}: 90-94cm</div>
+                    <div>{{ 'products.size_predictor.waist' | t }}: 74-78cm</div>
+                  </div>
+                  <button class="select-size-btn mt-3 w-full py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm" data-size="M">
+                    {{ 'products.size_predictor.select_recommended' | t }}
+                  </button>
+                </div>
+              </div>
+
+              <!-- Size Large -->
+              <div class="size-option-card border-2 border-gray-200 rounded-lg p-4 hover:border-purple-400 transition-all">
+                <div class="text-center">
+                  <div class="size-label text-lg font-medium text-gray-900">L</div>
+                  <div class="size-fit-indicator text-xs mb-3">
+                    <div class="fit-meter bg-gray-200 rounded-full h-2 mb-1">
+                      <div class="fit-level bg-blue-400 h-2 rounded-full" style="width: 95%"></div>
+                    </div>
+                    <span class="text-blue-600">{{ 'products.size_predictor.relaxed_fit' | t }}</span>
+                  </div>
+                  <div class="size-details text-xs text-gray-600 space-y-1">
+                    <div>{{ 'products.size_predictor.chest' | t }}: 94-98cm</div>
+                    <div>{{ 'products.size_predictor.waist' | t }}: 78-82cm</div>
+                  </div>
+                  <button class="select-size-btn mt-3 w-full py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm">
+                    {{ 'products.size_predictor.select_size' | t }}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Detailed Analysis -->
+            <div class="detailed-analysis bg-gray-50 rounded-lg p-6 mb-6">
+              <h3 class="text-lg font-semibold text-gray-900 mb-4">{{ 'products.size_predictor.detailed_analysis' | t }}</h3>
+
+              <div class="analysis-grid grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Body Measurements Analysis -->
+                <div class="analysis-section">
+                  <h4 class="font-medium text-gray-900 mb-3 flex items-center gap-2">
+                    <svg class="w-4 h-4 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"/>
+                    </svg>
+                    {{ 'products.size_predictor.body_measurements' | t }}
+                  </h4>
+                  <div class="measurements-chart">
+                    <canvas id="measurements-chart" width="300" height="200"></canvas>
+                  </div>
+                </div>
+
+                <!-- Fit Analysis -->
+                <div class="analysis-section">
+                  <h4 class="font-medium text-gray-900 mb-3 flex items-center gap-2">
+                    <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z"/>
+                    </svg>
+                    {{ 'products.size_predictor.fit_analysis' | t }}
+                  </h4>
+                  <div class="fit-scores space-y-3">
+                    <div class="fit-score-item">
+                      <div class="flex justify-between text-sm mb-1">
+                        <span>{{ 'products.size_predictor.chest_fit' | t }}</span>
+                        <span class="font-medium">92%</span>
+                      </div>
+                      <div class="score-bar bg-gray-200 rounded-full h-2">
+                        <div class="score-fill bg-green-500 h-2 rounded-full" style="width: 92%"></div>
+                      </div>
+                    </div>
+                    <div class="fit-score-item">
+                      <div class="flex justify-between text-sm mb-1">
+                        <span>{{ 'products.size_predictor.waist_fit' | t }}</span>
+                        <span class="font-medium">88%</span>
+                      </div>
+                      <div class="score-bar bg-gray-200 rounded-full h-2">
+                        <div class="score-fill bg-green-500 h-2 rounded-full" style="width: 88%"></div>
+                      </div>
+                    </div>
+                    <div class="fit-score-item">
+                      <div class="flex justify-between text-sm mb-1">
+                        <span>{{ 'products.size_predictor.length_fit' | t }}</span>
+                        <span class="font-medium">85%</span>
+                      </div>
+                      <div class="score-bar bg-gray-200 rounded-full h-2">
+                        <div class="score-fill bg-blue-500 h-2 rounded-full" style="width: 85%"></div>
+                      </div>
+                    </div>
+                    <div class="fit-score-item">
+                      <div class="flex justify-between text-sm mb-1">
+                        <span>{{ 'products.size_predictor.comfort_score' | t }}</span>
+                        <span class="font-medium">90%</span>
+                      </div>
+                      <div class="score-bar bg-gray-200 rounded-full h-2">
+                        <div class="score-fill bg-purple-500 h-2 rounded-full" style="width: 90%"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Alternative Recommendations -->
+            <div class="alternative-recommendations bg-yellow-50 rounded-lg p-6 mb-6">
+              <h3 class="text-lg font-semibold text-gray-900 mb-4">{{ 'products.size_predictor.alternative_options' | t }}</h3>
+              <div class="alternatives-grid grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="alternative-option bg-white rounded-lg p-4 border border-yellow-200">
+                  <div class="flex items-center justify-between mb-2">
+                    <h4 class="font-medium">{{ 'products.size_predictor.size_up' | t }}: L</h4>
+                    <span class="text-sm text-yellow-600">{{ 'products.size_predictor.for_looser_fit' | t }}</span>
+                  </div>
+                  <p class="text-sm text-gray-600">{{ 'products.size_predictor.size_up_explanation' | t }}</p>
+                </div>
+                <div class="alternative-option bg-white rounded-lg p-4 border border-yellow-200">
+                  <div class="flex items-center justify-between mb-2">
+                    <h4 class="font-medium">{{ 'products.size_predictor.size_down' | t }}: S</h4>
+                    <span class="text-sm text-yellow-600">{{ 'products.size_predictor.for_snug_fit' | t }}</span>
+                  </div>
+                  <p class="text-sm text-gray-600">{{ 'products.size_predictor.size_down_explanation' | t }}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons flex flex-col sm:flex-row gap-3">
+              <button class="add-to-cart-btn flex-1 bg-purple-600 text-white py-3 px-6 rounded-lg hover:bg-purple-700 transition-colors font-medium flex items-center justify-center gap-2" data-size="M">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"/>
+                </svg>
+                {{ 'products.size_predictor.add_recommended_to_cart' | t }}
+              </button>
+
+              <button class="save-measurements-btn flex-1 bg-gray-200 text-gray-700 py-3 px-6 rounded-lg hover:bg-gray-300 transition-colors font-medium flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+                </svg>
+                {{ 'products.size_predictor.save_measurements' | t }}
+              </button>
+
+              <button class="share-results-btn flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"/>
+                </svg>
+                {{ 'products.size_predictor.share_results' | t }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-between">
+          <button class="prev-step-btn bg-gray-200 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-300 transition-colors" data-prev-step="2">
+            <svg class="w-4 h-4 inline-block mr-1" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"/>
+            </svg>
+            {{ 'products.size_predictor.back_preferences' | t }}
+          </button>
+          <button class="restart-btn bg-gray-200 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-300 transition-colors">
+            <svg class="w-4 h-4 inline-block mr-1" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"/>
+            </svg>
+            {{ 'products.size_predictor.start_over' | t }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* Size Predictor Styles */
+.predictor-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.step-circle.active {
+  background-color: #8b5cf6 !important;
+}
+
+.step-label.active {
+  color: #4c1d95 !important;
+}
+
+.gender-option.active,
+.fit-option.active,
+.size-system-option.active,
+.fabric-option.active,
+.issue-option.active {
+  border-color: #8b5cf6 !important;
+  background-color: #f3f0ff;
+}
+
+.gender-option:hover,
+.fit-option:hover,
+.size-system-option:hover,
+.fabric-option:hover,
+.issue-option:hover {
+  border-color: #8b5cf6;
+  transform: translateY(-2px);
+}
+
+.measurement-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+.comfort-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  background: #e5e7eb;
+  border-radius: 3px;
+  outline: none;
+}
+
+.comfort-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #8b5cf6;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.comfort-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: #8b5cf6;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+
+.size-option-card:hover {
+  border-color: #8b5cf6;
+  transform: translateY(-2px);
+}
+
+.size-option-card.recommended {
+  border-color: #10b981;
+  background-color: #f0fdf4;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.step-dot.active {
+  background-color: #8b5cf6 !important;
+  animation: pulse 1s infinite;
+}
+
+/* Chart Styles */
+#measurements-chart {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .step-progress {
+    transform: scale(0.9);
+  }
+
+  .measurements-grid,
+  .fit-options,
+  .issues-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .analysis-grid,
+  .alternatives-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+}
+</style>
+
+<script>
+// Size Predictor JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+  class SizePredictor {
+    constructor(container) {
+      this.container = container;
+      this.currentStep = 1;
+      this.measurements = {
+        gender: '',
+        height: null,
+        weight: null,
+        chest: null,
+        waist: null,
+        hips: null,
+        bodyType: '',
+        sizeSystem: 'INT'
+      };
+      this.preferences = {
+        fit: 'regular',
+        comfort: {
+          breathability: 3,
+          movement: 3,
+          style: 3
+        },
+        issues: [],
+        fabric: 'stretch'
+      };
+      this.recommendation = null;
+
+      this.init();
+    }
+
+    init() {
+      this.setupEventListeners();
+      this.loadSavedMeasurements();
+    }
+
+    setupEventListeners() {
+      // Gender selection
+      this.container.querySelectorAll('.gender-option').forEach(btn => {
+        btn.addEventListener('click', () => {
+          this.selectGender(btn.dataset.gender);
+        });
+      });
+
+      // Measurement inputs
+      this.container.querySelectorAll('.measurement-input').forEach(input => {
+        input.addEventListener('input', (e) => {
+          this.updateMeasurement(input.id, parseFloat(e.target.value));
+        });
+      });
+
+      // Body type selection
+      this.container.querySelector('#body-type').addEventListener('change', (e) => {
+        this.measurements.bodyType = e.target.value;
+      });
+
+      // Size system selection
+      this.container.querySelectorAll('.size-system-option').forEach(btn => {
+        btn.addEventListener('click', () => {
+          this.selectSizeSystem(btn.dataset.system);
+        });
+      });
+
+      // Fit preference
+      this.container.querySelectorAll('.fit-option').forEach(btn => {
+        btn.addEventListener('click', () => {
+          this.selectFit(btn.dataset.fit);
+        });
+      });
+
+      // Comfort sliders
+      this.container.querySelectorAll('.comfort-slider').forEach(slider => {
+        slider.addEventListener('input', (e) => {
+          this.updateComfort(slider.dataset.comfort, parseInt(e.target.value));
+        });
+      });
+
+      // Issue checkboxes
+      this.container.querySelectorAll('.issue-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', (e) => {
+          this.updateIssue(e.target.dataset.issue, e.target.checked);
+        });
+      });
+
+      // Fabric preference
+      this.container.querySelectorAll('.fabric-option').forEach(btn => {
+        btn.addEventListener('click', () => {
+          this.selectFabric(btn.dataset.fabric);
+        });
+      });
+
+      // Step navigation
+      this.container.querySelectorAll('.next-step-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          this.nextStep(parseInt(btn.dataset.nextStep));
+        });
+      });
+
+      this.container.querySelectorAll('.prev-step-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          this.prevStep(parseInt(btn.dataset.prevStep));
+        });
+      });
+
+      // Action buttons
+      this.container.querySelector('.restart-btn')?.addEventListener('click', () => {
+        this.restart();
+      });
+
+      this.container.querySelector('.save-measurements-btn')?.addEventListener('click', () => {
+        this.saveMeasurements();
+      });
+
+      this.container.querySelector('.share-results-btn')?.addEventListener('click', () => {
+        this.shareResults();
+      });
+
+      this.container.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          this.addToCart(btn.dataset.size);
+        });
+      });
+
+      this.container.querySelectorAll('.select-size-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          this.addToCart(btn.closest('.size-option-card').querySelector('.size-label').textContent);
+        });
+      });
+    }
+
+    selectGender(gender) {
+      this.measurements.gender = gender;
+      this.updateActiveState('.gender-option', this.container.querySelector(`[data-gender="${gender}"]`));
+
+      // Show/hide hips measurement based on gender
+      const hipsGroup = this.container.querySelector('.hips-group');
+      if (gender === 'female') {
+        hipsGroup.style.display = 'block';
+      } else {
+        hipsGroup.style.display = 'none';
+      }
+
+      // Update measurement labels
+      this.updateMeasurementLabels(gender);
+    }
+
+    updateMeasurementLabels(gender) {
+      const chestLabel = this.container.querySelector('.chest-label');
+      const chestGuide = this.container.querySelector('.chest-guide');
+
+      if (gender === 'female') {
+        chestLabel.textContent = '{{ 'products.size_predictor.bust' | t }}';
+        chestGuide.textContent = '{{ 'products.size_predictor.bust_guide' | t }}';
+      } else {
+        chestLabel.textContent = '{{ 'products.size_predictor.chest' | t }}';
+        chestGuide.textContent = '{{ 'products.size_predictor.chest_guide' | t }}';
+      }
+    }
+
+    updateMeasurement(type, value) {
+      this.measurements[type] = value;
+    }
+
+    selectSizeSystem(system) {
+      this.measurements.sizeSystem = system;
+      this.updateActiveState('.size-system-option', this.container.querySelector(`[data-system="${system}"]`));
+    }
+
+    selectFit(fit) {
+      this.preferences.fit = fit;
+      this.updateActiveState('.fit-option', this.container.querySelector(`[data-fit="${fit}"]`));
+    }
+
+    updateComfort(type, value) {
+      this.preferences.comfort[type] = value;
+    }
+
+    updateIssue(issue, checked) {
+      if (checked) {
+        this.preferences.issues.push(issue);
+      } else {
+        this.preferences.issues = this.preferences.issues.filter(i => i !== issue);
+      }
+    }
+
+    selectFabric(fabric) {
+      this.preferences.fabric = fabric;
+      this.updateActiveState('.fabric-option', this.container.querySelector(`[data-fabric="${fabric}"]`));
+    }
+
+    updateActiveState(selector, activeElement) {
+      this.container.querySelectorAll(selector).forEach(el => {
+        el.classList.remove('active');
+      });
+      activeElement.classList.add('active');
+    }
+
+    nextStep(step) {
+      if (this.validateCurrentStep()) {
+        this.currentStep = step;
+        this.updateStepDisplay();
+        this.updateStepProgress();
+
+        if (step === 3) {
+          this.generateRecommendations();
+        }
+      }
+    }
+
+    prevStep(step) {
+      this.currentStep = step;
+      this.updateStepDisplay();
+      this.updateStepProgress();
+    }
+
+    validateCurrentStep() {
+      switch(this.currentStep) {
+        case 1:
+          if (!this.measurements.gender) {
+            this.showNotification('{{ 'products.size_predictor.select_gender' | t }}', 'error');
+            return false;
+          }
+          if (!this.measurements.height || !this.measurements.weight || !this.measurements.chest || !this.measurements.waist) {
+            this.showNotification('{{ 'products.size_predictor.fill_required_measurements' | t }}', 'error');
+            return false;
+          }
+          if (this.measurements.gender === 'female' && !this.measurements.hips) {
+            this.showNotification('{{ 'products.size_predictor.hips_measurement_required' | t }}', 'error');
+            return false;
+          }
+          return true;
+        case 2:
+          return true; // Preferences are optional
+        default:
+          return true;
+      }
+    }
+
+    updateStepDisplay() {
+      // Hide all step contents
+      this.container.querySelectorAll('.step-content').forEach(content => {
+        content.style.display = 'none';
+      });
+
+      // Show current step content
+      const currentContent = this.container.querySelector(`[data-step-content="${this.currentStep}"]`);
+      if (currentContent) {
+        currentContent.style.display = 'block';
+      }
+    }
+
+    updateStepProgress() {
+      // Update step circles
+      this.container.querySelectorAll('.step').forEach((step, index) => {
+        const stepNumber = index + 1;
+        const circle = step.querySelector('.step-circle');
+        const label = step.querySelector('.step-label');
+
+        if (stepNumber < this.currentStep) {
+          circle.classList.add('active');
+          label.classList.add('active');
+        } else if (stepNumber === this.currentStep) {
+          circle.classList.add('active');
+          label.classList.add('active');
+        } else {
+          circle.classList.remove('active');
+          label.classList.remove('active');
+        }
+      });
+    }
+
+    async generateRecommendations() {
+      // Show AI processing
+      this.showAIProcessing();
+
+      // Simulate AI processing with realistic delays
+      await this.simulateAIProcessing();
+
+      // Generate recommendation
+      this.recommendation = this.calculateRecommendation();
+
+      // Display results
+      this.displayResults();
+    }
+
+    showAIProcessing() {
+      const processing = this.container.querySelector('#ai-processing');
+      const results = this.container.querySelector('#results-content');
+
+      processing.style.display = 'block';
+      results.classList.add('hidden');
+    }
+
+    async simulateAIProcessing() {
+      const steps = [
+        { element: '.processing-step:nth-child(1)', duration: 1000 },
+        { element: '.processing-step:nth-child(2)', duration: 800 },
+        { element: '.processing-step:nth-child(3)', duration: 1200 },
+        { element: '.processing-step:nth-child(4)', duration: 600 }
+      ];
+
+      for (const step of steps) {
+        await new Promise(resolve => {
+          setTimeout(() => {
+            const stepElement = this.container.querySelector(step.element);
+            const dot = stepElement.querySelector('.step-dot');
+            dot.classList.add('active');
+            resolve();
+          }, step.duration);
+        });
+      }
+
+      // Final delay before showing results
+      await new Promise(resolve => setTimeout(resolve, 500));
+    }
+
+    calculateRecommendation() {
+      // Calculate body mass index
+      const heightInM = this.measurements.height / 100;
+      const bmi = this.measurements.weight / (heightInM * heightInM);
+
+      // Calculate size based on chest measurement (primary factor)
+      let size = this.calculateSizeFromMeasurements();
+
+      // Adjust based on preferences
+      size = this.adjustSizeForPreferences(size);
+
+      // Calculate confidence score
+      const confidence = this.calculateConfidenceScore();
+
+      // Generate explanation
+      const explanation = this.generateExplanation(size, confidence);
+
+      return {
+        size: size,
+        confidence: confidence,
+        explanation: explanation,
+        bmi: bmi,
+        alternativeSizes: this.getAlternativeSizes(size)
+      };
+    }
+
+    calculateSizeFromMeasurements() {
+      const { chest, waist, hips, gender } = this.measurements;
+
+      // Size calculation based on gender and measurements
+      if (gender === 'female') {
+        // Women's sizing based on bust measurement
+        if (chest < 84) return 'XS';
+        if (chest < 88) return 'S';
+        if (chest < 92) return 'M';
+        if (chest < 96) return 'L';
+        if (chest < 100) return 'XL';
+        return 'XXL';
+      } else {
+        // Men's sizing based on chest measurement
+        if (chest < 88) return 'XS';
+        if (chest < 92) return 'S';
+        if (chest < 96) return 'M';
+        if (chest < 100) return 'L';
+        if (chest < 104) return 'XL';
+        return 'XXL';
+      }
+    }
+
+    adjustSizeForPreferences(size) {
+      const sizeOrder = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+      let currentIndex = sizeOrder.indexOf(size);
+
+      // Adjust based on fit preference
+      switch(this.preferences.fit) {
+        case 'tight':
+          currentIndex = Math.max(0, currentIndex - 1);
+          break;
+        case 'loose':
+        case 'oversized':
+          currentIndex = Math.min(sizeOrder.length - 1, currentIndex + 1);
+          break;
+      }
+
+      // Adjust based on body type
+      if (this.measurements.bodyType === 'endomorph' && this.preferences.fit === 'regular') {
+        currentIndex = Math.min(sizeOrder.length - 1, currentIndex + 1);
+      }
+
+      return sizeOrder[currentIndex];
+    }
+
+    calculateConfidenceScore() {
+      let score = 100;
+
+      // Deduct for missing measurements
+      if (!this.measurements.hips && this.measurements.gender === 'female') score -= 10;
+      if (!this.measurements.bodyType) score -= 5;
+
+      // Deduct for conflicting preferences
+      if (this.preferences.issues.length > 2) score -= 10;
+
+      // Boost for complete measurements
+      if (this.measurements.height && this.measurements.weight && this.measurements.chest && this.measurements.waist) {
+        score += 5;
+      }
+
+      return Math.max(60, Math.min(100, score));
+    }
+
+    generateExplanation(size, confidence) {
+      const explanations = {
+        'XS': '{{ 'products.size_predictor.size_xs_explanation' | t }}',
+        'S': '{{ 'products.size_predictor.size_s_explanation' | t }}',
+        'M': '{{ 'products.size_predictor.size_m_explanation' | t }}',
+        'L': '{{ 'products.size_predictor.size_l_explanation' | t }}',
+        'XL': '{{ 'products.size_predictor.size_xl_explanation' | t }}',
+        'XXL': '{{ 'products.size_predictor.size_xxl_explanation' | t }}'
+      };
+
+      let explanation = explanations[size] || explanations['M'];
+
+      // Add preference-based reasoning
+      if (this.preferences.fit === 'tight') {
+        explanation += ' {{ 'products.size_predictor.tight_fit_reason' | t }}';
+      } else if (this.preferences.fit === 'loose') {
+        explanation += ' {{ 'products.size_predictor.loose_fit_reason' | t }}';
+      }
+
+      return explanation;
+    }
+
+    getAlternativeSizes(size) {
+      const sizeOrder = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+      const currentIndex = sizeOrder.indexOf(size);
+      const alternatives = [];
+
+      if (currentIndex > 0) alternatives.push(sizeOrder[currentIndex - 1]);
+      if (currentIndex < sizeOrder.length - 1) alternatives.push(sizeOrder[currentIndex + 1]);
+
+      return alternatives;
+    }
+
+    displayResults() {
+      // Hide processing, show results
+      this.container.querySelector('#ai-processing').style.display = 'none';
+      this.container.querySelector('#results-content').classList.remove('hidden');
+
+      // Update recommendation display
+      const recommendation = this.recommendation;
+      this.container.querySelector('#recommended-size').textContent = recommendation.size;
+      this.container.querySelector('#recommendation-explanation').textContent = recommendation.explanation;
+
+      // Update international sizes
+      this.updateInternationalSizes(recommendation.size);
+
+      // Create charts
+      this.createMeasurementsChart();
+      this.updateFitScores();
+
+      // Update confidence badge
+      const confidenceBadge = this.container.querySelector('.confidence-badge');
+      if (recommendation.confidence >= 85) {
+        confidenceBadge.textContent = '{{ 'products.size_predictor.high_confidence' | t }}';
+        confidenceBadge.className = 'confidence-badge bg-green-600 text-white px-3 py-1 rounded-full text-sm font-medium';
+      } else if (recommendation.confidence >= 70) {
+        confidenceBadge.textContent = '{{ 'products.size_predictor.medium_confidence' | t }}';
+        confidenceBadge.className = 'confidence-badge bg-yellow-600 text-white px-3 py-1 rounded-full text-sm font-medium';
+      } else {
+        confidenceBadge.textContent = '{{ 'products.size_predictor.low_confidence' | t }}';
+        confidenceBadge.className = 'confidence-badge bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium';
+      }
+    }
+
+    updateInternationalSizes(size) {
+      const sizeMappings = {
+        'XS': { EU: '34-36', US: '0-2', UK: '4-6' },
+        'S': { EU: '36-38', US: '2-4', UK: '6-8' },
+        'M': { EU: '38-40', US: '4-6', UK: '8-10' },
+        'L': { EU: '40-42', US: '6-8', UK: '10-12' },
+        'XL': { EU: '42-44', US: '8-10', UK: '12-14' },
+        'XXL': { EU: '44-46', US: '10-12', UK: '14-16' }
+      };
+
+      const mapping = sizeMappings[this.recommendation.size] || sizeMappings['M'];
+      this.container.querySelector('#eu-size').textContent = mapping.EU;
+      this.container.querySelector('#us-size').textContent = mapping.US;
+      this.container.querySelector('#uk-size').textContent = mapping.UK;
+    }
+
+    createMeasurementsChart() {
+      const canvas = this.container.querySelector('#measurements-chart');
+      const ctx = canvas.getContext('2d');
+
+      // Clear canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Data
+      const measurements = [
+        { label: '{{ 'products.size_predictor.chest' | t }}', value: this.measurements.chest, color: '#8b5cf6' },
+        { label: '{{ 'products.size_predictor.waist' | t }}', value: this.measurements.waist, color: '#3b82f6' }
+      ];
+
+      if (this.measurements.hips) {
+        measurements.push({ label: '{{ 'products.size_predictor.hips' | t }}', value: this.measurements.hips, color: '#10b981' });
+      }
+
+      // Draw bar chart
+      const barWidth = 40;
+      const barSpacing = 30;
+      const maxValue = Math.max(...measurements.map(m => m.value));
+      const chartHeight = 150;
+
+      measurements.forEach((measurement, index) => {
+        const x = 20 + index * (barWidth + barSpacing);
+        const barHeight = (measurement.value / maxValue) * chartHeight;
+        const y = canvas.height - barHeight - 30;
+
+        // Draw bar
+        ctx.fillStyle = measurement.color;
+        ctx.fillRect(x, y, barWidth, barHeight);
+
+        // Draw label
+        ctx.fillStyle = '#374151';
+        ctx.font = '12px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(measurement.label, x + barWidth / 2, canvas.height - 10);
+
+        // Draw value
+        ctx.fillText(measurement.value + 'cm', x + barWidth / 2, y - 5);
+      });
+    }
+
+    updateFitScores() {
+      // This would update the fit score bars with actual calculated values
+      // For now, we'll use the static values from the HTML
+    }
+
+    saveMeasurements() {
+      const measurementsData = {
+        ...this.measurements,
+        preferences: this.preferences,
+        timestamp: new Date().toISOString()
+      };
+
+      localStorage.setItem('sizePredictorMeasurements', JSON.stringify(measurementsData));
+      this.showNotification('{{ 'products.size_predictor.measurements_saved' | t }}', 'success');
+    }
+
+    loadSavedMeasurements() {
+      const saved = localStorage.getItem('sizePredictorMeasurements');
+      if (saved) {
+        const data = JSON.parse(saved);
+
+        // Populate saved measurements
+        Object.keys(this.measurements).forEach(key => {
+          if (data[key] !== undefined) {
+            this.measurements[key] = data[key];
+
+            // Update UI
+            const input = this.container.querySelector(`#${key}`);
+            if (input) {
+              input.value = data[key];
+            }
+          }
+        });
+
+        // Populate saved preferences
+        if (data.preferences) {
+          Object.assign(this.preferences, data.preferences);
+        }
+
+        // Update gender selection
+        if (data.gender) {
+          this.selectGender(data.gender);
+        }
+
+        // Update size system
+        if (data.sizeSystem) {
+          this.selectSizeSystem(data.sizeSystem);
+        }
+      }
+    }
+
+    addToCart(size) {
+      // Add product to cart with selected size
+      const variantId = this.getVariantIdForSize(size);
+
+      if (variantId) {
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            id: variantId,
+            quantity: 1,
+            properties: {
+              '_size_predictor_recommendation': 'true',
+              '_recommended_size': size,
+              '_confidence_score': this.recommendation.confidence + '%'
+            }
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === 422) {
+            this.showNotification(data.message, 'error');
+          } else {
+            this.showNotification('{{ 'products.size_predictor.added_to_cart' | t }}', 'success');
+            this.updateCartCounter();
+          }
+        })
+        .catch(error => {
+          console.error('Error adding to cart:', error);
+          this.showNotification('{{ 'products.size_predictor.add_to_cart_error' | t }}', 'error');
+        });
+      } else {
+        this.showNotification('{{ 'products.size_predictor.size_not_available' | t }}', 'error');
+      }
+    }
+
+    getVariantIdForSize(size) {
+      // This would need to be implemented based on the actual product variants
+      // For now, return a placeholder
+      return '{{ product.selected_or_first_available_variant.id }}';
+    }
+
+    updateCartCounter() {
+      // Update cart counter if it exists
+      const cartCounter = document.querySelector('.cart-counter');
+      if (cartCounter) {
+        fetch('/cart.js')
+          .then(response => response.json())
+          .then(cart => {
+            cartCounter.textContent = cart.item_count;
+          });
+      }
+    }
+
+    shareResults() {
+      const shareData = {
+        title: '{{ product.title }} - Size Recommendation',
+        text: `My recommended size: ${this.recommendation.size} (${this.recommendation.confidence}% confidence)`,
+        url: window.location.href
+      };
+
+      if (navigator.share) {
+        navigator.share(shareData).catch(() => {
+          this.fallbackShare();
+        });
+      } else {
+        this.fallbackShare();
+      }
+    }
+
+    fallbackShare() {
+      const shareUrl = window.location.href;
+      navigator.clipboard.writeText(shareUrl).then(() => {
+        this.showNotification('{{ 'products.size_predictor.link_copied' | t }}', 'success');
+      });
+    }
+
+    restart() {
+      this.currentStep = 1;
+      this.measurements = {
+        gender: '',
+        height: null,
+        weight: null,
+        chest: null,
+        waist: null,
+        hips: null,
+        bodyType: '',
+        sizeSystem: 'INT'
+      };
+      this.preferences = {
+        fit: 'regular',
+        comfort: {
+          breathability: 3,
+          movement: 3,
+          style: 3
+        },
+        issues: [],
+        fabric: 'stretch'
+      };
+
+      // Reset UI
+      this.container.querySelectorAll('.measurement-input').forEach(input => {
+        input.value = '';
+      });
+
+      this.container.querySelectorAll('.gender-option, .fit-option, .size-system-option, .fabric-option').forEach(btn => {
+        btn.classList.remove('active');
+      });
+
+      this.container.querySelectorAll('.issue-checkbox').forEach(checkbox => {
+        checkbox.checked = false;
+      });
+
+      this.container.querySelectorAll('.comfort-slider').forEach(slider => {
+        slider.value = 3;
+      });
+
+      this.updateStepDisplay();
+      this.updateStepProgress();
+    }
+
+    showNotification(message, type = 'info') {
+      const notification = document.createElement('div');
+      notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg text-white z-50 transition-all transform translate-x-full`;
+
+      switch(type) {
+        case 'success':
+          notification.classList.add('bg-green-500');
+          break;
+        case 'error':
+          notification.classList.add('bg-red-500');
+          break;
+        default:
+          notification.classList.add('bg-blue-500');
+      }
+
+      notification.textContent = message;
+      document.body.appendChild(notification);
+
+      setTimeout(() => {
+        notification.classList.remove('translate-x-full');
+      }, 100);
+
+      setTimeout(() => {
+        notification.classList.add('translate-x-full');
+        setTimeout(() => {
+          document.body.removeChild(notification);
+        }, 300);
+      }, 3000);
+    }
+  }
+
+  // Initialize size predictor
+  const predictorContainers = document.querySelectorAll('.size-predictor');
+  predictorContainers.forEach(container => {
+    new SizePredictor(container);
+  });
+
+  // Make available globally for Shopify integration
+  window.theme = window.theme || {};
+  window.theme.sizePredictor = SizePredictor;
+});
+</script>

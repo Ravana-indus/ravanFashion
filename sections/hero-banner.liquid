@@ -1,0 +1,156 @@
+<div class="relative bg-gradient-to-br from-charcoal-black via-deep-maroon to-gold text-white overflow-hidden">
+  <!-- Cultural Pattern Background -->
+  <div class="absolute inset-0 opacity-10">
+    <div class="h-full w-full bg-repeat" style="background-image: url('data:image/svg+xml,%3Csvg width=\\'80\\' height=\\'80\\' viewBox=\\'0 0 80 80\\' xmlns=\\'http://www.w3.org/2000/svg\\'%3E%3Cg fill=\\'%23D4AF37\\' fill-opacity=\\'0.3\\'%3E%3Cpath d=\\'M50 50c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10-10-4.477-10-10zm0 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10 10 4.477 10 10z\\'/%3E%3C/g%3E%3C/svg%3E');"></div>
+  </div>
+
+  <!-- Hero Content -->
+  <div class="relative container mx-auto px-4 py-20 md:py-32 lg:py-40">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <!-- Text Content -->
+      <div class="space-y-6 text-center lg:text-left">
+        <div class="space-y-4">
+          <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+            <span class="block text-cream-white">{% render 'translation', key: 'hero.title', default: 'Traditional Tamil Fashion' %}</span>
+            <span class="block text-gold font-tamil text-3xl md:text-4xl lg:text-5xl mt-2">
+              {% render 'translation', key: 'hero.title_tamil', default: 'தமிழ் உடைகள்' %}
+            </span>
+          </h1>
+
+          <p class="text-lg md:text-xl text-gray-300 max-w-2xl">
+            {% render 'translation', key: 'hero.subtitle', default: 'Discover the perfect blend of traditional Tamil craftsmanship and contemporary style.' %}
+          </p>
+
+          <p class="text-gold font-tamil text-lg md:text-xl">
+            {% render 'translation', key: 'hero.subtitle_tamil', default: 'பாரம்பரிய தமிழ் கைவினைத்திறன்' %}
+          </p>
+        </div>
+
+        <!-- Call to Action Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+          <a href="/collections/all" class="btn-primary bg-gold text-charcoal-black hover:bg-yellow-500 px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 transform hover:scale-105">
+            {% render 'translation', key: 'hero.shop_now', default: 'Shop Now' %}
+          </a>
+          <a href="/pages/collections" class="btn-cultural border-2 border-gold text-gold hover:bg-gold hover:text-charcoal-black px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300">
+            {% render 'translation', key: 'hero.explore_collections', default: 'Explore Collections' %}
+          </a>
+        </div>
+
+        <!-- Cultural Quote -->
+        <div class="mt-8 p-6 bg-black bg-opacity-30 rounded-lg border-l-4 border-gold">
+          <blockquote class="text-gray-200 italic">
+            "{% render 'translation', key: 'hero.quote', default: 'Clothing is the language of culture, woven with threads of tradition.' %}"
+          </blockquote>
+          <cite class="text-gold mt-2 block text-sm">
+            {% render 'translation', key: 'hero.quote_author', default: 'Tamil Proverb' %}
+          </cite>
+        </div>
+      </div>
+
+      <!-- Visual Content -->
+      <div class="relative">
+        <div class="aspect-square bg-gradient-to-br from-gold to-deep-maroon rounded-full p-2 mx-auto lg:mx-0 max-w-md">
+          <div class="w-full h-full bg-charcoal-black rounded-full flex items-center justify-center relative overflow-hidden">
+            <!-- Placeholder for hero image -->
+            <div class="text-center">
+              <div class="w-32 h-32 bg-gold bg-opacity-20 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <span class="text-6xl text-gold font-tamil">ர</span>
+              </div>
+              <p class="text-gold font-tamil text-xl">
+                {% render 'translation', key: 'hero.brand_motto', default: 'ரவன் ஃபேஷன்' %}
+              </p>
+            </div>
+
+            <!-- Decorative Elements -->
+            <div class="absolute top-0 left-0 w-full h-full border-4 border-gold border-opacity-20 rounded-full animate-pulse"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Featured Categories -->
+    <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6">
+      {% for collection in collections limit: 4 %}
+        <div class="text-center group cursor-pointer" onclick="window.location.href='{{ collection.url }}'">
+          <div class="w-20 h-20 bg-gold bg-opacity-10 rounded-full mx-auto mb-3 flex items-center justify-center group-hover:bg-opacity-20 transition-all duration-300">
+            <span class="text-2xl text-gold">
+              {% if forloop.first %}👘{% elsif forloop.first == false and forloop.index == 2 %}🧵{% elsif forloop.index == 3 %}✨{% else %}🎨{% endif %}
+            </span>
+          </div>
+          <h3 class="text-sm font-medium text-gray-300 group-hover:text-gold transition-colors">
+            {{ collection.title }}
+          </h3>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Bottom Wave Decoration -->
+  <div class="absolute bottom-0 left-0 w-full">
+    <svg class="w-full h-16 text-cream-white" viewBox="0 0 1200 120" preserveAspectRatio="none">
+      <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="fill-current"></path>
+    </svg>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Hero Banner",
+  "settings": [
+    {
+      "type": "text",
+      "id": "hero_title",
+      "label": "Hero Title",
+      "default": "Traditional Tamil Fashion"
+    },
+    {
+      "type": "text",
+      "id": "hero_title_tamil",
+      "label": "Hero Title (Tamil)",
+      "default": "தமிழ் உடைகள்"
+    },
+    {
+      "type": "textarea",
+      "id": "hero_subtitle",
+      "label": "Hero Subtitle",
+      "default": "Discover the perfect blend of traditional Tamil craftsmanship and contemporary style."
+    },
+    {
+      "type": "text",
+      "id": "hero_subtitle_tamil",
+      "label": "Hero Subtitle (Tamil)",
+      "default": "பாரம்பரிய தமிழ் கைவினைத்திறன்"
+    },
+    {
+      "type": "text",
+      "id": "shop_now_text",
+      "label": "Shop Now Button Text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "text",
+      "id": "explore_text",
+      "label": "Explore Button Text",
+      "default": "Explore Collections"
+    },
+    {
+      "type": "url",
+      "id": "shop_now_url",
+      "label": "Shop Now Button URL",
+      "default": "/collections/all"
+    },
+    {
+      "type": "url",
+      "id": "explore_url",
+      "label": "Explore Button URL",
+      "default": "/pages/collections"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Banner",
+      "category": "Custom Content"
+    }
+  ]
+}
+{% endschema %}

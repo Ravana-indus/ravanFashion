@@ -1,0 +1,46 @@
+<div class="py-16 px-4 bg-gradient-to-b from-white to-gray-50">
+  <div class="container mx-auto">
+    {% render 'featured-collections' %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Featured Collections",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Featured Collections"
+    },
+    {
+      "type": "text",
+      "id": "subtitle_tamil",
+      "label": "Subtitle (Tamil)",
+      "default": "சிறப்பு தொகுப்புகள்"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Explore our curated collections that celebrate Tamil heritage through contemporary fashion."
+    },
+    {
+      "type": "range",
+      "id": "collections_to_show",
+      "label": "Number of Collections to Show",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "default": 6
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Collections",
+      "category": "Collections"
+    }
+  ]
+}
+{% endschema %}

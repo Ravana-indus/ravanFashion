@@ -1,0 +1,22 @@
+# CODEOWNERS - Review Gates for Documentation
+
+# PRD and Requirements
+/docs/prd.md                       @PM-Sarah
+
+# Architecture and Technical Design
+/docs/architecture-blueprint.md    @Winston-Architect
+
+# UX and Design
+/docs/ui-style-guide.md            @Anita-UX
+/docs/ux-design-kit.md             @Anita-UX
+/docs/wireframes.md                @Anita-UX
+
+# Development Handoff
+/docs/dev-handoff-package.md       @Ravi-DevLead
+
+# Sprint Management
+/docs/sprint1-*.md                 @PM-Sarah
+/docs/acceptance-criteria.md       @PM-Sarah
+
+# Documentation Index
+/docs/README.md                    @PM-Sarah @Winston-Architect

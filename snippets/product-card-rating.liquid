@@ -1,0 +1,138 @@
+<!-- Product Card Rating Display -->
+<div class="product-rating mt-2">
+
+  {% if settings.reviews_app == 'loox' %}
+    <!-- Loox Rating Display -->
+    <div class="loox-rating-display"
+         data-product-id="{{ product.id }}"
+         data-show-rating-only="true">
+      <div id="loox-product-reviews-rating-{{ product.id }}"
+           data-product-id="{{ product.id }}"
+           data-rating-only="true">
+      </div>
+    </div>
+
+  {% elsif settings.reviews_app == 'judgeme' %}
+    <!-- Judge.me Rating Display -->
+    <div class="jdgm-preview-badge"
+         data-id="{{ product.id }}"
+         data-template="collection"
+         data-auto-install="false">
+      {{ product.metafields.judgeme.badge }}
+    </div>
+
+  {% else %}
+    <!-- Native Rating Fallback -->
+    {% assign review_count = product.metafields.reviews.count | default: 0 %}
+    {% assign average_rating = product.metafields.reviews.average | default: 0 %}
+
+    {% if review_count > 0 %}
+      <div class="native-rating flex items-center text-sm">
+        <div class="stars flex mr-2">
+          {% for i in (1..5) %}
+            <svg class="w-4 h-4 {% if i <= average_rating %}text-gold{% else %}text-gray-300{% endif %}"
+                 fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+            </svg>
+          {% endfor %}
+        </div>
+        <span class="text-muted-teal">({{ review_count }})</span>
+      </div>
+    {% endif %}
+  {% endif %}
+
+</div>
+
+<script>
+// Initialize rating display for third-party apps
+(function() {
+  const reviewsApp = '{{ settings.reviews_app }}';
+  const productId = {{ product.id }};
+
+  if (reviewsApp === 'loox' && window.Loox) {
+    // Initialize Loox rating for collection view
+    window.Loox && window.Loox.updateRating && window.Loox.updateRating(productId);
+  } else if (reviewsApp === 'judgeme' && window.jdgm) {
+    // Initialize Judge.me badge for collection view
+    window.jdgm && window.jdgm.initBadges && window.jdgm.initBadges();
+  }
+})();
+</script>
+
+<style>
+.product-rating {
+  display: flex;
+  align-items: center;
+  min-height: 20px;
+}
+
+.native-rating .stars {
+  display: flex;
+  align-items: center;
+}
+
+.native-rating .stars svg {
+  margin-right: 1px;
+}
+
+.native-rating span {
+  color: #6B7280;
+  font-size: 0.875rem;
+}
+
+/* Loox specific styling */
+.loox-rating-display {
+  display: flex;
+  align-items: center;
+}
+
+.loox-rating-display .loox-widget {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Judge.me specific styling */
+.jdgm-preview-badge {
+  display: flex !important;
+  align-items: center !important;
+  margin: 0 !important;
+}
+
+.jdgm-preview-badge .jdgm-star {
+  color: #D4AF37 !important;
+  font-size: 16px !important;
+}
+
+.jdgm-preview-badge .jdgm-rev__text {
+  color: #6B7280 !important;
+  font-size: 0.875rem !important;
+  margin-left: 4px !important;
+}
+
+/* Hover effects */
+.product-rating:hover {
+  opacity: 0.8;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .native-rating .stars svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .native-rating span {
+    font-size: 0.75rem;
+  }
+
+  .jdgm-preview-badge .jdgm-star {
+    font-size: 14px !important;
+  }
+
+  .jdgm-preview-badge .jdgm-rev__text {
+    font-size: 0.75rem !important;
+  }
+}
+</style>

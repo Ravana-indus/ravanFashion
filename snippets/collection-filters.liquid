@@ -1,0 +1,567 @@
+<style>
+  .filter-sidebar {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 1.5rem;
+    height: fit-content;
+    position: sticky;
+    top: 2rem;
+  }
+
+  .filter-group {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #f3f4f6;
+  }
+
+  .filter-group:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .filter-title {
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.75rem;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .filter-option {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 0.375rem;
+    transition: background-color 0.2s;
+  }
+
+  .filter-option:hover {
+    background-color: #f9fafb;
+  }
+
+  .filter-checkbox {
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid #d1d5db;
+    border-radius: 0.25rem;
+    margin-right: 0.5rem;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .filter-checkbox.checked {
+    background-color: #6a1b1b;
+    border-color: #6a1b1b;
+  }
+
+  .filter-checkbox.checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: bold;
+  }
+
+  .filter-label {
+    font-size: 0.875rem;
+    color: #4b5563;
+    flex-grow: 1;
+  }
+
+  .filter-count {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    margin-left: 0.5rem;
+  }
+
+  .price-range {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-top: 0.5rem;
+  }
+
+  .price-input {
+    flex: 1;
+    padding: 0.375rem 0.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+  }
+
+  .sort-dropdown {
+    background: white;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    color: #374151;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .sort-dropdown:hover {
+    border-color: #6a1b1b;
+  }
+
+  .sort-dropdown:focus {
+    outline: none;
+    border-color: #6a1b1b;
+    box-shadow: 0 0 0 3px rgba(106, 27, 27, 0.1);
+  }
+
+  .active-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .filter-tag {
+    background-color: #6a1b1b;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .filter-tag .remove {
+    cursor: pointer;
+    font-weight: bold;
+    hover: opacity: 0.8;
+  }
+
+  .clear-all {
+    color: #6a1b1b;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 0.875rem;
+    margin-left: 1rem;
+  }
+
+  .clear-all:hover {
+    text-decoration: none;
+  }
+
+  @media (max-width: 768px) {
+    .filter-sidebar {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      width: 80%;
+      max-width: 300px;
+      height: 100vh;
+      z-index: 1000;
+      overflow-y: auto;
+      transition: left 0.3s ease;
+    }
+
+    .filter-sidebar.open {
+      left: 0;
+    }
+
+    .filter-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .filter-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+</style>
+
+<!-- Mobile Filter Button -->
+<div class="md:hidden mb-4">
+  <button onclick="window.theme.toggleFilters()" class="btn-primary w-full">
+    <span class="flex items-center justify-center gap-2">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+      </svg>
+      {{ 'collection.filter' | t }}
+    </span>
+  </button>
+</div>
+
+<!-- Filter Sidebar -->
+<div id="filter-sidebar" class="filter-sidebar">
+  <div class="flex items-center justify-between mb-4 md:hidden">
+    <h3 class="text-lg font-bold">{{ 'collection.filter' | t }}</h3>
+    <button onclick="window.theme.toggleFilters()" class="text-gray-500 hover:text-gray-700">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Active Filters -->
+  <div id="active-filters" class="active-filters hidden">
+    <span class="text-sm text-gray-600 mr-2">{{ 'collection.refine' | t }}:</span>
+    <span class="clear-all" onclick="window.theme.clearAllFilters()">{{ 'collection.clear_all' | t }}</span>
+  </div>
+
+  <!-- Sort Dropdown -->
+  <div class="mb-6">
+    <label class="filter-title">{{ 'collection.sort' | t }}</label>
+    <select id="sort-dropdown" class="sort-dropdown w-full" onchange="window.theme.handleSort(this.value)">
+      <option value="manual">{{ 'general.featured' | t }}</option>
+      <option value="best-selling">{{ 'product.bestsellers' | t }}</option>
+      <option value="title-ascending">{{ 'general.title' | t }} A-Z</option>
+      <option value="title-descending">{{ 'general.title' | t }} Z-A</option>
+      <option value="price-ascending">{{ 'product.price' | t }} Low-High</option>
+      <option value="price-descending">{{ 'product.price' | t }} High-Low</option>
+      <option value="created-descending">{{ 'general.new' | t }}</option>
+    </select>
+  </div>
+
+  <!-- Categories Filter -->
+  {% if collection.all_types.size > 0 %}
+    <div class="filter-group">
+      <h4 class="filter-title">{{ 'general.collections' | t }}</h4>
+      {% for product_type in collection.all_types %}
+        <div class="filter-option" onclick="window.theme.toggleFilter('type', '{{ product_type | handleize }}', this)">
+          <div class="filter-checkbox" data-filter="type" data-value="{{ product_type | handleize }}"></div>
+          <span class="filter-label">{{ product_type }}</span>
+          <span class="filter-count">({{ collection.products_by_type[product_type].size }})</span>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <!-- Size Filter -->
+  <div class="filter-group">
+    <h4 class="filter-title">{{ 'product.size' | t }}</h4>
+    <div class="filter-option" onclick="window.theme.toggleFilter('size', 'xs', this)">
+      <div class="filter-checkbox" data-filter="size" data-value="xs"></div>
+      <span class="filter-label">XS</span>
+    </div>
+    <div class="filter-option" onclick="window.theme.toggleFilter('size', 's', this)">
+      <div class="filter-checkbox" data-filter="size" data-value="s"></div>
+      <span class="filter-label">S</span>
+    </div>
+    <div class="filter-option" onclick="window.theme.toggleFilter('size', 'm', this)">
+      <div class="filter-checkbox" data-filter="size" data-value="m"></div>
+      <span class="filter-label">M</span>
+    </div>
+    <div class="filter-option" onclick="window.theme.toggleFilter('size', 'l', this)">
+      <div class="filter-checkbox" data-filter="size" data-value="l"></div>
+      <span class="filter-label">L</span>
+    </div>
+    <div class="filter-option" onclick="window.theme.toggleFilter('size', 'xl', this)">
+      <div class="filter-checkbox" data-filter="size" data-value="xl"></div>
+      <span class="filter-label">XL</span>
+    </div>
+    <div class="filter-option" onclick="window.theme.toggleFilter('size', 'xxl', this)">
+      <div class="filter-checkbox" data-filter="size" data-value="xxl"></div>
+      <span class="filter-label">XXL</span>
+    </div>
+  </div>
+
+  <!-- Color Filter -->
+  <div class="filter-group">
+    <h4 class="filter-title">{{ 'product.color' | t }}</h4>
+    <div class="filter-option" onclick="window.theme.toggleFilter('color', 'red', this)">
+      <div class="filter-checkbox" data-filter="color" data-value="red"></div>
+      <span class="filter-label">{{ 'general.red' | t }}</span>
+    </div>
+    <div class="filter-option" onclick="window.theme.toggleFilter('color', 'blue', this)">
+      <div class="filter-checkbox" data-filter="color" data-value="blue"></div>
+      <span class="filter-label">{{ 'general.blue' | t }}</span>
+    </div>
+    <div class="filter-option" onclick="window.theme.toggleFilter('color', 'green', this)">
+      <div class="filter-checkbox" data-filter="color" data-value="green"></div>
+      <span class="filter-label">{{ 'general.green' | t }}</span>
+    </div>
+    <div class="filter-option" onclick="window.theme.toggleFilter('color', 'black', this)">
+      <div class="filter-checkbox" data-filter="color" data-value="black"></div>
+      <span class="filter-label">{{ 'general.black' | t }}</span>
+    </div>
+    <div class="filter-option" onclick="window.theme.toggleFilter('color', 'white', this)">
+      <div class="filter-checkbox" data-filter="color" data-value="white"></div>
+      <span class="filter-label">{{ 'general.white' | t }}</span>
+    </div>
+    <div class="filter-option" onclick="window.theme.toggleFilter('color', 'gold', this)">
+      <div class="filter-checkbox" data-filter="color" data-value="gold"></div>
+      <span class="filter-label">{{ 'general.gold' | t }}</span>
+    </div>
+  </div>
+
+  <!-- Price Range Filter -->
+  <div class="filter-group">
+    <h4 class="filter-title">{{ 'product.price' | t }}</h4>
+    <div class="price-range">
+      <input type="number" id="price-min" class="price-input" placeholder="Min" min="0" onchange="window.theme.handlePriceFilter()">
+      <span>-</span>
+      <input type="number" id="price-max" class="price-input" placeholder="Max" min="0" onchange="window.theme.handlePriceFilter()">
+    </div>
+  </div>
+
+  <!-- Availability Filter -->
+  <div class="filter-group">
+    <h4 class="filter-title">{{ 'general.availability' | t }}</h4>
+    <div class="filter-option" onclick="window.theme.toggleFilter('availability', 'in-stock', this)">
+      <div class="filter-checkbox" data-filter="availability" data-value="in-stock"></div>
+      <span class="filter-label">{{ 'product.in_stock' | t }}</span>
+    </div>
+    <div class="filter-option" onclick="window.theme.toggleFilter('availability', 'on-sale', this)">
+      <div class="filter-checkbox" data-filter="availability" data-value="on-sale"></div>
+      <span class="filter-label">{{ 'badges.sale' | t }}</span>
+    </div>
+  </div>
+
+  <!-- Cultural Style Filter -->
+  <div class="filter-group">
+    <h4 class="filter-title">{{ 'cultural.traditional' | t }}</h4>
+    <div class="filter-option" onclick="window.theme.toggleFilter('style', 'traditional', this)">
+      <div class="filter-checkbox" data-filter="style" data-value="traditional"></div>
+      <span class="filter-label">{{ 'cultural.traditional' | t }}</span>
+    </div>
+    <div class="filter-option" onclick="window.theme.toggleFilter('style', 'contemporary', this)">
+      <div class="filter-checkbox" data-filter="style" data-value="contemporary"></div>
+      <span class="filter-label">{{ 'general.contemporary' | t }}</span>
+    </div>
+    <div class="filter-option" onclick="window.theme.toggleFilter('style', 'festive', this)">
+      <div class="filter-checkbox" data-filter="style" data-value="festive"></div>
+      <span class="filter-label">{{ 'cultural.celebration' | t }}</span>
+    </div>
+    <div class="filter-option" onclick="window.theme.toggleFilter('style', 'casual', this)">
+      <div class="filter-checkbox" data-filter="style" data-value="casual"></div>
+      <span class="filter-label">{{ 'general.casual' | t }}</span>
+    </div>
+  </div>
+</div>
+
+<!-- Mobile Filter Overlay -->
+<div id="filter-overlay" class="filter-overlay md:hidden" onclick="window.theme.toggleFilters()"></div>
+
+<script>
+  // Collection Filter System
+  window.theme = window.theme || {};
+
+  window.theme.activeFilters = {
+    type: [],
+    size: [],
+    color: [],
+    availability: [],
+    style: [],
+    price: { min: null, max: null },
+    sort: 'manual'
+  };
+
+  window.theme.toggleFilters = function() {
+    const sidebar = document.getElementById('filter-sidebar');
+    const overlay = document.getElementById('filter-overlay');
+
+    sidebar.classList.toggle('open');
+    overlay.classList.toggle('show');
+  };
+
+  window.theme.toggleFilter = function(filterType, filterValue, element) {
+    const checkbox = element.querySelector('.filter-checkbox');
+    const isActive = checkbox.classList.contains('checked');
+
+    if (isActive) {
+      // Remove filter
+      checkbox.classList.remove('checked');
+      const index = window.theme.activeFilters[filterType].indexOf(filterValue);
+      if (index > -1) {
+        window.theme.activeFilters[filterType].splice(index, 1);
+      }
+    } else {
+      // Add filter
+      checkbox.classList.add('checked');
+      if (!window.theme.activeFilters[filterType].includes(filterValue)) {
+        window.theme.activeFilters[filterType].push(filterValue);
+      }
+    }
+
+    window.theme.updateActiveFilters();
+    window.theme.applyFilters();
+  };
+
+  window.theme.handlePriceFilter = function() {
+    const minPrice = document.getElementById('price-min').value;
+    const maxPrice = document.getElementById('price-max').value;
+
+    window.theme.activeFilters.price = {
+      min: minPrice ? parseFloat(minPrice) : null,
+      max: maxPrice ? parseFloat(maxPrice) : null
+    };
+
+    window.theme.applyFilters();
+  };
+
+  window.theme.handleSort = function(sortValue) {
+    window.theme.activeFilters.sort = sortValue;
+    window.theme.applyFilters();
+  };
+
+  window.theme.updateActiveFilters = function() {
+    const activeFiltersContainer = document.getElementById('active-filters');
+    const filters = [];
+
+    // Collect all active filters
+    Object.keys(window.theme.activeFilters).forEach(filterType => {
+      if (filterType === 'price') {
+        const { min, max } = window.theme.activeFilters.price;
+        if (min !== null || max !== null) {
+          const priceLabel = min !== null && max !== null
+            ? `₹${min}-${max}`
+            : min !== null
+            ? `>₹${min}`
+            : `<₹${max}`;
+          filters.push({ type: 'price', label: priceLabel });
+        }
+      } else if (Array.isArray(window.theme.activeFilters[filterType]) && window.theme.activeFilters[filterType].length > 0) {
+        window.theme.activeFilters[filterType].forEach(value => {
+          filters.push({ type: filterType, label: value, value });
+        });
+      }
+    });
+
+    // Update active filters display
+    if (filters.length > 0) {
+      activeFiltersContainer.classList.remove('hidden');
+      const filterTags = filters.map(filter => `
+        <span class="filter-tag">
+          ${filter.label}
+          <span class="remove" onclick="window.theme.removeFilter('${filter.type}', '${filter.value || ''}')">×</span>
+        </span>
+      `).join('');
+
+      activeFiltersContainer.innerHTML = `
+        <span class="text-sm text-gray-600 mr-2">{{ 'collection.refine' | t }}:</span>
+        ${filterTags}
+        <span class="clear-all" onclick="window.theme.clearAllFilters()">{{ 'collection.clear_all' | t }}</span>
+      `;
+    } else {
+      activeFiltersContainer.classList.add('hidden');
+    }
+  };
+
+  window.theme.removeFilter = function(filterType, filterValue) {
+    if (filterType === 'price') {
+      window.theme.activeFilters.price = { min: null, max: null };
+      document.getElementById('price-min').value = '';
+      document.getElementById('price-max').value = '';
+    } else {
+      const index = window.theme.activeFilters[filterType].indexOf(filterValue);
+      if (index > -1) {
+        window.theme.activeFilters[filterType].splice(index, 1);
+      }
+
+      // Update checkbox state
+      const checkbox = document.querySelector(`[data-filter="${filterType}"][data-value="${filterValue}"]`);
+      if (checkbox) {
+        checkbox.classList.remove('checked');
+      }
+    }
+
+    window.theme.updateActiveFilters();
+    window.theme.applyFilters();
+  };
+
+  window.theme.clearAllFilters = function() {
+    // Clear all active filters
+    Object.keys(window.theme.activeFilters).forEach(filterType => {
+      if (filterType === 'price') {
+        window.theme.activeFilters.price = { min: null, max: null };
+        document.getElementById('price-min').value = '';
+        document.getElementById('price-max').value = '';
+      } else if (Array.isArray(window.theme.activeFilters[filterType])) {
+        window.theme.activeFilters[filterType] = [];
+      }
+    });
+
+    // Clear sort
+    window.theme.activeFilters.sort = 'manual';
+    document.getElementById('sort-dropdown').value = 'manual';
+
+    // Clear all checkboxes
+    document.querySelectorAll('.filter-checkbox').forEach(checkbox => {
+      checkbox.classList.remove('checked');
+    });
+
+    window.theme.updateActiveFilters();
+    window.theme.applyFilters();
+  };
+
+  window.theme.applyFilters = function() {
+    // This is where you would typically make an API call or update the URL
+    // For now, we'll update the URL parameters and trigger a page reload
+    const params = new URLSearchParams();
+
+    // Add filter parameters
+    Object.keys(window.theme.activeFilters).forEach(filterType => {
+      if (filterType === 'price') {
+        const { min, max } = window.theme.activeFilters.price;
+        if (min !== null) params.set('filter.p.price.from', min);
+        if (max !== null) params.set('filter.p.price.to', max);
+      } else if (Array.isArray(window.theme.activeFilters[filterType]) && window.theme.activeFilters[filterType].length > 0) {
+        window.theme.activeFilters[filterType].forEach(value => {
+          params.append(`filter.${filterType}`, value);
+        });
+      }
+    });
+
+    // Add sort parameter
+    if (window.theme.activeFilters.sort !== 'manual') {
+      params.set('sort_by', window.theme.activeFilters.sort);
+    }
+
+    // Update URL without reloading page (for SPA-like experience)
+    const newUrl = `${window.location.pathname}${params.toString() ? '?' + params.toString() : ''}`;
+    window.history.pushState({}, '', newUrl);
+
+    // Trigger collection reload (this would be handled by Shopify's AJAX collection API)
+    window.theme.loadFilteredProducts();
+  };
+
+  window.theme.loadFilteredProducts = function() {
+    // This is a placeholder for AJAX product loading
+    // In a real implementation, this would fetch filtered products from Shopify
+    console.log('Loading filtered products with filters:', window.theme.activeFilters);
+
+    // Show loading state
+    const productGrid = document.querySelector('.product-grid');
+    if (productGrid) {
+      productGrid.style.opacity = '0.5';
+
+      // Simulate loading delay
+      setTimeout(() => {
+        productGrid.style.opacity = '1';
+      }, 500);
+    }
+  };
+
+  // Initialize filters from URL parameters
+  document.addEventListener('DOMContentLoaded', function() {
+    const params = new URLSearchParams(window.location.search);
+
+    // Parse and apply existing filters from URL
+    if (params.toString()) {
+      // Parse filters and update UI
+      // This would be implemented based on Shopify's filter URL structure
+    }
+  });
+</script>

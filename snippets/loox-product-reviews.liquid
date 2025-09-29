@@ -1,0 +1,171 @@
+<!-- Loox Product Reviews Integration -->
+<div class="loox-reviews" data-product-id="{{ product.id }}">
+
+  <!-- Reviews Summary -->
+  <div class="loox-rating-summary mb-6">
+    <div id="loox-product-reviews-rating-{{ product.id }}"
+         data-product-id="{{ product.id }}"
+         data-show-if-no-reviews="true">
+    </div>
+  </div>
+
+  <!-- Reviews List -->
+  <div class="loox-reviews-list">
+    <div id="loox-product-reviews-{{ product.id }}"
+         data-product-id="{{ product.id }}"
+         data-per-page="{{ settings.reviews_per_page | default: 10 }}"
+         data-max-width="100%"
+         data-hide-write-review-button="false">
+    </div>
+  </div>
+
+  <!-- Write Review Button -->
+  <div class="loox-write-review-wrapper mt-6 text-center">
+    <div id="loox-write-review-button-{{ product.id }}"
+         data-product-id="{{ product.id }}">
+    </div>
+  </div>
+
+</div>
+
+<!-- Loox Script Integration -->
+<script>
+// Loox configuration
+window.looxSettings = window.looxSettings || {};
+
+window.looxSettings['product-{{ product.id }}'] = {
+  productId: {{ product.id }},
+  shopDomain: '{{ shop.permanent_domain }}',
+  customCSS: `
+    .loox-rating {
+      color: #D4AF37 !important;
+    }
+    .loox-rating .loox-star {
+      color: #D4AF37 !important;
+    }
+    .loox-review-text {
+      font-family: 'Inter', sans-serif !important;
+      line-height: 1.6 !important;
+      color: #1C1C1C !important;
+    }
+    .loox-reviewer-name {
+      color: #6A1B1B !important;
+      font-weight: 600 !important;
+    }
+    .loox-review-date {
+      color: #6B7280 !important;
+      font-size: 0.875rem !important;
+    }
+    .loox-review-verified {
+      background-color: #D1FAE5 !important;
+      color: #065F46 !important;
+      padding: 2px 8px !important;
+      border-radius: 4px !important;
+      font-size: 0.75rem !important;
+    }
+    .loox-widget .loox-header {
+      border-bottom: 2px solid #D4AF37 !important;
+      padding-bottom: 1rem !important;
+      margin-bottom: 1.5rem !important;
+    }
+    .loox-reviews-container {
+      max-height: 600px !important;
+      overflow-y: auto !important;
+    }
+    .loox-review {
+      border: 1px solid #E5E7EB !important;
+      border-radius: 8px !important;
+      padding: 1.5rem !important;
+      margin-bottom: 1rem !important;
+      background: white !important;
+    }
+    .loox-review:hover {
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+    }
+  `,
+  translations: {
+    writeReview: '{{ "reviews.write_review" | t }}',
+    helpful: '{{ "reviews.helpful" | t }}',
+    verified: '{{ "reviews.verified_purchase" | t }}',
+    sortBy: '{{ "reviews.sort_by" | t }}',
+    newest: '{{ "reviews.newest" | t }}',
+    oldest: '{{ "reviews.oldest" | t }}',
+    highest: '{{ "reviews.highest_rated" | t }}',
+    lowest: '{{ "reviews.lowest_rated" | t }}',
+    photoReviews: '{{ "reviews.photo_reviews" | t }}',
+    allReviews: '{{ "reviews.all_reviews" | t }}',
+    verifiedOnly: '{{ "reviews.verified_only" | t }}'
+  },
+  language: '{{ request.locale.iso_code }}',
+  enablePhotos: true,
+  enableVideos: true,
+  verifiedOnly: false
+};
+
+// Load Loox script
+(function() {
+  if (window.looxLoaded) return;
+
+  const script = document.createElement('script');
+  script.src = 'https://loox.io/widget/{{ settings.loox_shop_id }}/script.js';
+  script.async = true;
+  script.setAttribute('data-loox-install', 'true');
+  document.head.appendChild(script);
+
+  window.looxLoaded = true;
+
+  // Track review views
+  if (window.trackKlaviyoEvent) {
+    window.trackKlaviyoEvent('Viewed Product Reviews', {
+      product_id: {{ product.id }},
+      product_name: '{{ product.title | escape }}',
+      reviews_app: 'loox'
+    });
+  }
+})();
+</script>
+
+<style>
+.loox-rating-summary {
+  text-align: center;
+  padding: 1rem;
+  background: #F9FAFB;
+  border-radius: 8px;
+}
+
+.loox-reviews-list {
+  min-height: 200px;
+}
+
+.loox-write-review-wrapper {
+  margin-top: 2rem;
+}
+
+/* Loox custom button styling */
+.loox-write-review-button {
+  background-color: #6A1B1B !important;
+  color: white !important;
+  border: none !important;
+  padding: 0.75rem 1.5rem !important;
+  border-radius: 0.5rem !important;
+  font-weight: 600 !important;
+  transition: all 0.2s !important;
+}
+
+.loox-write-review-button:hover {
+  background-color: #8B0000 !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .loox-reviews-list {
+    padding: 0 0.5rem;
+  }
+
+  .loox-review {
+    padding: 1rem !important;
+    margin-bottom: 0.75rem !important;
+  }
+}
+</style>

@@ -1,0 +1,1110 @@
+{%- comment -%}
+Product Customization Snippet
+Add product personalization options with real-time preview and configuration
+{%- endcomment -%}
+
+<div class="product-customization" data-section-id="{{ section.id }}" data-product-id="{{ product.id }}">
+  <!-- Customization Container -->
+  <div class="customization-container bg-gray-50 rounded-lg overflow-hidden">
+
+    <!-- Customization Header -->
+    <div class="customization-header bg-gradient-to-r from-yellow-600 to-yellow-700 text-white p-6">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="text-2xl font-bold mb-2">{{ 'products.customization.personalize_your_product' | t }}</h2>
+        <p class="text-yellow-100">{{ 'products.customization.make_it_uniquely_yours' | t }}</p>
+      </div>
+    </div>
+
+    <div class="max-w-6xl mx-auto p-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+        <!-- Customization Options Panel -->
+        <div class="customization-options space-y-6">
+
+          <!-- Personalization Type -->
+          <div class="customization-group bg-white rounded-lg p-6 shadow-sm">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <svg class="w-5 h-5 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/>
+              </svg>
+              {{ 'products.customization.personalization_type' | t }}
+            </h3>
+
+            <div class="personalization-options grid grid-cols-2 gap-3">
+              <button class="personalization-type-btn p-4 border-2 border-gray-200 rounded-lg hover:border-yellow-400 transition-all text-center" data-type="embroidery">
+                <svg class="w-8 h-8 mx-auto mb-2 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z"/>
+                </svg>
+                <div class="font-medium">{{ 'products.customization.embroidery' | t }}</div>
+                <div class="text-sm text-gray-500">{{ 'products.customization.embroidery_desc' | t }}</div>
+              </button>
+
+              <button class="personalization-type-btn p-4 border-2 border-gray-200 rounded-lg hover:border-yellow-400 transition-all text-center" data-type="printing">
+                <svg class="w-8 h-8 mx-auto mb-2 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1.586a1 1 0 01-.707-.293l-1.121-1.121A2 2 0 0011.172 3H8.828a2 2 0 00-1.414.586L6.293 4.707A1 1 0 015.586 5H4zm6 9a3 3 0 100-6 3 3 0 000 6z"/>
+                </svg>
+                <div class="font-medium">{{ 'products.customization.printing' | t }}</div>
+                <div class="text-sm text-gray-500">{{ 'products.customization.printing_desc' | t }}</div>
+              </button>
+
+              <button class="personalization-type-btn p-4 border-2 border-gray-200 rounded-lg hover:border-yellow-400 transition-all text-center" data-type="patches">
+                <svg class="w-8 h-8 mx-auto mb-2 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M3 5a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2h-2.22l.123.489.804.804A1 1 0 0113 18H7a1 1 0 01-.707-1.707l.804-.804L7.22 15H5a2 2 0 01-2-2V5zm5.771 7H5V5h10v7H8.771z"/>
+                </svg>
+                <div class="font-medium">{{ 'products.customization.patches' | t }}</div>
+                <div class="text-sm text-gray-500">{{ 'products.customization.patches_desc' | t }}</div>
+              </button>
+
+              <button class="personalization-type-btn p-4 border-2 border-gray-200 rounded-lg hover:border-yellow-400 transition-all text-center" data-type="engraving">
+                <svg class="w-8 h-8 mx-auto mb-2 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.707a1 1 0 010-1.414l8-8a1 1 0 011.414 1.414l-8 8a1 1 0 01-1.414 0z"/>
+                </svg>
+                <div class="font-medium">{{ 'products.customization.engraving' | t }}</div>
+                <div class="text-sm text-gray-500">{{ 'products.customization.engraving_desc' | t }}</div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Text Customization -->
+          <div class="customization-group bg-white rounded-lg p-6 shadow-sm" id="text-customization">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <svg class="w-5 h-5 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"/>
+              </svg>
+              {{ 'products.customization.text_customization' | t }}
+            </h3>
+
+            <div class="space-y-4">
+              <!-- Custom Text Input -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">{{ 'products.customization.enter_your_text' | t }}</label>
+                <input
+                  type="text"
+                  id="custom-text"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                  placeholder="{{ 'products.customization.text_placeholder' | t }}"
+                  maxlength="50"
+                >
+                <div class="text-xs text-gray-500 mt-1">
+                  {{ 'products.customization.character_limit' | t }}: <span id="char-count">0</span>/50
+                </div>
+              </div>
+
+              <!-- Font Selection -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">{{ 'products.customization.font_style' | t }}</label>
+                <div class="font-options grid grid-cols-3 gap-2">
+                  <button class="font-option p-2 border border-gray-300 rounded hover:border-yellow-400 transition-all" data-font="serif" style="font-family: serif;">
+                    Serif
+                  </button>
+                  <button class="font-option p-2 border border-gray-300 rounded hover:border-yellow-400 transition-all" data-font="sans-serif" style="font-family: sans-serif;">
+                    Sans
+                  </button>
+                  <button class="font-option p-2 border border-gray-300 rounded hover:border-yellow-400 transition-all" data-font="cursive" style="font-family: cursive;">
+                    Script
+                  </button>
+                  <button class="font-option p-2 border border-gray-300 rounded hover:border-yellow-400 transition-all" data-font="monospace" style="font-family: monospace;">
+                    Mono
+                  </button>
+                  <button class="font-option p-2 border border-gray-300 rounded hover:border-yellow-400 transition-all" data-font="fantasy" style="font-family: fantasy;">
+                    Decorative
+                  </button>
+                  <button class="font-option p-2 border border-gray-300 rounded hover:border-yellow-400 transition-all" data-font="tamil" style="font-family: 'Noto Sans Tamil', serif;">
+                    தமிழ்
+                  </button>
+                </div>
+              </div>
+
+              <!-- Text Color -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">{{ 'products.customization.text_color' | t }}</label>
+                <div class="color-options flex gap-2 flex-wrap">
+                  <button class="color-option w-10 h-10 rounded-lg border-2 border-gray-300 hover:border-yellow-400 transition-all" style="background-color: #000000;" data-color="#000000"></button>
+                  <button class="color-option w-10 h-10 rounded-lg border-2 border-gray-300 hover:border-yellow-400 transition-all" style="background-color: #ffffff; border-color: #d1d5db;" data-color="#ffffff"></button>
+                  <button class="color-option w-10 h-10 rounded-lg border-2 border-gray-300 hover:border-yellow-400 transition-all" style="background-color: #dc2626;" data-color="#dc2626"></button>
+                  <button class="color-option w-10 h-10 rounded-lg border-2 border-gray-300 hover:border-yellow-400 transition-all" style="background-color: #2563eb;" data-color="#2563eb"></button>
+                  <button class="color-option w-10 h-10 rounded-lg border-2 border-gray-300 hover:border-yellow-400 transition-all" style="background-color: #16a34a;" data-color="#16a34a"></button>
+                  <button class="color-option w-10 h-10 rounded-lg border-2 border-gray-300 hover:border-yellow-400 transition-all" style="background-color: #d4af37;" data-color="#d4af37"></button>
+                  <button class="color-option w-10 h-10 rounded-lg border-2 border-gray-300 hover:border-yellow-400 transition-all" style="background-color: #9333ea;" data-color="#9333ea"></button>
+                  <button class="color-option w-10 h-10 rounded-lg border-2 border-gray-300 hover:border-yellow-400 transition-all" style="background-color: #ea580c;" data-color="#ea580c"></button>
+                </div>
+              </div>
+
+              <!-- Text Size -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">{{ 'products.customization.text_size' | t }}</label>
+                <input type="range" id="text-size" min="12" max="48" value="24" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                  <span>Small</span>
+                  <span>Large</span>
+                </div>
+              </div>
+
+              <!-- Text Position -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">{{ 'products.customization.text_position' | t }}</label>
+                <div class="position-grid grid grid-cols-3 gap-2">
+                  <button class="position-btn p-3 border border-gray-300 rounded hover:border-yellow-400 transition-all" data-position="top-left">
+                    <svg class="w-6 h-6 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 11-2 0V5H5v1a1 1 0 11-2 0V4z"/>
+                    </svg>
+                  </button>
+                  <button class="position-btn p-3 border border-gray-300 rounded hover:border-yellow-400 transition-all" data-position="top-center">
+                    <svg class="w-6 h-6 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M10 3a1 1 0 011 1v2a1 1 0 11-2 0V4a1 1 0 011-1z"/>
+                    </svg>
+                  </button>
+                  <button class="position-btn p-3 border border-gray-300 rounded hover:border-yellow-400 transition-all" data-position="top-right">
+                    <svg class="w-6 h-6 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M17 4a1 1 0 00-1 1v1h-1a1 1 0 100 2h1v1a1 1 0 102 0V6h1a1 1 0 100-2h-1V4a1 1 0 00-1-1z"/>
+                    </svg>
+                  </button>
+                  <button class="position-btn p-3 border border-gray-300 rounded hover:border-yellow-400 transition-all" data-position="center-left">
+                    <svg class="w-6 h-6 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M3 10a1 1 0 011-1h2a1 1 0 110 2H4a1 1 0 01-1-1z"/>
+                    </svg>
+                  </button>
+                  <button class="position-btn p-3 border border-gray-300 rounded hover:border-yellow-400 transition-all active" data-position="center">
+                    <svg class="w-6 h-6 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z"/>
+                    </svg>
+                  </button>
+                  <button class="position-btn p-3 border border-gray-300 rounded hover:border-yellow-400 transition-all" data-position="center-right">
+                    <svg class="w-6 h-6 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M17 10a1 1 0 00-1-1h-2a1 1 0 100 2h2a1 1 0 001-1z"/>
+                    </svg>
+                  </button>
+                  <button class="position-btn p-3 border border-gray-300 rounded hover:border-yellow-400 transition-all" data-position="bottom-left">
+                    <svg class="w-6 h-6 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M3 16a1 1 0 001 1h2a1 1 0 100-2H4v-1a1 1 0 10-2 0v2z"/>
+                    </svg>
+                  </button>
+                  <button class="position-btn p-3 border border-gray-300 rounded hover:border-yellow-400 transition-all" data-position="bottom-center">
+                    <svg class="w-6 h-6 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M10 17a1 1 0 01-1-1v-2a1 1 0 112 0v2a1 1 0 01-1 1z"/>
+                    </svg>
+                  </button>
+                  <button class="position-btn p-3 border border-gray-300 rounded hover:border-yellow-400 transition-all" data-position="bottom-right">
+                    <svg class="w-6 h-6 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M17 16a1 1 0 00-1-1h-1v-1a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 001-1v-2z"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Design Customization -->
+          <div class="customization-group bg-white rounded-lg p-6 shadow-sm" id="design-customization">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <svg class="w-5 h-5 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"/>
+              </svg>
+              {{ 'products.customization.design_elements' | t }}
+            </h3>
+
+            <div class="space-y-4">
+              <!-- Design Templates -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">{{ 'products.customization.choose_template' | t }}</label>
+                <div class="template-grid grid grid-cols-3 gap-3">
+                  <button class="template-option border-2 border-gray-200 rounded-lg p-3 hover:border-yellow-400 transition-all" data-template="floral">
+                    <div class="template-preview w-full h-20 bg-gradient-to-br from-pink-100 to-pink-200 rounded mb-2 flex items-center justify-center">
+                      <svg class="w-8 h-8 text-pink-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1zM12 2a1 1 0 01.967.744L14.146 7.2 13.047 14.01c-.04.3-.25.5-.547.5h-1c-.297 0-.507-.2-.547-.5L9.854 7.2 11.033 2.744A1 1 0 0112 2z"/>
+                      </svg>
+                    </div>
+                    <div class="text-sm font-medium">{{ 'products.customization.floral' | t }}</div>
+                  </button>
+
+                  <button class="template-option border-2 border-gray-200 rounded-lg p-3 hover:border-yellow-400 transition-all" data-template="geometric">
+                    <div class="template-preview w-full h-20 bg-gradient-to-br from-blue-100 to-blue-200 rounded mb-2 flex items-center justify-center">
+                      <svg class="w-8 h-8 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"/>
+                      </svg>
+                    </div>
+                    <div class="text-sm font-medium">{{ 'products.customization.geometric' | t }}</div>
+                  </button>
+
+                  <button class="template-option border-2 border-gray-200 rounded-lg p-3 hover:border-yellow-400 transition-all" data-template="traditional">
+                    <div class="template-preview w-full h-20 bg-gradient-to-br from-yellow-100 to-yellow-200 rounded mb-2 flex items-center justify-center">
+                      <svg class="w-8 h-8 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M6.672 1.911a1 1 0 10-1.932.518l.259.966a1 1 0 001.932-.518l-.26-.966zM2.429 4.74a1 1 0 10-.517 1.932l.966.259a1 1 0 00.517-1.932l-.966-.26zm8.814-.569a1 1 0 00-1.415-1.414l-.707.707a1 1 0 101.415 1.415l.707-.708zm-7.071 7.072l.707-.707A1 1 0 003.465 9.12l-.708.707a1 1 0 001.415 1.415zm3.2-5.171a1 1 0 00-1.3 1.3l4 10a1 1 0 001.823.075l1.38-2.759 3.018 3.02a1 1 0 001.414-1.415l-3.019-3.02 2.76-1.379a1 1 0 00-.076-1.822l-10-4z"/>
+                      </svg>
+                    </div>
+                    <div class="text-sm font-medium">{{ 'products.customization.traditional' | t }}</div>
+                  </button>
+
+                  <button class="template-option border-2 border-gray-200 rounded-lg p-3 hover:border-yellow-400 transition-all" data-template="modern">
+                    <div class="template-preview w-full h-20 bg-gradient-to-br from-purple-100 to-purple-200 rounded mb-2 flex items-center justify-center">
+                      <svg class="w-8 h-8 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z"/>
+                      </svg>
+                    </div>
+                    <div class="text-sm font-medium">{{ 'products.customization.modern' | t }}</div>
+                  </button>
+
+                  <button class="template-option border-2 border-gray-200 rounded-lg p-3 hover:border-yellow-400 transition-all" data-template="minimalist">
+                    <div class="template-preview w-full h-20 bg-gradient-to-br from-gray-100 to-gray-200 rounded mb-2 flex items-center justify-center">
+                      <svg class="w-8 h-8 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"/>
+                      </svg>
+                    </div>
+                    <div class="text-sm font-medium">{{ 'products.customization.minimalist' | t }}</div>
+                  </button>
+
+                  <button class="template-option border-2 border-gray-200 rounded-lg p-3 hover:border-yellow-400 transition-all" data-template="custom">
+                    <div class="template-preview w-full h-20 bg-gradient-to-br from-green-100 to-green-200 rounded mb-2 flex items-center justify-center">
+                      <svg class="w-8 h-8 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"/>
+                      </svg>
+                    </div>
+                    <div class="text-sm font-medium">{{ 'products.customization.custom' | t }}</div>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Upload Custom Design -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">{{ 'products.customization.upload_design' | t }}</label>
+                <div class="upload-area border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-yellow-400 transition-all cursor-pointer" id="upload-area">
+                  <svg class="w-12 h-12 text-gray-400 mx-auto mb-3" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 011.414 0L9 8.586V3a1 1 0 112 0v5.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"/>
+                  </svg>
+                  <p class="text-sm text-gray-600 mb-2">{{ 'products.customization.drag_drop' | t }}</p>
+                  <p class="text-xs text-gray-500">{{ 'products.customization.supported_formats' | t }}</p>
+                  <input type="file" id="design-upload" class="hidden" accept="image/*">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Size & Fit Customization -->
+          <div class="customization-group bg-white rounded-lg p-6 shadow-sm" id="size-customization">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <svg class="w-5 h-5 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"/>
+              </svg>
+              {{ 'products.customization.size_fit' | t }}
+            </h3>
+
+            <div class="space-y-4">
+              <!-- Size Adjustment -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">{{ 'products.customization.size_adjustment' | t }}</label>
+                <div class="size-adjustment-grid grid grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-xs text-gray-500 mb-1">{{ 'products.customization.length' | t }}</label>
+                    <select id="length-adjustment" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent">
+                      <option value="standard">{{ 'products.customization.standard' | t }}</option>
+                      <option value="short-2">{{ 'products.customization.short_2cm' | t }}</option>
+                      <option value="short-5">{{ 'products.customization.short_5cm' | t }}</option>
+                      <option value="long-2">{{ 'products.customization.long_2cm' | t }}</option>
+                      <option value="long-5">{{ 'products.customization.long_5cm' | t }}</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-xs text-gray-500 mb-1">{{ 'products.customization.fit' | t }}</label>
+                    <select id="fit-adjustment" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent">
+                      <option value="regular">{{ 'products.customization.regular' | t }}</option>
+                      <option value="slim">{{ 'products.customization.slim' | t }}</option>
+                      <option value="relaxed">{{ 'products.customization.relaxed' | t }}</option>
+                      <option value="oversized">{{ 'products.customization.oversized' | t }}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Special Requests -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">{{ 'products.customization.special_requests' | t }}</label>
+                <textarea
+                  id="special-requests"
+                  rows="3"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                  placeholder="{{ 'products.customization.special_requests_placeholder' | t }}"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pricing Summary -->
+          <div class="customization-group bg-yellow-50 rounded-lg p-6 shadow-sm">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <svg class="w-5 h-5 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"/>
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z"/>
+              </svg>
+              {{ 'products.customization.pricing_summary' | t }}
+            </h3>
+
+            <div class="pricing-details space-y-2">
+              <div class="flex justify-between">
+                <span class="text-gray-600">{{ 'products.customization.base_price' | t }}</span>
+                <span class="font-medium" id="base-price">{{ product.price | money }}</span>
+              </div>
+              <div class="flex justify-between" id="embroidery-price-row" style="display: none;">
+                <span class="text-gray-600">{{ 'products.customization.embroidery_fee' | t }}</span>
+                <span class="font-medium">+{{ 'products.customization.embroidery_price' | t }}</span>
+              </div>
+              <div class="flex justify-between" id="printing-price-row" style="display: none;">
+                <span class="text-gray-600">{{ 'products.customization.printing_fee' | t }}</span>
+                <span class="font-medium">+{{ 'products.customization.printing_price' | t }}</span>
+              </div>
+              <div class="flex justify-between" id="size-adjustment-price-row" style="display: none;">
+                <span class="text-gray-600">{{ 'products.customization.size_adjustment_fee' | t }}</span>
+                <span class="font-medium">+{{ 'products.customization.size_adjustment_price' | t }}</span>
+              </div>
+              <div class="border-t pt-2 flex justify-between text-lg font-bold">
+                <span>{{ 'products.customization.total_price' | t }}</span>
+                <span id="total-price">{{ product.price | money }}</span>
+              </div>
+            </div>
+
+            <div class="mt-4 text-sm text-gray-600">
+              <svg class="w-4 h-4 inline-block mr-1" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"/>
+              </svg>
+              {{ 'products.customization.production_time' | t }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Product Preview Panel -->
+        <div class="customization-preview">
+          <div class="preview-container bg-white rounded-lg shadow-sm overflow-hidden">
+
+            <!-- Preview Header -->
+            <div class="preview-header bg-gray-50 px-6 py-4 border-b">
+              <h3 class="text-lg font-semibold text-gray-900">{{ 'products.customization.live_preview' | t }}</h3>
+              <p class="text-sm text-gray-600">{{ 'products.customization.preview_changes' | t }}</p>
+            </div>
+
+            <!-- Preview Area -->
+            <div class="preview-area relative aspect-square bg-gray-100" id="preview-area">
+              <!-- Product Image -->
+              <img
+                id="product-preview-image"
+                src="{{ product.featured_image | img_url: '800x800' }}"
+                alt="{{ product.title }}"
+                class="w-full h-full object-contain"
+              >
+
+              <!-- Customization Overlay -->
+              <div class="customization-overlay absolute inset-0 pointer-events-none" id="customization-overlay">
+                <!-- Text overlay will be positioned here -->
+                <div id="text-overlay" class="absolute" style="display: none;"></div>
+
+                <!-- Design overlay will be positioned here -->
+                <div id="design-overlay" class="absolute inset-0" style="display: none;"></div>
+              </div>
+
+              <!-- Preview Controls -->
+              <div class="preview-controls absolute bottom-4 right-4 flex gap-2">
+                <button
+                  class="preview-control-btn bg-black bg-opacity-60 text-white p-2 rounded-lg hover:bg-opacity-80 transition-all"
+                  onclick="document.getElementById('preview-area').requestFullscreen()"
+                  title="{{ 'products.customization.fullscreen_preview' | t }}"
+                >
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h4a1 1 0 010 2H6.414l2.293 2.293a1 1 0 11-1.414 1.414L5 6.414V8a1 1 0 01-2 0V4zm9 1a1 1 0 110-2h4a1 1 0 011 1v4a1 1 0 11-2 0V6.414l-2.293 2.293a1 1 0 11-1.414-1.414L13.586 5H12zm-9 7a1 1 0 012 0v1.586l2.293-2.293a1 1 0 111.414 1.414L6.414 15H8a1 1 0 110 2H4a1 1 0 01-1-1v-4zm13-1a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 110-2h1.586l-2.293-2.293a1 1 0 111.414-1.414L15 13.586V12a1 1 0 011-1z"/>
+                  </svg>
+                </button>
+
+                <button
+                  class="preview-control-btn bg-black bg-opacity-60 text-white p-2 rounded-lg hover:bg-opacity-80 transition-all"
+                  onclick="this.closest('.customization-preview').querySelector('#product-preview-image').click()"
+                  title="{{ 'products.customization.rotate_view' | t }}"
+                >
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Preview Details -->
+            <div class="preview-details px-6 py-4 border-t bg-gray-50">
+              <div class="preview-details-grid grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <span class="text-gray-600">{{ 'products.customization.personalization' | t }}:</span>
+                  <span class="font-medium ml-1" id="preview-personalization">{{ 'products.customization.none' | t }}</span>
+                </div>
+                <div>
+                  <span class="text-gray-600">{{ 'products.customization.estimated_delivery' | t }}:</span>
+                  <span class="font-medium ml-1">{{ 'products.customization.delivery_timeframe' | t }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="mt-6 space-y-3">
+            <button
+              id="add-to-cart-customized"
+              class="w-full bg-yellow-600 text-white py-3 px-6 rounded-lg hover:bg-yellow-700 transition-colors font-medium flex items-center justify-center gap-2"
+            >
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"/>
+              </svg>
+              {{ 'products.customization.add_customized_to_cart' | t }}
+            </button>
+
+            <button
+              id="save-customization"
+              class="w-full bg-gray-200 text-gray-700 py-3 px-6 rounded-lg hover:bg-gray-300 transition-colors font-medium flex items-center justify-center gap-2"
+            >
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M7.707 10.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V6h5a2 2 0 012 2v7a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2h5v5.586l-1.293-1.293zM9 4a1 1 0 012 0v2H9V4z"/>
+              </svg>
+              {{ 'products.customization.save_design' | t }}
+            </button>
+
+            <button
+              id="share-customization"
+              class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center justify-center gap-2"
+            >
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"/>
+              </svg>
+              {{ 'products.customization.share_design' | t }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* Product Customization Styles */
+.customization-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.personalization-type-btn.active,
+.template-option.active,
+.font-option.active,
+.position-btn.active,
+.color-option.active {
+  border-color: #d4af37 !important;
+  background-color: #fef3c7;
+}
+
+.personalization-type-btn:hover,
+.template-option:hover,
+.font-option:hover,
+.position-btn:hover {
+  border-color: #d4af37;
+  transform: translateY(-2px);
+}
+
+.preview-area {
+  position: relative;
+  overflow: hidden;
+}
+
+#text-overlay {
+  pointer-events: none;
+  user-select: none;
+  z-index: 10;
+}
+
+.upload-area:hover {
+  border-color: #d4af37;
+  background-color: #fef3c7;
+}
+
+/* Range Slider Styling */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-track {
+  background: #e5e7eb;
+  height: 8px;
+  border-radius: 4px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  background: #d4af37;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  margin-top: -6px;
+}
+
+input[type="range"]::-moz-range-track {
+  background: #e5e7eb;
+  height: 8px;
+  border-radius: 4px;
+  border: none;
+}
+
+input[type="range"]::-moz-range-thumb {
+  background: #d4af37;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  border: none;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .customization-container {
+    padding: 1rem;
+  }
+
+  .grid-cols-1.lg\\:grid-cols-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .personalization-options,
+  .template-grid,
+  .font-options,
+  .position-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .size-adjustment-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .preview-details-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+</style>
+
+<script>
+// Product Customization JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+  class ProductCustomization {
+    constructor(container) {
+      this.container = container;
+      this.currentCustomization = {
+        type: '',
+        text: '',
+        font: 'serif',
+        color: '#000000',
+        size: 24,
+        position: 'center',
+        template: '',
+        designImage: null,
+        sizeAdjustment: 'standard',
+        fitAdjustment: 'regular',
+        specialRequests: ''
+      };
+      this.basePrice = parseFloat('{{ product.price | money_without_currency }}'.replace(',', ''));
+      this.pricing = {
+        embroidery: 15.00,
+        printing: 10.00,
+        patches: 20.00,
+        engraving: 25.00,
+        sizeAdjustment: 5.00
+      };
+
+      this.init();
+    }
+
+    init() {
+      this.setupEventListeners();
+      this.updatePreview();
+      this.updatePricing();
+    }
+
+    setupEventListeners() {
+      // Personalization type selection
+      this.container.querySelectorAll('.personalization-type-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          this.selectPersonalizationType(btn.dataset.type);
+        });
+      });
+
+      // Text input
+      const textInput = this.container.querySelector('#custom-text');
+      textInput.addEventListener('input', (e) => {
+        this.currentCustomization.text = e.target.value;
+        this.updateCharCount();
+        this.updatePreview();
+      });
+
+      // Font selection
+      this.container.querySelectorAll('.font-option').forEach(btn => {
+        btn.addEventListener('click', () => {
+          this.currentCustomization.font = btn.dataset.font;
+          this.updateActiveState('.font-option', btn);
+          this.updatePreview();
+        });
+      });
+
+      // Color selection
+      this.container.querySelectorAll('.color-option').forEach(btn => {
+        btn.addEventListener('click', () => {
+          this.currentCustomization.color = btn.dataset.color;
+          this.updateActiveState('.color-option', btn);
+          this.updatePreview();
+        });
+      });
+
+      // Text size
+      const textSizeSlider = this.container.querySelector('#text-size');
+      textSizeSlider.addEventListener('input', (e) => {
+        this.currentCustomization.size = parseInt(e.target.value);
+        this.updatePreview();
+      });
+
+      // Position selection
+      this.container.querySelectorAll('.position-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          this.currentCustomization.position = btn.dataset.position;
+          this.updateActiveState('.position-btn', btn);
+          this.updatePreview();
+        });
+      });
+
+      // Template selection
+      this.container.querySelectorAll('.template-option').forEach(btn => {
+        btn.addEventListener('click', () => {
+          this.currentCustomization.template = btn.dataset.template;
+          this.updateActiveState('.template-option', btn);
+          this.updatePreview();
+        });
+      });
+
+      // File upload
+      const uploadArea = this.container.querySelector('#upload-area');
+      const fileInput = this.container.querySelector('#design-upload');
+
+      uploadArea.addEventListener('click', () => {
+        fileInput.click();
+      });
+
+      uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('border-yellow-400', 'bg-yellow-50');
+      });
+
+      uploadArea.addEventListener('dragleave', () => {
+        uploadArea.classList.remove('border-yellow-400', 'bg-yellow-50');
+      });
+
+      uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('border-yellow-400', 'bg-yellow-50');
+        this.handleFileUpload(e.dataTransfer.files[0]);
+      });
+
+      fileInput.addEventListener('change', (e) => {
+        this.handleFileUpload(e.target.files[0]);
+      });
+
+      // Size and fit adjustments
+      document.getElementById('length-adjustment').addEventListener('change', (e) => {
+        this.currentCustomization.sizeAdjustment = e.target.value;
+        this.updatePricing();
+      });
+
+      document.getElementById('fit-adjustment').addEventListener('change', (e) => {
+        this.currentCustomization.fitAdjustment = e.target.value;
+      });
+
+      document.getElementById('special-requests').addEventListener('input', (e) => {
+        this.currentCustomization.specialRequests = e.target.value;
+      });
+
+      // Action buttons
+      document.getElementById('add-to-cart-customized').addEventListener('click', () => {
+        this.addToCart();
+      });
+
+      document.getElementById('save-customization').addEventListener('click', () => {
+        this.saveCustomization();
+      });
+
+      document.getElementById('share-customization').addEventListener('click', () => {
+        this.shareCustomization();
+      });
+
+      // Keyboard shortcuts
+      document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey || e.metaKey) {
+          switch(e.key) {
+            case 's':
+              e.preventDefault();
+              this.saveCustomization();
+              break;
+            case 'Enter':
+              e.preventDefault();
+              this.addToCart();
+              break;
+          }
+        }
+      });
+    }
+
+    selectPersonalizationType(type) {
+      this.currentCustomization.type = type;
+
+      // Update UI
+      this.updateActiveState('.personalization-type-btn', this.container.querySelector(`[data-type="${type}"]`));
+
+      // Show/hide relevant customization options
+      this.toggleCustomizationOptions(type);
+
+      // Update pricing
+      this.updatePricing();
+
+      // Update preview
+      this.updatePreview();
+    }
+
+    toggleCustomizationOptions(type) {
+      const textGroup = this.container.querySelector('#text-customization');
+      const designGroup = this.container.querySelector('#design-customization');
+      const sizeGroup = this.container.querySelector('#size-customization');
+
+      // Show all by default
+      textGroup.style.display = 'block';
+      designGroup.style.display = 'block';
+      sizeGroup.style.display = 'block';
+
+      // Hide based on type
+      switch(type) {
+        case 'engraving':
+          designGroup.style.display = 'none';
+          break;
+        case 'patches':
+          textGroup.style.display = 'none';
+          break;
+      }
+    }
+
+    updateActiveState(selector, activeElement) {
+      this.container.querySelectorAll(selector).forEach(el => {
+        el.classList.remove('active');
+      });
+      activeElement.classList.add('active');
+    }
+
+    updateCharCount() {
+      const charCount = this.container.querySelector('#char-count');
+      charCount.textContent = this.currentCustomization.text.length;
+    }
+
+    handleFileUpload(file) {
+      if (!file || !file.type.startsWith('image/')) {
+        this.showNotification('{{ 'products.customization.please_select_image' | t }}', 'error');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.currentCustomization.designImage = e.target.result;
+        this.updatePreview();
+        this.showNotification('{{ 'products.customization.design_uploaded' | t }}', 'success');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    updatePreview() {
+      const textOverlay = this.container.querySelector('#text-overlay');
+      const designOverlay = this.container.querySelector('#design-overlay');
+
+      // Clear previous overlays
+      textOverlay.innerHTML = '';
+      designOverlay.innerHTML = '';
+      designOverlay.style.backgroundImage = '';
+
+      // Update text overlay
+      if (this.currentCustomization.text && this.currentCustomization.type !== 'patches') {
+        textOverlay.style.display = 'block';
+        textOverlay.textContent = this.currentCustomization.text;
+        textOverlay.style.fontFamily = this.getFontFamily(this.currentCustomization.font);
+        textOverlay.style.color = this.currentCustomization.color;
+        textOverlay.style.fontSize = `${this.currentCustomization.size}px`;
+        textOverlay.style.fontWeight = 'bold';
+        textOverlay.style.textShadow = '1px 1px 2px rgba(0,0,0,0.3)';
+        this.positionTextOverlay(textOverlay);
+      } else {
+        textOverlay.style.display = 'none';
+      }
+
+      // Update design overlay
+      if (this.currentCustomization.designImage) {
+        designOverlay.style.display = 'block';
+        designOverlay.style.backgroundImage = `url(${this.currentCustomization.designImage})`;
+        designOverlay.style.backgroundSize = 'contain';
+        designOverlay.style.backgroundPosition = 'center';
+        designOverlay.style.backgroundRepeat = 'no-repeat';
+        designOverlay.style.opacity = '0.8';
+      } else if (this.currentCustomization.template) {
+        designOverlay.style.display = 'block';
+        designOverlay.style.background = this.getTemplateBackground(this.currentCustomization.template);
+        designOverlay.style.opacity = '0.3';
+      } else {
+        designOverlay.style.display = 'none';
+      }
+
+      // Update preview details
+      this.updatePreviewDetails();
+    }
+
+    getFontFamily(font) {
+      const fontMap = {
+        'serif': 'serif',
+        'sans-serif': 'sans-serif',
+        'cursive': 'cursive',
+        'monospace': 'monospace',
+        'fantasy': 'fantasy',
+        'tamil': "'Noto Sans Tamil', serif"
+      };
+      return fontMap[font] || 'serif';
+    }
+
+    getTemplateBackground(template) {
+      const backgrounds = {
+        'floral': 'linear-gradient(45deg, #fce7f3, #fbcfe8)',
+        'geometric': 'linear-gradient(45deg, #dbeafe, #bfdbfe)',
+        'traditional': 'linear-gradient(45deg, #fef3c7, #fde68a)',
+        'modern': 'linear-gradient(45deg, #e9d5ff, #d8b4fe)',
+        'minimalist': 'linear-gradient(45deg, #f3f4f6, #e5e7eb)',
+        'custom': 'linear-gradient(45deg, #d1fae5, #a7f3d0)'
+      };
+      return backgrounds[template] || 'transparent';
+    }
+
+    positionTextOverlay(textOverlay) {
+      const positions = {
+        'top-left': { top: '20%', left: '20%', transform: 'translate(-50%, -50%)' },
+        'top-center': { top: '20%', left: '50%', transform: 'translate(-50%, -50%)' },
+        'top-right': { top: '20%', left: '80%', transform: 'translate(-50%, -50%)' },
+        'center-left': { top: '50%', left: '20%', transform: 'translate(-50%, -50%)' },
+        'center': { top: '50%', left: '50%', transform: 'translate(-50%, -50%)' },
+        'center-right': { top: '50%', left: '80%', transform: 'translate(-50%, -50%)' },
+        'bottom-left': { top: '80%', left: '20%', transform: 'translate(-50%, -50%)' },
+        'bottom-center': { top: '80%', left: '50%', transform: 'translate(-50%, -50%)' },
+        'bottom-right': { top: '80%', left: '80%', transform: 'translate(-50%, -50%)' }
+      };
+
+      const position = positions[this.currentCustomization.position] || positions.center;
+      Object.assign(textOverlay.style, position);
+    }
+
+    updatePreviewDetails() {
+      const personalizationSpan = this.container.querySelector('#preview-personalization');
+
+      if (this.currentCustomization.type) {
+        const typeMap = {
+          'embroidery': '{{ 'products.customization.embroidery' | t }}',
+          'printing': '{{ 'products.customization.printing' | t }}',
+          'patches': '{{ 'products.customization.patches' | t }}',
+          'engraving': '{{ 'products.customization.engraving' | t }}'
+        };
+
+        let details = typeMap[this.currentCustomization.type];
+        if (this.currentCustomization.text) {
+          details += `: "${this.currentCustomization.text}"`;
+        }
+
+        personalizationSpan.textContent = details;
+      } else {
+        personalizationSpan.textContent = '{{ 'products.customization.none' | t }}';
+      }
+    }
+
+    updatePricing() {
+      let totalPrice = this.basePrice;
+
+      // Hide all price rows
+      this.container.querySelectorAll('[id$="-price-row"]').forEach(row => {
+        row.style.display = 'none';
+      });
+
+      // Add customization fees
+      if (this.currentCustomization.type && this.pricing[this.currentCustomization.type]) {
+        totalPrice += this.pricing[this.currentCustomization.type];
+        this.container.querySelector(`#${this.currentCustomization.type}-price-row`).style.display = 'flex';
+      }
+
+      // Add size adjustment fee
+      if (this.currentCustomization.sizeAdjustment !== 'standard') {
+        totalPrice += this.pricing.sizeAdjustment;
+        this.container.querySelector('#size-adjustment-price-row').style.display = 'flex';
+      }
+
+      // Update total price display
+      const totalPriceElement = this.container.querySelector('#total-price');
+      totalPriceElement.textContent = `Rs${totalPrice.toFixed(2)}`;
+    }
+
+    addToCart() {
+      if (!this.currentCustomization.type) {
+        this.showNotification('{{ 'products.customization.select_personalization_type' | t }}', 'error');
+        return;
+      }
+
+      // Prepare cart data
+      const cartData = {
+        id: '{{ product.selected_or_first_available_variant.id }}',
+        quantity: 1,
+        properties: {
+          '_customization_type': this.currentCustomization.type,
+          '_customization_text': this.currentCustomization.text,
+          '_customization_font': this.currentCustomization.font,
+          '_customization_color': this.currentCustomization.color,
+          '_customization_size': this.currentCustomization.size,
+          '_customization_position': this.currentCustomization.position,
+          '_customization_template': this.currentCustomization.template,
+          '_size_adjustment': this.currentCustomization.sizeAdjustment,
+          '_fit_adjustment': this.currentCustomization.fitAdjustment,
+          '_special_requests': this.currentCustomization.specialRequests,
+          '_customization_price': this.getTotalAdditionalPrice().toFixed(2)
+        }
+      };
+
+      // Add to cart
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(cartData)
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 422) {
+          this.showNotification(data.message, 'error');
+        } else {
+          this.showNotification('{{ 'products.customization.added_to_cart' | t }}', 'success');
+          // Update cart counter
+          this.updateCartCounter();
+        }
+      })
+      .catch(error => {
+        console.error('Error adding to cart:', error);
+        this.showNotification('{{ 'products.customization.add_to_cart_error' | t }}', 'error');
+      });
+    }
+
+    getTotalAdditionalPrice() {
+      let additionalPrice = 0;
+
+      if (this.currentCustomization.type && this.pricing[this.currentCustomization.type]) {
+        additionalPrice += this.pricing[this.currentCustomization.type];
+      }
+
+      if (this.currentCustomization.sizeAdjustment !== 'standard') {
+        additionalPrice += this.pricing.sizeAdjustment;
+      }
+
+      return additionalPrice;
+    }
+
+    updateCartCounter() {
+      // Update cart counter if it exists
+      const cartCounter = document.querySelector('.cart-counter');
+      if (cartCounter) {
+        fetch('/cart.js')
+          .then(response => response.json())
+          .then(cart => {
+            cartCounter.textContent = cart.item_count;
+          });
+      }
+    }
+
+    saveCustomization() {
+      const customizationData = {
+        ...this.currentCustomization,
+        productId: this.container.dataset.productId,
+        timestamp: new Date().toISOString()
+      };
+
+      // Save to localStorage
+      const savedCustomizations = JSON.parse(localStorage.getItem('savedCustomizations') || '[]');
+      savedCustomizations.push(customizationData);
+
+      // Keep only last 10 customizations
+      if (savedCustomizations.length > 10) {
+        savedCustomizations.splice(0, savedCustomizations.length - 10);
+      }
+
+      localStorage.setItem('savedCustomizations', JSON.stringify(savedCustomizations));
+
+      this.showNotification('{{ 'products.customization.customization_saved' | t }}', 'success');
+    }
+
+    shareCustomization() {
+      const shareData = {
+        title: '{{ product.title }} - Custom Design',
+        text: `Check out my customized ${this.currentCustomization.type} design!`,
+        url: window.location.href
+      };
+
+      if (navigator.share) {
+        navigator.share(shareData).catch(() => {
+          this.fallbackShare();
+        });
+      } else {
+        this.fallbackShare();
+      }
+    }
+
+    fallbackShare() {
+      const shareUrl = window.location.href;
+      navigator.clipboard.writeText(shareUrl).then(() => {
+        this.showNotification('{{ 'products.customization.link_copied' | t }}', 'success');
+      });
+    }
+
+    showNotification(message, type = 'info') {
+      const notification = document.createElement('div');
+      notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg text-white z-50 transition-all transform translate-x-full`;
+
+      switch(type) {
+        case 'success':
+          notification.classList.add('bg-green-500');
+          break;
+        case 'error':
+          notification.classList.add('bg-red-500');
+          break;
+        default:
+          notification.classList.add('bg-blue-500');
+      }
+
+      notification.textContent = message;
+      document.body.appendChild(notification);
+
+      setTimeout(() => {
+        notification.classList.remove('translate-x-full');
+      }, 100);
+
+      setTimeout(() => {
+        notification.classList.add('translate-x-full');
+        setTimeout(() => {
+          document.body.removeChild(notification);
+        }, 300);
+      }, 3000);
+    }
+  }
+
+  // Initialize product customization
+  const customizationContainers = document.querySelectorAll('.product-customization');
+  customizationContainers.forEach(container => {
+    new ProductCustomization(container);
+  });
+
+  // Make available globally for Shopify integration
+  window.theme = window.theme || {};
+  window.theme.productCustomization = ProductCustomization;
+});
+</script>

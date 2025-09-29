@@ -1,0 +1,25 @@
+# Sprint 1 Kickoff & Daily Standup Plan — Tamil Cultural Streetwear Shopify Theme
+
+## Table of Contents
+
+- [Sprint 1 Kickoff & Daily Standup Plan — Tamil Cultural Streetwear Shopify Theme](#table-of-contents)
+  - [Sprint Goal](./sprint-goal.md)
+  - [Sprint Duration](./sprint-duration.md)
+  - [Team Roles](./team-roles.md)
+  - [Sprint Metrics](./sprint-metrics.md)
+  - [Standup Format (Daily)](./standup-format-daily.md)
+  - [Day-by-Day Standup Agenda](./day-by-day-standup-agenda.md)
+    - [Day 1: Kickoff & Setup](./day-by-day-standup-agenda.md#day-1-kickoff-setup)
+    - [Day 2: Foundation Progress](./day-by-day-standup-agenda.md#day-2-foundation-progress)
+    - [Day 3: Branding Integration](./day-by-day-standup-agenda.md#day-3-branding-integration)
+    - [Day 4: Homepage Hero](./day-by-day-standup-agenda.md#day-4-homepage-hero)
+    - [Day 5: Countdown & Proverbs](./day-by-day-standup-agenda.md#day-5-countdown-proverbs)
+    - [Day 6: Featured Collections](./day-by-day-standup-agenda.md#day-6-featured-collections)
+    - [Day 7: Newsletter & Mid-Sprint Review](./day-by-day-standup-agenda.md#day-7-newsletter-mid-sprint-review)
+    - [Day 8: Collection Page Skeleton](./day-by-day-standup-agenda.md#day-8-collection-page-skeleton)
+    - [Day 9: Product Page Variants](./day-by-day-standup-agenda.md#day-9-product-page-variants)
+    - [Day 10: Size Guide & Reviews](./day-by-day-standup-agenda.md#day-10-size-guide-reviews)
+    - [Day 11: Performance Optimization](./day-by-day-standup-agenda.md#day-11-performance-optimization)
+    - [Day 12: QA Deep Dive](./day-by-day-standup-agenda.md#day-12-qa-deep-dive)
+    - [Day 13: Final Fixes & Pre-Launch Checklist](./day-by-day-standup-agenda.md#day-13-final-fixes-pre-launch-checklist)
+    - [Day 14: Sprint Review & Retrospective](./day-by-day-standup-agenda.md#day-14-sprint-review-retrospective)

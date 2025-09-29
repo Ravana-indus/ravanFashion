@@ -1,0 +1,864 @@
+<style>
+  .product-recommendations {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #fef3f3 0%, #fefce8 100%);
+    border-radius: 0.75rem;
+    border: 2px dashed #dc2626;
+  }
+
+  .product-recommendations.dark-theme {
+    background: linear-gradient(135deg, #451a03 0%, #78350f 100%);
+    color: white;
+    border-color: #fbbf24;
+  }
+
+  .recommendations-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .recommendations-header h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #dc2626;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .recommendations-header .tamil-subtitle {
+    font-size: 0.875rem;
+    color: #7c1e1e;
+    font-weight: 500;
+  }
+
+  .recommendations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .recommendation-card {
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .recommendation-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  }
+
+  .recommendation-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    background: #f3f4f6;
+  }
+
+  .recommendation-content {
+    padding: 1rem;
+  }
+
+  .recommendation-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+  }
+
+  .recommendation-price {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #dc2626;
+    margin-bottom: 0.75rem;
+  }
+
+  .recommendation-price .compare-at {
+    font-size: 0.875rem;
+    color: #6b7280;
+    text-decoration: line-through;
+    margin-left: 0.5rem;
+  }
+
+  .recommendation-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .recommendation-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  .badge-views {
+    background: #dbeafe;
+    color: #1e40af;
+  }
+
+  .badge-wishlist {
+    background: #fce7f3;
+    color: #be185d;
+  }
+
+  .badge-similar {
+    background: #d1fae5;
+    color: #065f46;
+  }
+
+  .badge-trending {
+    background: #fef3c7;
+    color: #92400e;
+  }
+
+  .badge-cultural {
+    background: #e9d5ff;
+    color: #6b21a8;
+  }
+
+  .recommendation-reason {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-bottom: 1rem;
+    font-style: italic;
+  }
+
+  .recommendation-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .recommendation-btn {
+    flex: 1;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn-add-to-cart {
+    background: #dc2626;
+    color: white;
+  }
+
+  .btn-add-to-cart:hover:not(:disabled) {
+    background: #b91c1c;
+  }
+
+  .btn-add-to-cart:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+  }
+
+  .btn-add-to-wishlist {
+    background: #f3f4f6;
+    color: #374151;
+    border: 1px solid #d1d5db;
+  }
+
+  .btn-add-to-wishlist:hover {
+    background: #e5e7eb;
+  }
+
+  .btn-add-to-wishlist.active {
+    background: #fbbf24;
+    color: #1c1c1c;
+    border-color: #f59e0b;
+  }
+
+  .recommendation-loading {
+    text-align: center;
+    padding: 3rem;
+    color: #6b7280;
+  }
+
+  .recommendation-empty {
+    text-align: center;
+    padding: 3rem;
+    color: #6b7280;
+  }
+
+  .recommendation-refresh {
+    text-align: center;
+    margin-top: 1rem;
+  }
+
+  .refresh-btn {
+    padding: 0.75rem 1.5rem;
+    background: #d4af37;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .refresh-btn:hover {
+    background: #ffd700;
+    transform: translateY(-1px);
+  }
+
+  .recommendation-stats {
+    background: white;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    border: 1px solid #e5e7eb;
+  }
+
+  .stats-item {
+    display: inline-block;
+    margin: 0 1rem;
+  }
+
+  .stats-number {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #dc2626;
+  }
+
+  .stats-label {
+    font-size: 0.875rem;
+    color: #6b7280;
+  }
+
+  .recommendation-filters {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    padding: 0.5rem 1rem;
+    background: white;
+    color: #374151;
+    border: 1px solid #d1d5db;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .filter-btn:hover {
+    background: #f3f4f6;
+  }
+
+  .filter-btn.active {
+    background: #dc2626;
+    color: white;
+    border-color: #dc2626;
+  }
+
+  .loading-spinner {
+    width: 2rem;
+    height: 2rem;
+    border: 3px solid rgba(220, 38, 38, 0.3);
+    border-top: 3px solid #dc2626;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1rem;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  @media (max-width: 768px) {
+    .product-recommendations {
+      margin: 1.5rem 0;
+      padding: 1rem;
+    }
+
+    .recommendations-header h3 {
+      font-size: 1.25rem;
+    }
+
+    .recommendations-grid {
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+
+    .recommendation-image {
+      height: 180px;
+    }
+
+    .stats-item {
+      display: block;
+      margin: 0.5rem 0;
+    }
+  }
+</style>
+
+<div class="product-recommendations" id="product-recommendations">
+  <div class="recommendations-header">
+    <h3>
+      <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+      </svg>
+      {{ 'recommendations.title' | t }}
+    </h3>
+    <div class="tamil-subtitle">{{ 'recommendations.subtitle_tamil' | t }}</div>
+  </div>
+
+  <!-- Recommendations Stats -->
+  <div class="recommendation-stats" id="recommendation-stats" style="display: none;">
+    <div class="stats-item">
+      <div class="stats-number" id="total-recommendations">0</div>
+      <div class="stats-label">{{ 'recommendations.based_on_views' | t }}</div>
+    </div>
+    <div class="stats-item">
+      <div class="stats-number" id="wishlist-matches">0</div>
+      <div class="stats-label">{{ 'recommendations.based_on_wishlist' | t }}</div>
+    </div>
+    <div class="stats-item">
+      <div class="stats-number" id="cultural-matches">0</div>
+      <div class="stats-label">{{ 'recommendations.cultural_match' | t }}</div>
+    </div>
+  </div>
+
+  <!-- Recommendation Filters -->
+  <div class="recommendation-filters" id="recommendation-filters" style="display: none;">
+    <button class="filter-btn active" data-filter="all">{{ 'general.all' | t }}</button>
+    <button class="filter-btn" data-filter="views">{{ 'recommendations.based_on_views' | t }}</button>
+    <button class="filter-btn" data-filter="wishlist">{{ 'recommendations.based_on_wishlist' | t }}</button>
+    <button class="filter-btn" data-filter="trending">{{ 'recommendations.trending_now' | t }}</button>
+    <button class="filter-btn" data-filter="cultural">{{ 'recommendations.cultural_match' | t }}</button>
+  </div>
+
+  <!-- Loading State -->
+  <div class="recommendation-loading" id="recommendation-loading">
+    <div class="loading-spinner"></div>
+    {{ 'recommendations.loading' | t }}
+  </div>
+
+  <!-- Empty State -->
+  <div class="recommendation-empty" id="recommendation-empty" style="display: none;">
+    <svg class="w-12 h-12 mx-auto mb-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+    </svg>
+    <h4 class="text-lg font-semibold mb-2">{{ 'recommendations.no_recommendations' | t }}</h4>
+    <p class="text-sm mb-4">{{ 'recommendations.try_browsing' | t }}</p>
+    <button class="refresh-btn" onclick="window.theme.productRecommendations.refresh()">
+      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+      </svg>
+      {{ 'recommendations.refresh' | t }}
+    </button>
+  </div>
+
+  <!-- Recommendations Grid -->
+  <div class="recommendations-grid" id="recommendations-grid" style="display: none;">
+    <!-- Recommendations will be loaded here -->
+  </div>
+
+  <!-- Refresh Button -->
+  <div class="recommendation-refresh">
+    <button class="refresh-btn" onclick="window.theme.productRecommendations.refresh()">
+      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+      </svg>
+      {{ 'recommendations.refresh' | t }}
+    </button>
+  </div>
+</div>
+
+<script>
+  // Product Recommendations System
+  window.theme = window.theme || {};
+  window.theme.productRecommendations = window.theme.productRecommendations || {};
+
+  // Configuration
+  window.theme.productRecommendations.config = {
+    maxRecommendations: 12,
+    minConfidence: 0.3,
+    refreshInterval: 300000, // 5 minutes
+    storageKey: 'ravan-recommendations-data',
+    userPreferencesKey: 'ravan-user-preferences'
+  };
+
+  // State
+  window.theme.productRecommendations.recommendations = [];
+  window.theme.productRecommendations.currentFilter = 'all';
+  window.theme.productRecommendations.isLoading = false;
+
+  // Initialize recommendations
+  window.theme.productRecommendations.init = function() {
+    window.theme.productRecommendations.loadUserPreferences();
+    window.theme.productRecommendations.loadRecommendations();
+    window.theme.productRecommendations.setupEventListeners();
+    window.theme.productRecommendations.startAutoRefresh();
+  };
+
+  // Load user preferences
+  window.theme.productRecommendations.loadUserPreferences = function() {
+    try {
+      const stored = localStorage.getItem(window.theme.productRecommendations.config.userPreferencesKey);
+      if (stored) {
+        window.theme.productRecommendations.userPreferences = JSON.parse(stored);
+      } else {
+        window.theme.productRecommendations.userPreferences = {
+          categories: [],
+          priceRange: { min: 0, max: 1000 },
+          style: 'traditional',
+          culturalPreference: 'high',
+          lastUpdated: Date.now()
+        };
+      }
+    } catch (error) {
+      console.warn('Failed to load user preferences:', error);
+      window.theme.productRecommendations.userPreferences = {};
+    }
+  };
+
+  // Save user preferences
+  window.theme.productRecommendations.saveUserPreferences = function() {
+    try {
+      localStorage.setItem(
+        window.theme.productRecommendations.config.userPreferencesKey,
+        JSON.stringify(window.theme.productRecommendations.userPreferences)
+      );
+    } catch (error) {
+      console.warn('Failed to save user preferences:', error);
+    }
+  };
+
+  // Generate recommendations based on user behavior
+  window.theme.productRecommendations.generateRecommendations = function() {
+    const recommendations = [];
+
+    // Get user data from other systems
+    const viewedProducts = window.theme.recentlyViewed?.products || [];
+    const wishlistItems = window.theme.wishlist?.items || [];
+    const cartItems = window.theme.cart?.items || [];
+
+    // Mock product database (in real implementation, this would come from Shopify API)
+    const productDatabase = [
+      {
+        id: 'traditional-saree-1',
+        title: 'Traditional Kanjivaram Saree',
+        price: 299.99,
+        comparePrice: 399.99,
+        image: 'https://picsum.photos/seed/saree1/400/300.jpg',
+        category: 'sarees',
+        culturalScore: 0.9,
+        trending: true,
+        tags: ['traditional', 'silk', 'wedding']
+      },
+      {
+        id: 'modern-kurta-1',
+        title: 'Modern Ethnic Kurta',
+        price: 89.99,
+        comparePrice: null,
+        image: 'https://picsum.photos/seed/kurta1/400/300.jpg',
+        category: 'mens-wear',
+        culturalScore: 0.7,
+        trending: true,
+        tags: ['modern', 'casual', 'ethnic']
+      },
+      {
+        id: 'cultural-jewelry-1',
+        title: 'Temple Jewelry Set',
+        price: 149.99,
+        comparePrice: 199.99,
+        image: 'https://picsum.photos/seed/jewelry1/400/300.jpg',
+        category: 'accessories',
+        culturalScore: 0.95,
+        trending: false,
+        tags: ['traditional', 'jewelry', 'temple']
+      },
+      {
+        id: 'festive-dress-1',
+        title: 'Festive Wear Dress',
+        price: 179.99,
+        comparePrice: null,
+        image: 'https://picsum.photos/seed/dress1/400/300.jpg',
+        category: 'womens-wear',
+        culturalScore: 0.8,
+        trending: true,
+        tags: ['festive', 'modern', 'traditional']
+      },
+      {
+        id: 'ethnic-accessories-1',
+        title: 'Ethnic Accessories Set',
+        price: 59.99,
+        comparePrice: 79.99,
+        image: 'https://picsum.photos/seed/accessories1/400/300.jpg',
+        category: 'accessories',
+        culturalScore: 0.6,
+        trending: false,
+        tags: ['accessories', 'ethnic', 'modern']
+      }
+    ];
+
+    // Generate recommendations based on viewed products
+    viewedProducts.forEach(viewedProduct => {
+      const related = productDatabase.filter(product =>
+        product.id !== viewedProduct.id &&
+        (product.category === viewedProduct.category ||
+         product.tags.some(tag => viewedProduct.tags?.includes(tag)))
+      );
+
+      related.forEach(product => {
+        const existing = recommendations.find(r => r.id === product.id);
+        if (!existing) {
+          recommendations.push({
+            ...product,
+            reason: 'views',
+            confidence: 0.8,
+            reasonText: `{{ 'recommendations.because_you_viewed' | t }} ${viewedProduct.title}`
+          });
+        }
+      });
+    });
+
+    // Generate recommendations based on wishlist
+    wishlistItems.forEach(wishlistItem => {
+      const similar = productDatabase.filter(product =>
+        product.id !== wishlistItem.id &&
+        product.culturalScore >= 0.7
+      );
+
+      similar.forEach(product => {
+        const existing = recommendations.find(r => r.id === product.id);
+        if (!existing) {
+          recommendations.push({
+            ...product,
+            reason: 'wishlist',
+            confidence: 0.9,
+            reasonText: `{{ 'recommendations.because_you_wishlisted' | t }} ${wishlistItem.title}`
+          });
+        }
+      });
+    });
+
+    // Add trending items
+    const trendingItems = productDatabase.filter(product => product.trending);
+    trendingItems.forEach(product => {
+      const existing = recommendations.find(r => r.id === product.id);
+      if (!existing) {
+        recommendations.push({
+          ...product,
+          reason: 'trending',
+          confidence: 0.6,
+          reasonText: `{{ 'recommendations.trending_now' | t }}`
+        });
+      }
+    });
+
+    // Add cultural matches based on user preferences
+    const culturalItems = productDatabase.filter(product =>
+      product.culturalScore >= (window.theme.productRecommendations.userPreferences.culturalPreference || 0.7)
+    );
+    culturalItems.forEach(product => {
+      const existing = recommendations.find(r => r.id === product.id);
+      if (!existing) {
+        recommendations.push({
+          ...product,
+          reason: 'cultural',
+          confidence: product.culturalScore,
+          reasonText: `{{ 'recommendations.cultural_fit' | t }}`
+        });
+      }
+    });
+
+    // Sort by confidence and limit results
+    return recommendations
+      .sort((a, b) => b.confidence - a.confidence)
+      .slice(0, window.theme.productRecommendations.config.maxRecommendations);
+  };
+
+  // Load recommendations
+  window.theme.productRecommendations.loadRecommendations = function() {
+    window.theme.productRecommendations.isLoading = true;
+    window.theme.productRecommendations.showLoading();
+
+    // Simulate API call
+    setTimeout(() => {
+      window.theme.productRecommendations.recommendations = window.theme.productRecommendations.generateRecommendations();
+      window.theme.productRecommendations.saveRecommendations();
+      window.theme.productRecommendations.render();
+      window.theme.productRecommendations.updateStats();
+      window.theme.productRecommendations.isLoading = false;
+    }, 1500);
+  };
+
+  // Save recommendations to cache
+  window.theme.productRecommendations.saveRecommendations = function() {
+    try {
+      const cacheData = {
+        recommendations: window.theme.productRecommendations.recommendations,
+        timestamp: Date.now(),
+        filter: window.theme.productRecommendations.currentFilter
+      };
+      localStorage.setItem(
+        window.theme.productRecommendations.config.storageKey,
+        JSON.stringify(cacheData)
+      );
+    } catch (error) {
+      console.warn('Failed to save recommendations cache:', error);
+    }
+  };
+
+  // Render recommendations
+  window.theme.productRecommendations.render = function() {
+    const grid = document.getElementById('recommendations-grid');
+    const empty = document.getElementById('recommendation-empty');
+    const loading = document.getElementById('recommendation-loading');
+    const stats = document.getElementById('recommendation-stats');
+    const filters = document.getElementById('recommendation-filters');
+
+    let filteredRecommendations = window.theme.productRecommendations.recommendations;
+
+    // Apply filter
+    if (window.theme.productRecommendations.currentFilter !== 'all') {
+      filteredRecommendations = filteredRecommendations.filter(
+        r => r.reason === window.theme.productRecommendations.currentFilter
+      );
+    }
+
+    if (filteredRecommendations.length === 0) {
+      grid.style.display = 'none';
+      empty.style.display = 'block';
+      loading.style.display = 'none';
+      stats.style.display = 'none';
+      filters.style.display = 'none';
+      return;
+    }
+
+    grid.style.display = 'grid';
+    empty.style.display = 'none';
+    loading.style.display = 'none';
+    stats.style.display = 'block';
+    filters.style.display = 'flex';
+
+    grid.innerHTML = filteredRecommendations.map(product => `
+      <div class="recommendation-card" data-product-id="${product.id}">
+        <img src="${product.image}" alt="${product.title}" class="recommendation-image">
+        <div class="recommendation-content">
+          <h4 class="recommendation-title">${product.title}</h4>
+          <div class="recommendation-price">
+            $${product.price}
+            ${product.comparePrice ? `<span class="compare-at">$${product.comparePrice}</span>` : ''}
+          </div>
+          <div class="recommendation-badges">
+            ${window.theme.productRecommendations.getBadges(product)}
+          </div>
+          <div class="recommendation-reason">${product.reasonText}</div>
+          <div class="recommendation-actions">
+            <button class="recommendation-btn btn-add-to-cart" onclick="window.theme.productRecommendations.addToCart('${product.id}')">
+              {{ 'product.add_to_cart' | t }}
+            </button>
+            <button class="recommendation-btn btn-add-to-wishlist" onclick="window.theme.productRecommendations.addToWishlist('${product.id}')">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+    // Update wishlist button states
+    window.theme.productRecommendations.updateWishlistButtons();
+  };
+
+  // Get badges for product
+  window.theme.productRecommendations.getBadges = function(product) {
+    const badges = [];
+
+    if (product.reason === 'views') {
+      badges.push('<span class="recommendation-badge badge-views">{{ 'recommendations.based_on_views' | t }}</span>');
+    }
+    if (product.reason === 'wishlist') {
+      badges.push('<span class="recommendation-badge badge-wishlist">{{ 'recommendations.based_on_wishlist' | t }}</span>');
+    }
+    if (product.reason === 'similar') {
+      badges.push('<span class="recommendation-badge badge-similar">{{ 'recommendations.based_on_similar' | t }}</span>');
+    }
+    if (product.trending) {
+      badges.push('<span class="recommendation-badge badge-trending">{{ 'recommendations.trending_now' | t }}</span>');
+    }
+    if (product.culturalScore >= 0.8) {
+      badges.push('<span class="recommendation-badge badge-cultural">{{ 'recommendations.cultural_match' | t }}</span>');
+    }
+
+    return badges.join('');
+  };
+
+  // Update statistics
+  window.theme.productRecommendations.updateStats = function() {
+    const totalRecs = document.getElementById('total-recommendations');
+    const wishlistMatches = document.getElementById('wishlist-matches');
+    const culturalMatches = document.getElementById('cultural-matches');
+
+    if (totalRecs) {
+      totalRecs.textContent = window.theme.productRecommendations.recommendations.length;
+    }
+
+    if (wishlistMatches) {
+      const wishlistCount = window.theme.productRecommendations.recommendations.filter(r => r.reason === 'wishlist').length;
+      wishlistMatches.textContent = wishlistCount;
+    }
+
+    if (culturalMatches) {
+      const culturalCount = window.theme.productRecommendations.recommendations.filter(r => r.culturalScore >= 0.8).length;
+      culturalMatches.textContent = culturalCount;
+    }
+  };
+
+  // Setup event listeners
+  window.theme.productRecommendations.setupEventListeners = function() {
+    // Filter buttons
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        window.theme.productRecommendations.currentFilter = this.dataset.filter;
+        window.theme.productRecommendations.render();
+      });
+    });
+  };
+
+  // Show loading state
+  window.theme.productRecommendations.showLoading = function() {
+    document.getElementById('recommendation-loading').style.display = 'block';
+    document.getElementById('recommendations-grid').style.display = 'none';
+    document.getElementById('recommendation-empty').style.display = 'none';
+    document.getElementById('recommendation-stats').style.display = 'none';
+    document.getElementById('recommendation-filters').style.display = 'none';
+  };
+
+  // Add to cart
+  window.theme.productRecommendations.addToCart = function(productId) {
+    const product = window.theme.productRecommendations.recommendations.find(p => p.id === productId);
+    if (product) {
+      // Track recommendation interaction
+      window.theme.productRecommendations.trackInteraction('add_to_cart', product);
+
+      // Add to cart logic (would integrate with Shopify cart system)
+      if (window.theme.cart && typeof window.theme.cart.addItem === 'function') {
+        window.theme.cart.addItem({
+          id: productId,
+          title: product.title,
+          price: product.price,
+          quantity: 1
+        });
+      } else {
+        // Fallback notification
+        window.theme.showNotification(`${product.title} added to cart`, 'success');
+      }
+    }
+  };
+
+  // Add to wishlist
+  window.theme.productRecommendations.addToWishlist = function(productId) {
+    const product = window.theme.productRecommendations.recommendations.find(p => p.id === productId);
+    if (product) {
+      // Track recommendation interaction
+      window.theme.productRecommendations.trackInteraction('add_to_wishlist', product);
+
+      // Add to wishlist logic
+      if (window.theme.wishlist && typeof window.theme.wishlist.addItem === 'function') {
+        window.theme.wishlist.addItem({
+          id: productId,
+          title: product.title,
+          price: product.price,
+          image: product.image
+        });
+        window.theme.productRecommendations.updateWishlistButtons();
+      } else {
+        // Fallback notification
+        window.theme.showNotification(`${product.title} added to wishlist`, 'success');
+      }
+    }
+  };
+
+  // Update wishlist button states
+  window.theme.productRecommendations.updateWishlistButtons = function() {
+    if (!window.theme.wishlist) return;
+
+    document.querySelectorAll('.btn-add-to-wishlist').forEach(btn => {
+      const productId = btn.getAttribute('onclick').match(/'([^']+)'/)[1];
+      const isInWishlist = window.theme.wishlist.items.some(item => item.id === productId);
+
+      if (isInWishlist) {
+        btn.classList.add('active');
+        btn.title = 'Remove from wishlist';
+      } else {
+        btn.classList.remove('active');
+        btn.title = 'Add to wishlist';
+      }
+    });
+  };
+
+  // Track user interaction with recommendations
+  window.theme.productRecommendations.trackInteraction = function(action, product) {
+    // Update user preferences based on interaction
+    if (product.category && !window.theme.productRecommendations.userPreferences.categories.includes(product.category)) {
+      window.theme.productRecommendations.userPreferences.categories.push(product.category);
+    }
+
+    if (product.culturalScore > 0.7) {
+      window.theme.productRecommendations.userPreferences.culturalPreference =
+        Math.min(1.0, (window.theme.productRecommendations.userPreferences.culturalPreference || 0.5) + 0.1);
+    }
+
+    window.theme.productRecommendations.userPreferences.lastUpdated = Date.now();
+    window.theme.productRecommendations.saveUserPreferences();
+
+    // Track analytics (mock implementation)
+    console.log('Recommendation Interaction:', action, product);
+  };
+
+  // Refresh recommendations
+  window.theme.productRecommendations.refresh = function() {
+    window.theme.productRecommendations.loadRecommendations();
+  };
+
+  // Start auto-refresh
+  window.theme.productRecommendations.startAutoRefresh = function() {
+    setInterval(() => {
+      if (!window.theme.productRecommendations.isLoading) {
+        window.theme.productRecommendations.refresh();
+      }
+    }, window.theme.productRecommendations.config.refreshInterval);
+  };
+
+  // Public method to improve recommendations
+  window.theme.productRecommendations.improveRecommendations = function() {
+    // Show feedback form or preferences modal
+    alert('{{ 'recommendations.improve_recommendations' | t }}: {{ 'recommendations.rate_items' | t }}');
+  };
+
+  // Initialize when DOM is loaded
+  document.addEventListener('DOMContentLoaded', function() {
+    if (document.getElementById('product-recommendations')) {
+      window.theme.productRecommendations.init();
+    }
+  });
+</script>

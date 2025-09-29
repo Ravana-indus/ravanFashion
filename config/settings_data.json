@@ -1,0 +1,36 @@
+{
+  "current": {
+    "sections": {
+      "header": {
+        "type": "header",
+        "settings": {
+          "logo": "shopify://shop_images/placeholder_logo.png",
+          "tamil_brand_name": "ரவன் ஃபேஷன்",
+          "brand_description": "Traditional Tamil fashion with contemporary style",
+          "show_language_toggle": true,
+          "enable_search": true,
+          "enable_account": true
+        }
+      },
+      "footer": {
+        "type": "footer",
+        "settings": {
+          "show_newsletter": true,
+          "newsletter_description": "Join our community for exclusive offers and cultural updates.",
+          "social_media_links": true
+        }
+      },
+      "announcement-bar": {
+        "type": "announcement-bar",
+        "settings": {
+          "show_announcement": true,
+          "announcement_text": "Free shipping on orders over $50",
+          "announcement_link": ""
+        }
+      }
+    },
+    "content_for_index": [
+      "1642745285f1cc4c9f"
+    ]
+  }
+}

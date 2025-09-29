@@ -1,0 +1,459 @@
+{
+  "testCustomers": [
+    {
+      "id": 1,
+      "email": "test.customer@example.com",
+      "firstName": "ராஜா",
+      "lastName": "குமார்",
+      "phone": "+919876543210",
+      "languagePreference": "ta",
+      "culturalInterests": ["traditional", "festival", "heritage"],
+      "prefersTamilContent": true,
+      "festivalNotifications": true,
+      "heritageProducts": true,
+      "addresses": [
+        {
+          "firstName": "ராஜா",
+          "lastName": "குமார்",
+          "address1": "123, தமிழ்நாடு தெரு",
+          "address2": "அண்ணா நகர்",
+          "city": "சென்னை",
+          "province": "தமிழ்நாடு",
+          "zip": "600001",
+          "country": "India",
+          "phone": "+919876543210"
+        }
+      ],
+      "orderHistory": [
+        {
+          "orderId": "ORD-001",
+          "date": "2024-01-15",
+          "total": 4999,
+          "items": [
+            {
+              "productId": 123456789,
+              "title": "பாரம்பரிய பட்டு சேலை",
+              "price": 4999,
+              "quantity": 1
+            }
+          ],
+          "culturalContext": {
+            "festival": "பொங்கல்",
+            "culturalCategory": "Traditional Wear",
+            "gift": false
+          }
+        }
+      ],
+      "wishlist": [
+        {
+          "productId": 123456790,
+          "title": "வேட்டி மற்றும் சட்டை",
+          "price": 2999,
+          "addedAt": "2024-01-20"
+        }
+      ],
+      "preferences": {
+        "size": "M",
+        "color": "சிவப்பு",
+        "fabric": "பட்டு",
+        "style": "traditional",
+        "priceRange": "3000-10000"
+      }
+    },
+    {
+      "id": 2,
+      "email": "modern.customer@example.com",
+      "firstName": "Priya",
+      "lastName": "Sharma",
+      "phone": "+919876543211",
+      "languagePreference": "en",
+      "culturalInterests": ["modern", "fusion", "heritage"],
+      "prefersTamilContent": false,
+      "festivalNotifications": true,
+      "heritageProducts": true,
+      "addresses": [
+        {
+          "firstName": "Priya",
+          "lastName": "Sharma",
+          "address1": "456, Fusion Street",
+          "address2": "Sector 7",
+          "city": "Mumbai",
+          "province": "Maharashtra",
+          "zip": "400001",
+          "country": "India",
+          "phone": "+919876543211"
+        }
+      ],
+      "orderHistory": [
+        {
+          "orderId": "ORD-002",
+          "date": "2024-01-10",
+          "total": 7999,
+          "items": [
+            {
+              "productId": 123456791,
+              "title": "பாரம்பரிய நகைகள்",
+              "price": 7999,
+              "quantity": 1
+            }
+          ],
+          "culturalContext": {
+            "festival": "தீபாவளி",
+            "culturalCategory": "Jewelry",
+            "gift": true
+          }
+        }
+      ],
+      "wishlist": [
+        {
+          "productId": 123456792,
+          "title": "பொங்கல் சிறப்பு சேலை",
+          "price": 8999,
+          "addedAt": "2024-01-18"
+        }
+      ],
+      "preferences": {
+        "size": "S",
+        "color": "Gold",
+        "fabric": "Silk",
+        "style": "fusion",
+        "priceRange": "5000-15000"
+      }
+    },
+    {
+      "id": 3,
+      "email": "festival.lover@example.com",
+      "firstName": "லட்சுமி",
+      "lastName": "ராஜன்",
+      "phone": "+919876543212",
+      "languagePreference": "ta",
+      "culturalInterests": ["festival", "traditional", "ceremonial"],
+      "prefersTamilContent": true,
+      "festivalNotifications": true,
+      "heritageProducts": true,
+      "addresses": [
+        {
+          "firstName": "லட்சுமி",
+          "lastName": "ராஜன்",
+          "address1": "789, பண்டிகை வீதி",
+          "city": "மதுரை",
+          "province": "தமிழ்நாடு",
+          "zip": "625001",
+          "country": "India",
+          "phone": "+919876543212"
+        }
+      ],
+      "orderHistory": [
+        {
+          "orderId": "ORD-003",
+          "date": "2024-01-05",
+          "total": 14999,
+          "items": [
+            {
+              "productId": 123456794,
+              "title": "திருமண சிறப்பு சேலை",
+              "price": 14999,
+              "quantity": 1
+            }
+          ],
+          "culturalContext": {
+            "festival": "Wedding",
+            "culturalCategory": "Wedding Wear",
+            "gift": false
+          }
+        },
+        {
+          "orderId": "ORD-004",
+          "date": "2024-01-14",
+          "total": 6999,
+          "items": [
+            {
+              "productId": 123456793,
+              "title": "தீபாவளி சிறப்பு உடை",
+              "price": 6999,
+              "quantity": 1
+            }
+          ],
+          "culturalContext": {
+            "festival": "தீபாவளி",
+            "culturalCategory": "Festival Wear",
+            "gift": true
+          }
+        }
+      ],
+      "wishlist": [
+        {
+          "productId": 123456795,
+          "title": "வேட்டி மற்றும் சட்டை",
+          "price": 2999,
+          "addedAt": "2024-01-22"
+        },
+        {
+          "productId": 123456796,
+          "title": "பாரம்பரிய நகைகள்",
+          "price": 7999,
+          "addedAt": "2024-01-22"
+        }
+      ],
+      "preferences": {
+        "size": "L",
+        "color": "Red and Gold",
+        "fabric": "Silk",
+        "style": "traditional",
+        "priceRange": "5000-20000"
+      }
+    },
+    {
+      "id": 4,
+      "email": "heritage.seeker@example.com",
+      "firstName": "Karthik",
+      "lastName": "Subramaniam",
+      "phone": "+919876543213",
+      "languagePreference": "en",
+      "culturalInterests": ["heritage", "traditional", "cultural"],
+      "prefersTamilContent": false,
+      "festivalNotifications": false,
+      "heritageProducts": true,
+      "addresses": [
+        {
+          "firstName": "Karthik",
+          "lastName": "Subramaniam",
+          "address1": "321, Heritage Avenue",
+          "city": "Bangalore",
+          "province": "Karnataka",
+          "zip": "560001",
+          "country": "India",
+          "phone": "+919876543213"
+        }
+      ],
+      "orderHistory": [
+        {
+          "orderId": "ORD-005",
+          "date": "2024-01-08",
+          "total": 8999,
+          "items": [
+            {
+              "productId": 123456797,
+              "title": "பாரம்பரிய கைத்தறி உடை",
+              "price": 8999,
+              "quantity": 1
+            }
+          ],
+          "culturalContext": {
+            "festival": "Cultural Event",
+            "culturalCategory": "Heritage Wear",
+            "gift": false
+          }
+        }
+      ],
+      "wishlist": [
+        {
+          "productId": 123456798,
+          "title": "பாரம்பரிய நகைகள்",
+          "price": 4999,
+          "addedAt": "2024-01-25"
+        }
+      ],
+      "preferences": {
+        "size": "M",
+        "color": "Blue",
+        "fabric": "Cotton",
+        "style": "heritage",
+        "priceRange": "3000-12000"
+      }
+    },
+    {
+      "id": 5,
+      "email": "diaspora.customer@example.com",
+      "firstName": "Meena",
+      "lastName": "Rajendran",
+      "phone": "+14155552671",
+      "languagePreference": "en",
+      "culturalInterests": ["traditional", "festival", "diaspora"],
+      "prefersTamilContent": true,
+      "festivalNotifications": true,
+      "heritageProducts": true,
+      "addresses": [
+        {
+          "firstName": "Meena",
+          "lastName": "Rajendran",
+          "address1": "567, Tamil Diaspora Lane",
+          "city": "Toronto",
+          "province": "Ontario",
+          "zip": "M5V 3L8",
+          "country": "Canada",
+          "phone": "+14155552671"
+        }
+      ],
+      "orderHistory": [
+        {
+          "orderId": "ORD-006",
+          "date": "2024-01-12",
+          "total": 11999,
+          "items": [
+            {
+              "productId": 123456799,
+              "title": "Diaspora Special Collection",
+              "price": 11999,
+              "quantity": 1
+            }
+          ],
+          "culturalContext": {
+            "festival": "Tamil New Year",
+            "culturalCategory": "Diaspora Wear",
+            "gift": true
+          }
+        }
+      ],
+      "wishlist": [
+        {
+          "productId": 123456800,
+          "title": "பாரம்பரிய சேலை",
+          "price": 4999,
+          "addedAt": "2024-01-24"
+        },
+        {
+          "productId": 123456801,
+          "title": "Fusion Wear Collection",
+          "price": 7999,
+          "addedAt": "2024-01-24"
+        }
+      ],
+      "preferences": {
+        "size": "S",
+        "color": "Multi-color",
+        "fabric": "Silk Blend",
+        "style": "fusion",
+        "priceRange": "4000-15000"
+      }
+    }
+  ],
+  "customerSegments": {
+    "traditionalLovers": {
+      "name": "Traditional Culture Lovers",
+      "description": "Customers who prefer traditional Tamil wear",
+      "criteria": {
+        "culturalInterests": ["traditional"],
+        "prefersTamilContent": true,
+        "style": "traditional"
+      },
+      "customerIds": [1, 3]
+    },
+    "festivalShoppers": {
+      "name": "Festival Shoppers",
+      "description": "Customers who shop for festivals",
+      "criteria": {
+        "culturalInterests": ["festival"],
+        "festivalNotifications": true
+      },
+      "customerIds": [1, 2, 3, 5]
+    },
+    "heritageEnthusiasts": {
+      "name": "Heritage Enthusiasts",
+      "description": "Customers interested in heritage products",
+      "criteria": {
+        "culturalInterests": ["heritage"],
+        "heritageProducts": true
+      },
+      "customerIds": [1, 2, 3, 4, 5]
+    },
+    "diasporaCommunity": {
+      "name": "Tamil Diaspora",
+      "description": "Tamil customers living abroad",
+      "criteria": {
+        "country": ["Canada", "USA", "UK", "Australia"],
+        "culturalInterests": ["diaspora"]
+      },
+      "customerIds": [5]
+    },
+    "modernFusion": {
+      "name": "Modern Fusion Seekers",
+      "description": "Customers who like modern fusion wear",
+      "criteria": {
+        "culturalInterests": ["modern", "fusion"],
+        "style": "fusion"
+      },
+      "customerIds": [2, 5]
+    }
+  },
+  "orderScenarios": [
+    {
+      "name": "Festival Purchase",
+      "description": "Customer buying for Pongal festival",
+      "customerId": 1,
+      "products": [
+        {
+          "productId": 123456789,
+          "title": "பாரம்பரிய பட்டு சேலை",
+          "price": 4999,
+          "quantity": 1
+        }
+      ],
+      "context": {
+        "festival": "பொங்கல்",
+        "gift": false,
+        "culturalSignificance": "Traditional Pongal wear"
+      }
+    },
+    {
+      "name": "Wedding Purchase",
+      "description": "Customer buying wedding attire",
+      "customerId": 3,
+      "products": [
+        {
+          "productId": 123456794,
+          "title": "திருமண சிறப்பு சேலை",
+          "price": 14999,
+          "quantity": 1
+        },
+        {
+          "productId": 123456795,
+          "title": "பாரம்பரிய நகைகள்",
+          "price": 7999,
+          "quantity": 1
+        }
+      ],
+      "context": {
+        "festival": "Wedding",
+        "gift": false,
+        "culturalSignificance": "Bridal wear and jewelry"
+      }
+    },
+    {
+      "name": "Gift Purchase",
+      "description": "Customer buying gifts for Diwali",
+      "customerId": 2,
+      "products": [
+        {
+          "productId": 123456796,
+          "title": "தீபாவளி சிறப்பு உடை",
+          "price": 6999,
+          "quantity": 2
+        }
+      ],
+      "context": {
+        "festival": "தீபாவளி",
+        "gift": true,
+        "culturalSignificance": "Diwali gifts for family"
+      }
+    },
+    {
+      "name": "Diaspora Purchase",
+      "description": "Diaspora customer buying cultural wear",
+      "customerId": 5,
+      "products": [
+        {
+          "productId": 123456797,
+          "title": "Diaspora Special Collection",
+          "price": 11999,
+          "quantity": 1
+        }
+      ],
+      "context": {
+        "festival": "Tamil New Year",
+        "gift": true,
+        "culturalSignificance": "Cultural connection for diaspora"
+      }
+    }
+  ]
+}

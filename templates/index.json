@@ -1,0 +1,66 @@
+{
+  "sections": {
+    "hero-banner": {
+      "type": "hero-banner",
+      "settings": {
+        "hero_title": "Traditional Tamil Fashion",
+        "hero_title_tamil": "தமிழ் உடைகள்",
+        "hero_subtitle": "Discover the perfect blend of traditional Tamil craftsmanship and contemporary style.",
+        "hero_subtitle_tamil": "பாரம்பரிய தமிழ் கைவினைத்திறன்",
+        "shop_now_text": "Shop Now",
+        "explore_text": "Explore Collections",
+        "shop_now_url": "/collections/all",
+        "explore_url": "/pages/collections"
+      }
+    },
+    "countdown-timer": {
+      "type": "countdown-section",
+      "settings": {
+        "title": "Festival Special",
+        "subtitle": "Limited Time Offer",
+        "target_date": "2024-12-31T23:59:59"
+      }
+    },
+    "tamil-proverbs": {
+      "type": "tamil-proverbs-section",
+      "settings": {
+        "section_title": "Tamil Wisdom",
+        "section_subtitle_tamil": "தமிழ் பழமொழிகள்",
+        "section_description": "Discover the timeless wisdom of Tamil culture through traditional proverbs that have been passed down through generations."
+      }
+    },
+    "featured-collections": {
+      "type": "featured-collections-section",
+      "settings": {
+        "title": "Featured Collections",
+        "subtitle_tamil": "சிறப்பு தொகுப்புகள்",
+        "description": "Explore our curated collections that celebrate Tamil heritage through contemporary fashion.",
+        "collections_to_show": 6
+      }
+    },
+    "ugc-social-feed": {
+      "type": "ugc-social-feed",
+      "settings": {
+        "title": "Community Style",
+        "subtitle_tamil": "சமூக பாணி",
+        "description": "See how our community styles traditional Tamil fashion in their everyday lives. Share your looks with #RavanFashion for a chance to be featured."
+      }
+    },
+    "enhanced-newsletter": {
+      "type": "enhanced-newsletter-section",
+      "settings": {
+        "title": "Join the Tamil Fashion Community",
+        "subtitle_tamil": "ரவன் ஃபேஷன் சமூகத்தில் இணையுங்கள்",
+        "description": "Get exclusive access to new collections, cultural events, and special offers celebrating Tamil heritage."
+      }
+    }
+  },
+  "order": [
+    "hero-banner",
+    "countdown-timer",
+    "tamil-proverbs",
+    "featured-collections",
+    "ugc-social-feed",
+    "enhanced-newsletter"
+  ]
+}

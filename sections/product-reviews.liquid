@@ -1,0 +1,174 @@
+<!-- Product Reviews Section -->
+<div class="product-reviews py-12" id="product-reviews">
+  <div class="container mx-auto px-4">
+
+    <!-- Reviews Header -->
+    <div class="reviews-header text-center mb-8">
+      <h2 class="text-2xl md:text-3xl font-bold text-charcoal-black mb-2">
+        {{ 'reviews.customer_reviews' | t }}
+      </h2>
+      <p class="text-lg font-tamil text-deep-maroon mb-4">
+        {{ 'reviews.customer_reviews_tamil' | t }}
+      </p>
+      <p class="text-muted-teal">
+        {{ 'reviews.authentic_feedback' | t }}
+      </p>
+    </div>
+
+    <!-- App Block for Reviews -->
+    {% comment %} Loox Reviews Integration {% endcomment %}
+    {% if settings.reviews_app == 'loox' %}
+      <div class="loox-reviews-wrapper">
+        {% render 'loox-product-reviews', product: product %}
+      </div>
+
+    {% comment %} Judge.me Reviews Integration {% endcomment %}
+    {% elsif settings.reviews_app == 'judgeme' %}
+      <div class="judgeme-reviews-wrapper">
+        {% render 'judgeme-product-reviews', product: product %}
+      </div>
+
+    {% comment %} Shopify Native Reviews {% endcomment %}
+    {% else %}
+      <div class="native-reviews-wrapper">
+        {% render 'native-product-reviews', product: product %}
+      </div>
+    {% endif %}
+
+    <!-- Review Submission Encouragement -->
+    <div class="review-encouragement bg-gold/10 rounded-lg p-6 mt-8 text-center">
+      <h3 class="text-lg font-bold text-charcoal-black mb-2">
+        {{ 'reviews.share_experience' | t }}
+      </h3>
+      <p class="text-muted-teal mb-4">
+        {{ 'reviews.help_community' | t }}
+      </p>
+      <button class="btn btn-primary write-review-btn"
+              onclick="openReviewForm()">
+        {{ 'reviews.write_review' | t }}
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function openReviewForm() {
+  const reviewsApp = '{{ settings.reviews_app }}';
+
+  switch (reviewsApp) {
+    case 'loox':
+      // Trigger Loox review form
+      if (window.Loox && window.Loox.openWriteReview) {
+        window.Loox.openWriteReview({{ product.id }});
+      } else {
+        // Fallback to product page with review anchor
+        window.location.href = '{{ product.url }}#loox-write-review-button-{{ product.id }}';
+      }
+      break;
+
+    case 'judgeme':
+      // Trigger Judge.me review form
+      if (window.jdgm && window.jdgm.openWriteReview) {
+        window.jdgm.openWriteReview({{ product.id }});
+      } else {
+        // Fallback to Judge.me review page
+        window.open('https://judge.me/reviews/{{ shop.permanent_domain }}?review_for={{ product.id }}', '_blank');
+      }
+      break;
+
+    default:
+      // Native reviews - show form inline
+      const nativeForm = document.querySelector('.native-review-form');
+      if (nativeForm) {
+        nativeForm.scrollIntoView({ behavior: 'smooth' });
+        nativeForm.classList.remove('hidden');
+      }
+  }
+}
+</script>
+
+<style>
+.product-reviews {
+  background-color: #FDF6EC;
+}
+
+.reviews-header h2 {
+  font-family: 'Playfair Display', serif;
+}
+
+.reviews-header .font-tamil {
+  font-family: 'Noto Sans Tamil', sans-serif;
+}
+
+.review-encouragement {
+  border: 2px solid #D4AF37;
+}
+
+.write-review-btn {
+  background-color: #D4AF37;
+  color: #1C1C1C;
+  transition: all 0.2s;
+}
+
+.write-review-btn:hover {
+  background-color: #FFD700;
+  transform: translateY(-2px);
+}
+
+/* App-specific styling */
+.loox-reviews-wrapper,
+.judgeme-reviews-wrapper,
+.native-reviews-wrapper {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+</style>
+
+{% schema %}
+{
+  "name": "Product Reviews",
+  "tag": "section",
+  "class": "product-reviews-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_encouragement",
+      "label": "Show Review Encouragement",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "encouragement_title",
+      "label": "Encouragement Title",
+      "default": "Share Your Experience"
+    },
+    {
+      "type": "textarea",
+      "id": "encouragement_text",
+      "label": "Encouragement Text",
+      "default": "Help our Tamil heritage community by sharing your thoughts"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#FDF6EC"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "Section Padding",
+      "default": "60px 0"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Reviews",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

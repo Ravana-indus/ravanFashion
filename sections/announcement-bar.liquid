@@ -1,0 +1,32 @@
+{%- if section.settings.show_announcement -%}
+  <div class="bg-deep-maroon text-gold text-center py-2 text-sm font-medium">
+    <div class="container mx-auto px-4">
+      {{ section.settings.announcement_text }}
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Announcement Bar",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_announcement",
+      "label": "Show announcement",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "announcement_text",
+      "label": "Announcement text",
+      "default": "வணக்கம்! Welcome to Ravan Fashion - Authentic Tamil Heritage Streetwear"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Announcement Bar"
+    }
+  ]
+}
+{% endschema %}

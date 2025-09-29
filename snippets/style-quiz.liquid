@@ -1,0 +1,905 @@
+{%- comment -%}
+Style Quiz - Interactive style preference quiz
+Helps users discover their personal style through engaging questions
+{%- endcomment -%}
+
+<div class="style-quiz" data-quiz-id="style-preference-quiz">
+  <!-- Quiz Header -->
+  <div class="quiz-header text-center mb-8">
+    <div class="quiz-icon mb-4">
+      <div class="w-20 h-20 mx-auto rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-3xl">
+        <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+        </svg>
+      </div>
+    </div>
+    <h3 class="text-2xl font-bold text-gray-800 mb-2" data-i18n="style_quiz.title">Discover Your Style</h3>
+    <p class="text-gray-600" data-i18n="style_quiz.subtitle">Answer a few questions to uncover your unique fashion personality</p>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="quiz-progress mb-8">
+    <div class="flex items-center justify-between mb-2">
+      <span class="text-sm font-medium text-gray-700" data-i18n="style_quiz.progress">Progress</span>
+      <span class="text-sm text-gray-600">
+        <span id="current-question">1</span> / <span id="total-questions">8</span>
+      </span>
+    </div>
+    <div class="w-full bg-gray-200 rounded-full h-2">
+      <div id="progress-bar" class="bg-gradient-to-r from-purple-600 to-pink-600 h-2 rounded-full transition-all duration-300" style="width: 12.5%"></div>
+    </div>
+  </div>
+
+  <!-- Quiz Container -->
+  <div class="quiz-container max-w-2xl mx-auto">
+    <!-- Welcome Screen -->
+    <div id="quiz-welcome" class="quiz-screen">
+      <div class="bg-white rounded-lg shadow-lg p-8 text-center">
+        <h4 class="text-xl font-semibold mb-4" data-i18n="style_quiz.welcome_title">Find Your Perfect Style!</h4>
+        <p class="text-gray-600 mb-6" data-i18n="style_quiz.welcome_description">
+          This quick quiz will help you discover your personal style preferences and get customized fashion recommendations tailored just for you.
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <div class="feature-card">
+            <div class="w-12 h-12 mx-auto mb-2 bg-purple-100 rounded-full flex items-center justify-center">
+              <svg class="w-6 h-6 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <p class="text-sm font-medium" data-i18n="style_quiz.feature_1">Personalized Results</p>
+          </div>
+          <div class="feature-card">
+            <div class="w-12 h-12 mx-auto mb-2 bg-pink-100 rounded-full flex items-center justify-center">
+              <svg class="w-6 h-6 text-pink-600" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M6.672 1.911a1 1 0 10-1.932.518l.259.966a1 1 0 001.932-.518l-.26-.966zM2.429 4.74a1 1 0 10-.517 1.932l.966.259a1 1 0 00.517-1.932l-.966-.26zm8.814-.569a1 1 0 00-1.415-1.414l-.707.707a1 1 0 101.415 1.415l.707-.708zm-7.071 7.072l.707-.707A1 1 0 003.465 9.12l-.708.707a1 1 0 001.415 1.415zm3.2-5.171a1 1 0 00-1.3 1.3l4 10a1 1 0 001.823.075l1.38-2.759 3.018 3.02a1 1 0 001.414-1.415l-3.019-3.02 2.76-1.379a1 1 0 00-.076-1.822l-10-4z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <p class="text-sm font-medium" data-i18n="style_quiz.feature_2">Quick & Easy</p>
+          </div>
+          <div class="feature-card">
+            <div class="w-12 h-12 mx-auto mb-2 bg-blue-100 rounded-full flex items-center justify-center">
+              <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M3 5a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2h-2.22l.123.489.804.804A1 1 0 0115 15H5a1 1 0 01-.707-1.707l.804-.804L5.22 13H5a2 2 0 01-2-2V5zm5.771 7H5V5h10v7H8.771z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <p class="text-sm font-medium" data-i18n="style_quiz.feature_3">Cultural Insights</p>
+          </div>
+        </div>
+        <button id="start-quiz" class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-3 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-200 font-medium">
+          <span data-i18n="style_quiz.start_quiz">Start Quiz</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Questions Container -->
+    <div id="quiz-questions" class="quiz-screen hidden">
+      <!-- Questions will be dynamically inserted here -->
+    </div>
+
+    <!-- Results Screen -->
+    <div id="quiz-results" class="quiz-screen hidden">
+      <div class="bg-white rounded-lg shadow-lg p-8">
+        <div class="text-center mb-8">
+          <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-4xl">
+            <span id="style-emoji">✨</span>
+          </div>
+          <h4 class="text-2xl font-bold text-gray-800 mb-2" id="style-name">Your Style Name</h4>
+          <p class="text-gray-600" id="style-description">Your style description</p>
+        </div>
+
+        <!-- Style Details -->
+        <div class="grid md:grid-cols-2 gap-6 mb-8">
+          <div class="style-details">
+            <h5 class="text-lg font-semibold mb-3 flex items-center gap-2">
+              <svg class="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M3 5a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2h-2.22l.123.489.804.804A1 1 0 0115 15H5a1 1 0 01-.707-1.707l.804-.804L5.22 13H5a2 2 0 01-2-2V5zm5.771 7H5V5h10v7H8.771z" clip-rule="evenodd"/>
+              </svg>
+              <span data-i18n="style_quiz.key_traits">Key Style Traits</span>
+            </h5>
+            <div id="style-traits" class="space-y-2">
+              <!-- Traits will be dynamically inserted -->
+            </div>
+          </div>
+
+          <div class="style-recommendations">
+            <h5 class="text-lg font-semibold mb-3 flex items-center gap-2">
+              <svg class="w-5 h-5 text-pink-600" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+              </svg>
+              <span data-i18n="style_quiz.recommendations">Perfect For You</span>
+            </h5>
+            <div id="style-recommendations" class="space-y-2">
+              <!-- Recommendations will be dynamically inserted -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Color Palette -->
+        <div class="color-palette mb-8">
+          <h5 class="text-lg font-semibold mb-3" data-i18n="style_quiz.color_palette">Your Color Palette</h5>
+          <div class="flex gap-3" id="color-swatches">
+            <!-- Color swatches will be dynamically inserted -->
+          </div>
+        </div>
+
+        <!-- Cultural Connection -->
+        <div class="cultural-connection mb-8">
+          <h5 class="text-lg font-semibold mb-3 flex items-center gap-2">
+            <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+            </svg>
+            <span data-i18n="style_quiz.cultural_connection">Cultural Style Connection</span>
+          </h5>
+          <p id="cultural-text" class="text-gray-600 mb-4">Your cultural style connection text</p>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex gap-4 justify-center">
+          <button id="retake-quiz" class="bg-gray-200 text-gray-800 px-6 py-2 rounded-lg hover:bg-gray-300 transition-colors">
+            <span data-i18n="style_quiz.retake">Retake Quiz</span>
+          </button>
+          <button id="save-results" class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-200">
+            <span data-i18n="style_quiz.save_results">Save Results</span>
+          </button>
+          <button id="shop-style" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+            <span data-i18n="style_quiz.shop_style">Shop Your Style</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Share Results -->
+  <div id="share-modal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" data-i18n="style_quiz.share_title">Share Your Style</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="share-preview mb-4 p-4 bg-gray-50 rounded-lg">
+            <h6 class="font-semibold mb-2" id="share-style-name">My Style Personality</h6>
+            <p class="text-sm text-gray-600 mb-2" id="share-style-description">Style description</p>
+            <div class="flex gap-2 mb-2" id="share-colors">
+              <!-- Share colors will be inserted -->
+            </div>
+          </div>
+          <div class="share-buttons">
+            <button class="btn btn-primary mb-2" onclick="window.theme.styleQuiz.shareOnSocial('facebook')">
+              <i class="fab fa-facebook-f me-2"></i>Facebook
+            </button>
+            <button class="btn btn-info mb-2" onclick="window.theme.styleQuiz.shareOnSocial('twitter')">
+              <i class="fab fa-twitter me-2"></i>Twitter
+            </button>
+            <button class="btn btn-danger mb-2" onclick="window.theme.styleQuiz.shareOnSocial('pinterest')">
+              <i class="fab fa-pinterest me-2"></i>Pinterest
+            </button>
+            <button class="btn btn-secondary mb-2" onclick="window.theme.styleQuiz.copyResults()">
+              <i class="fas fa-copy me-2"></i>Copy Link
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.style-quiz {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+.quiz-screen {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.feature-card {
+  transition: transform 0.2s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-2px);
+}
+
+.quiz-option {
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.quiz-option:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.quiz-option.selected {
+  border-color: #8b5cf6;
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+}
+
+.style-icon {
+  transition: transform 0.3s ease;
+}
+
+.quiz-option:hover .style-icon {
+  transform: scale(1.1);
+}
+
+.color-swatch {
+  transition: transform 0.2s ease;
+}
+
+.color-swatch:hover {
+  transform: scale(1.1);
+}
+
+.progress-bar {
+  transition: width 0.5s ease-in-out;
+}
+
+.question-image {
+  transition: transform 0.3s ease;
+}
+
+.question-image:hover {
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .quiz-container {
+    padding: 0 1rem;
+  }
+
+  .flex.gap-4 {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}
+</style>
+
+<script>
+class StyleQuiz {
+  constructor(container) {
+    this.container = container;
+    this.currentQuestion = 0;
+    this.answers = {};
+    this.quizCompleted = false;
+
+    this.questions = [
+      {
+        id: 'lifestyle',
+        question: "What's your typical daily routine?",
+        type: 'single',
+        options: [
+          { value: 'active', label: 'Always on the go', icon: '🏃‍♀️' },
+          { value: 'professional', label: 'Office meetings & deadlines', icon: '💼' },
+          { value: 'creative', label: 'Creative projects & brainstorming', icon: '🎨' },
+          { value: 'social', label: 'Social events & gatherings', icon: '🎉' },
+          { value: 'relaxed', label: 'Cozy & comfortable at home', icon: '🏠' }
+        ]
+      },
+      {
+        id: 'color_preference',
+        question: "Which color palette speaks to you?",
+        type: 'single',
+        options: [
+          { value: 'bold', label: 'Bold & Vibrant', icon: '🌈', colors: ['#FF6B6B', '#4ECDC4', '#45B7D1'] },
+          { value: 'neutral', label: 'Neutral & Classic', icon: '🤍', colors: ['#2C3E50', '#ECF0F1', '#95A5A6'] },
+          { value: 'earth', label: 'Earth Tones', icon: '🌿', colors: ['#8B4513', '#D2691E', '#F4A460'] },
+          { value: 'pastel', label: 'Soft Pastels', icon: '🌸', colors: ['#FFB6C1', '#E6E6FA', '#F0E68C'] },
+          { value: 'jewel', label: 'Jewel Tones', icon: '💎', colors: ['#9370DB', '#20B2AA', '#B22222'] }
+        ]
+      },
+      {
+        id: 'style_priority',
+        question: "What's most important in your clothing?",
+        type: 'single',
+        options: [
+          { value: 'comfort', label: 'Ultimate comfort', icon: '😌' },
+          { value: 'trendy', label: 'Latest trends', icon: '🔥' },
+          { value: 'practical', label: 'Practical & functional', icon: '⚡' },
+          { value: 'expression', label: 'Self-expression', icon: '🎭' },
+          { value: 'quality', label: 'Quality & durability', icon: '💎' }
+        ]
+      },
+      {
+        id: 'silhouette',
+        question: "Which silhouette do you prefer?",
+        type: 'single',
+        options: [
+          { value: 'fitted', label: 'Fitted & tailored', icon: '👗' },
+          { value: 'flowy', label: 'Flowy & relaxed', icon: '👘' },
+          { value: 'structured', label: 'Structured & architectural', icon: '🏗️' },
+          { value: 'layered', label: 'Layered & textured', icon: '🧥' },
+          { value: 'asymmetrical', label: 'Asymmetrical & unique', icon: '🎪' }
+        ]
+      },
+      {
+        id: 'occasion',
+        question: "Where do you dress up most often?",
+        type: 'single',
+        options: [
+          { value: 'work', label: 'Work/Professional settings', icon: '🏢' },
+          { value: 'casual', label: 'Casual outings with friends', icon: '☕' },
+          { value: 'cultural', label: 'Cultural events & festivals', icon: '🎊' },
+          { value: 'formal', label: 'Formal events & parties', icon: '🎩' },
+          { value: 'home', label: 'At home & family time', icon: '👨‍👩‍👧‍👦' }
+        ]
+      },
+      {
+        id: 'accessories',
+        question: "How do you feel about accessories?",
+        type: 'single',
+        options: [
+          { value: 'minimal', label: 'Less is more', icon: '⚪' },
+          { value: 'statement', label: 'Bold statement pieces', icon: '💍' },
+          { value: 'traditional', label: 'Traditional jewelry', icon: '📿' },
+          { value: 'mixed', label: 'Mix & match styles', icon: '🎨' },
+          { value: 'none', label: 'Prefer no accessories', icon: '🚫' }
+        ]
+      },
+      {
+        id: 'cultural_preference',
+        question: "How do you like to incorporate cultural elements?",
+        type: 'single',
+        options: [
+          { value: 'traditional', label: 'Fully traditional attire', icon: '👳‍♀️' },
+          { value: 'fusion', label: 'Modern with cultural touches', icon: '🌟' },
+          { value: 'subtle', label: 'Subtle cultural hints', icon: '✨' },
+          { value: 'contemporary', label: 'Contemporary cultural fusion', icon: '🎭' },
+          { value: 'occasional', label: 'Only for special occasions', icon: '🎪' }
+        ]
+      },
+      {
+        id: 'personality',
+        question: "Which word describes your personality best?",
+        type: 'single',
+        options: [
+          { value: 'bold', label: 'Bold & confident', icon: '🦁' },
+          { value: 'elegant', label: 'Elegant & graceful', icon: '🦢' },
+          { value: 'creative', label: 'Creative & artistic', icon: '🎨' },
+          { value: 'practical', label: 'Practical & efficient', icon: '⚙️' },
+          { value: 'free_spirited', label: 'Free-spirited & adventurous', icon: '🦋' }
+        ]
+      }
+    ];
+
+    this.styleProfiles = {
+      'Traditional Elegance': {
+        emoji: '👑',
+        description: 'Classic and sophisticated with a deep appreciation for cultural heritage',
+        traits: ['Timeless elegance', 'Cultural pride', 'Attention to detail', 'Graceful presence'],
+        recommendations: ['Silk sarees with modern blouses', 'Traditional jewelry with contemporary outfits', 'Handwoven fabrics', 'Classic silhouettes'],
+        colors: ['#8B0000', '#FFD700', '#000080', '#800080'],
+        cultural: 'Your style honors Tamil traditions while embracing modern sophistication. Perfect for cultural events and formal occasions.'
+      },
+      'Modern Fusion': {
+        emoji: '🌟',
+        description: 'Contemporary fashion with thoughtful cultural integration',
+        traits: ['Innovative thinker', 'Cultural connector', 'Trend-aware', 'Versatile'],
+        recommendations: ['Fusion wear like kurti with jeans', 'Contemporary silhouettes with traditional prints', 'Modern accessories with cultural motifs', 'Experiment with layering'],
+        colors: ['#FF6347', '#4682B4', '#32CD32', '#FF69B4'],
+        cultural: 'You bridge traditional and modern worlds effortlessly. Your style tells stories of cultural evolution through fashion.'
+      },
+      'Bohemian Spirit': {
+        emoji: '🦋',
+        description: 'Free-spirited and artistic with flowing silhouettes and cultural elements',
+        traits: ['Free-spirited', 'Artistic soul', 'Nature lover', 'Comfort seeker'],
+        recommendations: ['Flowy kurtas and palazzos', 'Embroidered and handcrafted pieces', 'Natural fabrics and earthy tones', 'Layered accessories'],
+        colors: ['#8FBC8F', '#DEB887', '#DDA0DD', '#F0E68C'],
+        cultural: 'Your bohemian spirit connects with traditional crafts and techniques, creating a style that\'s both global and locally rooted.'
+      },
+      'Professional Chic': {
+        emoji: '💼',
+        description: 'Polished and professional with cultural sophistication',
+        traits: ['Ambitious', 'Detail-oriented', 'Confident', 'Culturally aware'],
+        recommendations: ['Tailored blazers with ethnic prints', 'Structured silhouettes in traditional fabrics', 'Professional yet culturally appropriate accessories', 'Versatile pieces for work and events'],
+        colors: ['#2F4F4F', '#800080', '#000080', '#696969'],
+        cultural: 'You balance professional demands with cultural pride, creating a powerful style that commands respect in any setting.'
+      },
+      'Creative Artist': {
+        emoji: '🎨',
+        description: 'Expressive and unique with bold experimentation in colors and patterns',
+        traits: ['Creative visionary', 'Trendsetter', 'Bold experimenter', 'Cultural innovator'],
+        recommendations: ['Mixed patterns and textures', 'Bold color combinations', 'Customized and personalized pieces', 'Art draping and unique silhouettes'],
+        colors: ['#FF1493', '#00CED1', '#FFD700', '#9370DB'],
+        cultural: 'Your creative expression draws from Tamil artistic traditions while pushing fashion boundaries into new territories.'
+      },
+      'Comfort Queen': {
+        emoji: '👑',
+        description: 'Comfort-first approach without compromising on style and cultural elements',
+        traits: ['Comfort seeker', 'Practical thinker', 'Style conscious', 'Cultural appreciation'],
+        recommendations: ['Comfortable yet stylish fusion wear', 'Easy-to-wear traditional pieces', 'Soft fabrics with beautiful drape', 'Versatile layering options'],
+        colors: ['#F0E68C', '#87CEEB', '#DDA0DD', '#98FB98'],
+        cultural: 'You prioritize comfort while maintaining cultural connections through smart, practical fashion choices.'
+      },
+      'Trendsetter': {
+        emoji: '🔥',
+        description: 'Always ahead of trends with a confident and bold style',
+        traits: ['Fashion forward', 'Confident', 'Trend aware', 'Style influencer'],
+        recommendations: ['Latest fashion with cultural twists', 'Statement pieces and bold accessories', 'Experimental silhouettes', 'Social media worthy outfits'],
+        colors: ['#FF1744', '#2979FF', '#00E676', '#FFEA00'],
+        cultural: 'You set trends rather than follow them, bringing Tamil cultural elements into contemporary fashion conversations.'
+      },
+      'Cultural Ambassador': {
+        emoji: '🌍',
+        description: 'Proud representative of Tamil culture through fashion',
+        traits: ['Cultural pride', 'Traditional values', 'Graceful presence', 'Knowledge sharing'],
+        recommendations: ['Authentic traditional wear', 'Handcrafted and artisanal pieces', 'Cultural storytelling through fashion', 'Event-specific traditional attire'],
+        colors: ['#8B0000', '#FFD700', '#000080', '#006400'],
+        cultural: 'You wear your culture with pride, serving as an ambassador of Tamil heritage through your authentic fashion choices.'
+      }
+    };
+
+    this.init();
+  }
+
+  init() {
+    this.setupEventListeners();
+    this.updateProgress();
+  }
+
+  setupEventListeners() {
+    // Start quiz button
+    const startBtn = document.getElementById('start-quiz');
+    if (startBtn) {
+      startBtn.addEventListener('click', () => this.startQuiz());
+    }
+
+    // Retake quiz button
+    const retakeBtn = document.getElementById('retake-quiz');
+    if (retakeBtn) {
+      retakeBtn.addEventListener('click', () => this.retakeQuiz());
+    }
+
+    // Save results button
+    const saveBtn = document.getElementById('save-results');
+    if (saveBtn) {
+      saveBtn.addEventListener('click', () => this.saveResults());
+    }
+
+    // Shop style button
+    const shopBtn = document.getElementById('shop-style');
+    if (shopBtn) {
+      shopBtn.addEventListener('click', () => this.shopStyle());
+    }
+  }
+
+  startQuiz() {
+    document.getElementById('quiz-welcome').classList.add('hidden');
+    document.getElementById('quiz-questions').classList.remove('hidden');
+    this.showQuestion(0);
+  }
+
+  showQuestion(index) {
+    const questionContainer = document.getElementById('quiz-questions');
+    const question = this.questions[index];
+
+    let questionHTML = `
+      <div class="question-card bg-white rounded-lg shadow-lg p-8">
+        <h4 class="text-xl font-semibold mb-6 text-center">${this.escapeHtml(question.question)}</h4>
+        <div class="options-grid grid grid-cols-1 md:grid-cols-2 gap-4">
+    `;
+
+    question.options.forEach((option, optionIndex) => {
+      const isSelected = this.answers[question.id] === option.value;
+      const selectedClass = isSelected ? 'selected' : '';
+
+      questionHTML += `
+        <div class="quiz-option ${selectedClass} bg-gray-50 rounded-lg p-4 border-2 border-gray-200"
+             data-question="${question.id}" data-value="${option.value}">
+          <div class="flex items-center gap-3">
+            <div class="style-icon text-2xl">${option.icon}</div>
+            <div class="flex-1">
+              <p class="font-medium text-gray-800">${this.escapeHtml(option.label)}</p>
+              ${option.colors ? `
+                <div class="flex gap-1 mt-1">
+                  ${option.colors.map(color =>
+                    `<div class="w-4 h-4 rounded-full" style="background-color: ${color}"></div>`
+                  ).join('')}
+                </div>
+              ` : ''}
+            </div>
+            <div class="radio-circle w-6 h-6 rounded-full border-2 border-gray-300 flex items-center justify-center">
+              ${isSelected ? '<div class="w-3 h-3 rounded-full bg-purple-600"></div>' : ''}
+            </div>
+          </div>
+        </div>
+      `;
+    });
+
+    questionHTML += `
+        </div>
+        <div class="navigation-buttons mt-8 flex justify-between">
+          <button id="prev-question" class="bg-gray-200 text-gray-800 px-6 py-2 rounded-lg hover:bg-gray-300 transition-colors ${index === 0 ? 'opacity-50 cursor-not-allowed' : ''}"
+                    ${index === 0 ? 'disabled' : ''}>
+            <span data-i18n="style_quiz.previous">Previous</span>
+          </button>
+          <button id="next-question" class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-200">
+            ${index === this.questions.length - 1 ?
+              '<span data-i18n="style_quiz.finish">Finish</span>' :
+              '<span data-i18n="style_quiz.next">Next</span>'
+            }
+          </button>
+        </div>
+      </div>
+    `;
+
+    questionContainer.innerHTML = questionHTML;
+
+    // Add event listeners to options
+    questionContainer.querySelectorAll('.quiz-option').forEach(option => {
+      option.addEventListener('click', () => this.selectOption(option));
+    });
+
+    // Add navigation listeners
+    const prevBtn = document.getElementById('prev-question');
+    const nextBtn = document.getElementById('next-question');
+
+    if (prevBtn) {
+      prevBtn.addEventListener('click', () => this.previousQuestion());
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => this.nextQuestion());
+    }
+
+    this.updateProgress();
+  }
+
+  selectOption(optionElement) {
+    const questionId = optionElement.dataset.question;
+    const value = optionElement.dataset.value;
+
+    // Update answer
+    this.answers[questionId] = value;
+
+    // Update UI
+    const questionCard = optionElement.closest('.question-card');
+    questionCard.querySelectorAll('.quiz-option').forEach(opt => {
+      opt.classList.remove('selected');
+      opt.querySelector('.radio-circle').innerHTML = '';
+    });
+
+    optionElement.classList.add('selected');
+    optionElement.querySelector('.radio-circle').innerHTML = '<div class="w-3 h-3 rounded-full bg-purple-600"></div>';
+  }
+
+  nextQuestion() {
+    if (this.currentQuestion < this.questions.length - 1) {
+      this.currentQuestion++;
+      this.showQuestion(this.currentQuestion);
+    } else {
+      this.finishQuiz();
+    }
+  }
+
+  previousQuestion() {
+    if (this.currentQuestion > 0) {
+      this.currentQuestion--;
+      this.showQuestion(this.currentQuestion);
+    }
+  }
+
+  updateProgress() {
+    const currentEl = document.getElementById('current-question');
+    const totalEl = document.getElementById('total-questions');
+    const progressBar = document.getElementById('progress-bar');
+
+    if (currentEl) currentEl.textContent = this.currentQuestion + 1;
+    if (totalEl) totalEl.textContent = this.questions.length;
+    if (progressBar) {
+      const progress = ((this.currentQuestion + 1) / this.questions.length) * 100;
+      progressBar.style.width = `${progress}%`;
+    }
+  }
+
+  finishQuiz() {
+    const result = this.calculateResult();
+    this.showResults(result);
+  }
+
+  calculateResult() {
+    // Simple scoring system based on answers
+    let scores = {
+      'Traditional Elegance': 0,
+      'Modern Fusion': 0,
+      'Bohemian Spirit': 0,
+      'Professional Chic': 0,
+      'Creative Artist': 0,
+      'Comfort Queen': 0,
+      'Trendsetter': 0,
+      'Cultural Ambassador': 0
+    };
+
+    // Score based on answers
+    Object.entries(this.answers).forEach(([questionId, answer]) => {
+      switch (questionId) {
+        case 'lifestyle':
+          if (['professional', 'cultural'].includes(answer)) {
+            scores['Traditional Elegance'] += 2;
+            scores['Professional Chic'] += 2;
+            scores['Cultural Ambassador'] += 2;
+          }
+          if (['creative', 'social'].includes(answer)) {
+            scores['Modern Fusion'] += 2;
+            scores['Creative Artist'] += 2;
+            scores['Trendsetter'] += 2;
+          }
+          if (['relaxed'].includes(answer)) {
+            scores['Bohemian Spirit'] += 2;
+            scores['Comfort Queen'] += 2;
+          }
+          break;
+
+        case 'cultural_preference':
+          if (answer === 'traditional') {
+            scores['Traditional Elegance'] += 3;
+            scores['Cultural Ambassador'] += 3;
+          }
+          if (answer === 'fusion') {
+            scores['Modern Fusion'] += 3;
+            scores['Creative Artist'] += 2;
+          }
+          if (answer === 'subtle') {
+            scores['Professional Chic'] += 2;
+            scores['Comfort Queen'] += 2;
+          }
+          break;
+
+        case 'style_priority':
+          if (answer === 'quality') {
+            scores['Traditional Elegance'] += 2;
+            scores['Professional Chic'] += 2;
+          }
+          if (answer === 'trendy') {
+            scores['Trendsetter'] += 3;
+            scores['Modern Fusion'] += 2;
+          }
+          if (answer === 'expression') {
+            scores['Creative Artist'] += 3;
+            scores['Bohemian Spirit'] += 2;
+          }
+          if (answer === 'comfort') {
+            scores['Comfort Queen'] += 3;
+            scores['Bohemian Spirit'] += 2;
+          }
+          break;
+
+        case 'color_preference':
+          if (answer === 'neutral') {
+            scores['Professional Chic'] += 2;
+            scores['Traditional Elegance'] += 2;
+          }
+          if (answer === 'bold' || answer === 'jewel') {
+            scores['Creative Artist'] += 2;
+            scores['Trendsetter'] += 2;
+          }
+          if (answer === 'earth') {
+            scores['Bohemian Spirit'] += 2;
+            scores['Comfort Queen'] += 2;
+          }
+          break;
+
+        case 'accessories':
+          if (answer === 'traditional') {
+            scores['Traditional Elegance'] += 2;
+            scores['Cultural Ambassador'] += 2;
+          }
+          if (answer === 'statement') {
+            scores['Trendsetter'] += 2;
+            scores['Creative Artist'] += 2;
+          }
+          if (answer === 'minimal') {
+            scores['Professional Chic'] += 2;
+            scores['Comfort Queen'] += 1;
+          }
+          break;
+      }
+    });
+
+    // Find highest score
+    let maxScore = 0;
+    let result = 'Modern Fusion'; // Default
+
+    Object.entries(scores).forEach(([style, score]) => {
+      if (score > maxScore) {
+        maxScore = score;
+        result = style;
+      }
+    });
+
+    return result;
+  }
+
+  showResults(styleName) {
+    const profile = this.styleProfiles[styleName];
+
+    // Hide questions, show results
+    document.getElementById('quiz-questions').classList.add('hidden');
+    document.getElementById('quiz-results').classList.remove('hidden');
+
+    // Update result content
+    document.getElementById('style-emoji').textContent = profile.emoji;
+    document.getElementById('style-name').textContent = styleName;
+    document.getElementById('style-description').textContent = profile.description;
+
+    // Update traits
+    const traitsContainer = document.getElementById('style-traits');
+    traitsContainer.innerHTML = profile.traits.map(trait => `
+      <div class="flex items-center gap-2">
+        <svg class="w-4 h-4 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+        </svg>
+        <span class="text-sm text-gray-700">${trait}</span>
+      </div>
+    `).join('');
+
+    // Update recommendations
+    const recommendationsContainer = document.getElementById('style-recommendations');
+    recommendationsContainer.innerHTML = profile.recommendations.map(rec => `
+      <div class="flex items-center gap-2">
+        <svg class="w-4 h-4 text-pink-600" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+        </svg>
+        <span class="text-sm text-gray-700">${rec}</span>
+      </div>
+    `).join('');
+
+    // Update color palette
+    const colorContainer = document.getElementById('color-swatches');
+    colorContainer.innerHTML = profile.colors.map(color => `
+      <div class="color-swatch w-12 h-12 rounded-lg shadow-md cursor-pointer"
+           style="background-color: ${color}"
+           title="${color}">
+      </div>
+    `).join('');
+
+    // Update cultural text
+    document.getElementById('cultural-text').textContent = profile.cultural;
+
+    // Store results
+    this.quizResults = {
+      styleName,
+      profile,
+      answers: this.answers,
+      timestamp: new Date().toISOString()
+    };
+
+    this.quizCompleted = true;
+  }
+
+  retakeQuiz() {
+    this.currentQuestion = 0;
+    this.answers = {};
+    this.quizCompleted = false;
+
+    document.getElementById('quiz-results').classList.add('hidden');
+    document.getElementById('quiz-welcome').classList.remove('hidden');
+  }
+
+  saveResults() {
+    if (!this.quizResults) return;
+
+    // Save to localStorage
+    const savedQuizzes = JSON.parse(localStorage.getItem('style-quiz-results') || '[]');
+    savedQuizzes.push(this.quizResults);
+    localStorage.setItem('style-quiz-results', JSON.stringify(savedQuizzes.slice(-5))); // Keep last 5
+
+    // Update virtual stylist profile if available
+    if (window.theme.virtualStylist) {
+      const stylistProfile = window.theme.virtualStylist.userProfile || {};
+
+      // Map quiz results to stylist profile
+      const styleMapping = {
+        'Traditional Elegance': 'traditional',
+        'Modern Fusion': 'fusion',
+        'Bohemian Spirit': 'bohemian',
+        'Professional Chic': 'modern',
+        'Creative Artist': 'creative',
+        'Comfort Queen': 'minimalist',
+        'Trendsetter': 'modern',
+        'Cultural Ambassador': 'traditional'
+      };
+
+      stylistProfile.stylePreference = styleMapping[this.quizResults.styleName] || 'fusion';
+      stylistProfile.quizResults = this.quizResults;
+      stylistProfile.updatedAt = new Date().toISOString();
+
+      localStorage.setItem('virtual-stylist-profile', JSON.stringify(stylistProfile));
+    }
+
+    // Show confirmation
+    this.showNotification('Results saved successfully!', 'success');
+  }
+
+  shopStyle() {
+    if (!this.quizResults) return;
+
+    // Navigate to collections or products based on style
+    const styleMapping = {
+      'Traditional Elegance': '/collections/traditional-wear',
+      'Modern Fusion': '/collections/fusion-wear',
+      'Bohemian Spirit': '/collections/bohemian',
+      'Professional Chic': '/collections/work-wear',
+      'Creative Artist': '/collections/statement-pieces',
+      'Comfort Queen': '/collections/comfy-chic',
+      'Trendsetter': '/collections/trending-now',
+      'Cultural Ambassador': '/collections/cultural-heritage'
+    };
+
+    const url = styleMapping[this.quizResults.styleName] || '/collections/all';
+    window.location.href = url;
+  }
+
+  shareOnSocial(platform) {
+    if (!this.quizResults) return;
+
+    const text = `I just discovered my style personality: ${this.quizResults.styleName}! 🌟 ${this.quizResults.profile.description}`;
+    const url = window.location.href;
+
+    const shareUrls = {
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(text)}`,
+      twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
+      pinterest: `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(url)}&description=${encodeURIComponent(text)}`
+    };
+
+    if (shareUrls[platform]) {
+      window.open(shareUrls[platform], '_blank', 'width=600,height=400');
+    }
+  }
+
+  copyResults() {
+    if (!this.quizResults) return;
+
+    const text = `My Style Personality: ${this.quizResults.styleName}\n\n${this.quizResults.profile.description}\n\nKey Traits:\n${this.quizResults.profile.traits.join('\n')}\n\nTake the quiz yourself!`;
+
+    navigator.clipboard.writeText(text).then(() => {
+      this.showNotification('Results copied to clipboard!', 'success');
+    });
+  }
+
+  showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 ${
+      type === 'success' ? 'bg-green-500 text-white' : 'bg-blue-500 text-white'
+    }`;
+    notification.textContent = message;
+
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+      notification.remove();
+    }, 3000);
+  }
+
+  escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+}
+
+// Initialize Style Quiz
+document.addEventListener('DOMContentLoaded', function() {
+  const quizContainer = document.querySelector('[data-quiz-id="style-preference-quiz"]');
+  if (quizContainer) {
+    window.theme.styleQuiz = new StyleQuiz(quizContainer);
+  }
+});
+</script>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="{{ settings.color_primary }}">
+
+    {%- capture seo_title -%}
+      {%- if template.name == 'index' -%}
+        {{ page_title }}
+      {%- else -%}
+        {{ page_title }} - {{ shop.name }}
+      {%- endif -%}
+    {%- endcapture -%}
+
+    <title>{{ seo_title }}</title>
+
+    {%- if page_description -%}
+      <meta name="description" content="{{ page_description | escape }}">
+    {%- endif -%}
+
+    <!-- Hreflang tags for SEO -->
+    <link rel="alternate" hreflang="en" href="{{ canonical_url | replace: request.locale.iso_code, 'en' }}">
+    <link rel="alternate" hreflang="ta" href="{{ canonical_url | replace: request.locale.iso_code, 'ta' }}">
+    <link rel="alternate" hreflang="x-default" href="{{ canonical_url | replace: request.locale.iso_code, 'en' }}">
+
+    <!-- Language preference persistence -->
+    <script>
+      // Save language preference
+      if (localStorage.getItem('preferred-language') !== '{{ request.locale.iso_code }}') {
+        localStorage.setItem('preferred-language', '{{ request.locale.iso_code }}');
+      }
+    </script>
+
+    {{ content_for_header }}
+
+    {{ 'theme.build.css' | asset_url | stylesheet_tag }}
+    {{ 'main.js' | asset_url | script_tag, defer: true }}
+    {{ 'klaviyo-service.js' | asset_url | script_tag, defer: true }}
+    {{ 'pod-service.js' | asset_url | script_tag, defer: true }}
+
+    <!-- Klaviyo Configuration -->
+    {% if settings.klaviyo_public_key %}
+      <script>
+        window.klaviyoPublicKey = '{{ settings.klaviyo_public_key }}';
+        window.klaviyoNewsletterList = '{{ settings.klaviyo_newsletter_list }}';
+      </script>
+    {% endif %}
+
+    <!-- POD Configuration -->
+    {% if settings.pod_provider and settings.pod_api_key %}
+      <script>
+        window.POD_CONFIG = {
+          provider: '{{ settings.pod_provider }}',
+          apiKey: '{{ settings.pod_api_key }}',
+          shopId: '{{ settings.pod_shop_id }}',
+          printful: {
+            apiUrl: 'https://api.printful.com',
+            webhookSecret: '{{ settings.printful_webhook_secret }}',
+            syncEnabled: true,
+            inventorySync: {{ settings.pod_sync_inventory | default: true }},
+            orderSync: true
+          },
+          printify: {
+            apiUrl: 'https://api.printify.com',
+            shopId: '{{ settings.printify_shop_id }}',
+            webhookKey: '{{ settings.printify_webhook_key }}',
+            syncEnabled: true,
+            inventorySync: {{ settings.pod_sync_inventory | default: true }},
+            orderSync: true
+          },
+          settings: {
+            autoFulfill: {{ settings.pod_auto_fulfill | default: true }},
+            trackInventory: {{ settings.pod_sync_inventory | default: true }},
+            sendEmails: true,
+            culturalDesigns: {{ settings.pod_cultural_designs | default: true }},
+            qualityCheck: true,
+            showMockups: {{ settings.pod_show_mockups | default: true }}
+          }
+        };
+      </script>
+    {% endif %}
+  </head>
+
+  <body class="bg-cream-white text-charcoal-black font-sans">
+
+    {% section 'announcement-bar' %}
+    {% section 'header' %}
+
+    <main role="main" id="MainContent">
+      {{ content_for_layout }}
+    </main>
+
+    {% section 'footer' %}
+
+    <div id="cart-drawer" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+      <div class="fixed right-0 top-0 h-full w-full max-w-md bg-white shadow-xl">
+        <div class="p-6 border-b">
+          <div class="flex items-center justify-between">
+            <h2 class="text-xl font-semibold">{% render 'translation', key: 'cart.title', default: 'Your Cart' %}</h2>
+            <button class="close-cart p-2 hover:bg-gray-100 rounded">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="cart-items p-6">
+          <p class="text-gray-500 text-center py-8">Your cart is empty</p>
+        </div>
+      </div>
+    </div>
+
+    {% render 'mobile-menu' %}
+
+    <div class="notification-container fixed top-4 right-4 z-50"></div>
+  </body>
+</html>

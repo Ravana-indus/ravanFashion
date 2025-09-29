@@ -1,0 +1,729 @@
+<style>
+  .size-guide-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    padding: 2rem;
+  }
+
+  .size-guide-modal.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .size-guide-content {
+    background: white;
+    border-radius: 16px;
+    max-width: 800px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    transform: scale(0.8);
+    transition: transform 0.3s ease;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  }
+
+  .size-guide-modal.active .size-guide-content {
+    transform: scale(1);
+  }
+
+  .close-size-guide {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 3rem;
+    height: 3rem;
+    background: white;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+  }
+
+  .close-size-guide:hover {
+    background: #6a1b1b;
+    color: white;
+    transform: rotate(90deg);
+  }
+
+  .size-guide-header {
+    background: linear-gradient(135deg, #6a1b1b 0%, #8b0000 100%);
+    color: white;
+    padding: 2rem;
+    text-align: center;
+    border-radius: 16px 16px 0 0;
+  }
+
+  .size-guide-header h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .size-guide-header p {
+    opacity: 0.9;
+    font-size: 1.1rem;
+  }
+
+  .size-guide-body {
+    padding: 2rem;
+  }
+
+  .size-tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #f3f4f6;
+    flex-wrap: wrap;
+  }
+
+  .size-tab {
+    padding: 0.75rem 1.5rem;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    font-weight: 600;
+    color: #6b7280;
+    transition: all 0.2s ease;
+    position: relative;
+  }
+
+  .size-tab:hover {
+    color: #6a1b1b;
+  }
+
+  .size-tab.active {
+    color: #6a1b1b;
+    border-bottom-color: #6a1b1b;
+  }
+
+  .size-tab-content {
+    display: none;
+  }
+
+  .size-tab-content.active {
+    display: block;
+  }
+
+  .size-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .size-table th,
+  .size-table td {
+    padding: 1rem;
+    text-align: center;
+    border-bottom: 1px solid #f3f4f6;
+  }
+
+  .size-table th {
+    background: #f9fafb;
+    font-weight: 600;
+    color: #374151;
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    letter-spacing: 0.05em;
+  }
+
+  .size-table tr:hover {
+    background: #f9fafb;
+  }
+
+  .size-table .highlight {
+    background: #fef3c7;
+    font-weight: 600;
+    color: #6a1b1b;
+  }
+
+  .measurement-diagram {
+    background: #f9fafb;
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .measurement-diagram img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+
+  .measurement-tips {
+    background: #fef3c7;
+    border-left: 4px solid #f59e0b;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    border-radius: 0 8px 8px 0;
+  }
+
+  .measurement-tips h4 {
+    color: #92400e;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+
+  .measurement-tips ul {
+    color: #78350f;
+    margin: 0;
+    padding-left: 1.5rem;
+  }
+
+  .measurement-tips li {
+    margin-bottom: 0.25rem;
+  }
+
+  .size-chart-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .size-card {
+    background: white;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.2s ease;
+  }
+
+  .size-card:hover {
+    border-color: #6a1b1b;
+    transform: translateY(-2px);
+  }
+
+  .size-card h4 {
+    color: #6a1b1b;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+
+  .size-card .size-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+  }
+
+  .size-card .size-range {
+    font-size: 0.875rem;
+    color: #6b7280;
+  }
+
+  .fit-preference {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .fit-option {
+    padding: 0.75rem 1.5rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 9999px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+  }
+
+  .fit-option:hover {
+    border-color: #6a1b1b;
+    color: #6a1b1b;
+  }
+
+  .fit-option.selected {
+    background: #6a1b1b;
+    color: white;
+    border-color: #6a1b1b;
+  }
+
+  .conversion-chart {
+    background: #f3f4f6;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .conversion-chart h4 {
+    color: #374151;
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+
+  @media (max-width: 768px) {
+    .size-guide-content {
+      margin: 1rem;
+      max-height: 95vh;
+    }
+
+    .close-size-guide {
+      top: 0.5rem;
+      right: 0.5rem;
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+
+    .size-guide-header {
+      padding: 1.5rem;
+    }
+
+    .size-guide-header h2 {
+      font-size: 1.5rem;
+    }
+
+    .size-guide-body {
+      padding: 1rem;
+    }
+
+    .size-tabs {
+      gap: 0.5rem;
+    }
+
+    .size-tab {
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+    }
+
+    .size-table {
+      font-size: 0.875rem;
+    }
+
+    .size-table th,
+    .size-table td {
+      padding: 0.5rem;
+    }
+  }
+</style>
+
+<!-- Size Guide Modal -->
+<div id="size-guide-modal" class="size-guide-modal">
+  <div class="size-guide-content">
+    <button class="close-size-guide" onclick="window.theme.closeSizeGuide()">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+
+    <div class="size-guide-header">
+      <h2>{{ 'product.size_guide' | t }}</h2>
+      <p>{{ 'general.find_perfect_fit' | t }}</p>
+    </div>
+
+    <div class="size-guide-body">
+      <!-- Size Tabs -->
+      <div class="size-tabs">
+        <button class="size-tab active" onclick="window.theme.showSizeTab('clothing')">{{ 'general.clothing' | t }}</button>
+        <button class="size-tab" onclick="window.theme.showSizeTab('bottoms')">{{ 'general.bottoms' | t }}</button>
+        <button class="size-tab" onclick="window.theme.showSizeTab('accessories')">{{ 'general.accessories' | t }}</button>
+        <button class="size-tab" onclick="window.theme.showSizeTab('international')">{{ 'general.international' | t }}</button>
+      </div>
+
+      <!-- Clothing Size Chart -->
+      <div id="clothing-tab" class="size-tab-content active">
+        <table class="size-table">
+          <thead>
+            <tr>
+              <th>{{ 'general.size' | t }}</th>
+              <th>{{ 'general.chest' | t }} (cm)</th>
+              <th>{{ 'general.waist' | t }} (cm)</th>
+              <th>{{ 'general.hips' | t }} (cm)</th>
+              <th>{{ 'general.shoulder' | t }} (cm)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="highlight">XS</td>
+              <td>84-88</td>
+              <td>70-74</td>
+              <td>90-94</td>
+              <td>36-38</td>
+            </tr>
+            <tr>
+              <td class="highlight">S</td>
+              <td>88-92</td>
+              <td>74-78</td>
+              <td>94-98</td>
+              <td>38-40</td>
+            </tr>
+            <tr>
+              <td class="highlight">M</td>
+              <td>92-96</td>
+              <td>78-82</td>
+              <td>98-102</td>
+              <td>40-42</td>
+            </tr>
+            <tr>
+              <td class="highlight">L</td>
+              <td>96-100</td>
+              <td>82-86</td>
+              <td>102-106</td>
+              <td>42-44</td>
+            </tr>
+            <tr>
+              <td class="highlight">XL</td>
+              <td>100-104</td>
+              <td>86-90</td>
+              <td>106-110</td>
+              <td>44-46</td>
+            </tr>
+            <tr>
+              <td class="highlight">XXL</td>
+              <td>104-108</td>
+              <td>90-94</td>
+              <td>110-114</td>
+              <td>46-48</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="size-chart-grid">
+          <div class="size-card">
+            <h4>{{ 'general.regular_fit' | t }}</h4>
+            <div class="size-value">M</div>
+            <div class="size-range">92-96 cm chest</div>
+          </div>
+          <div class="size-card">
+            <h4>{{ 'general.slim_fit' | t }}</h4>
+            <div class="size-value">S</div>
+            <div class="size-range">88-92 cm chest</div>
+          </div>
+          <div class="size-card">
+            <h4>{{ 'gener宽松_fit' | t }}</h4>
+            <div class="size-value">L</div>
+            <div class="size-range">96-100 cm chest</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottoms Size Chart -->
+      <div id="bottoms-tab" class="size-tab-content">
+        <table class="size-table">
+          <thead>
+            <tr>
+              <th>{{ 'general.size' | t }}</th>
+              <th>{{ 'general.waist' | t }} (cm)</th>
+              <th>{{ 'general.hips' | t }} (cm)</th>
+              <th>{{ 'general.inseam' | t }} (cm)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="highlight">28</td>
+              <td>71-74</td>
+              <td>91-94</td>
+              <td>81</td>
+            </tr>
+            <tr>
+              <td class="highlight">30</td>
+              <td>76-79</td>
+              <td>96-99</td>
+              <td>84</td>
+            </tr>
+            <tr>
+              <td class="highlight">32</td>
+              <td>81-84</td>
+              <td>101-104</td>
+              <td>86</td>
+            </tr>
+            <tr>
+              <td class="highlight">34</td>
+              <td>86-89</td>
+              <td>106-109</td>
+              <td>89</td>
+            </tr>
+            <tr>
+              <td class="highlight">36</td>
+              <td>91-94</td>
+              <td>111-114</td>
+              <td>91</td>
+            </tr>
+            <tr>
+              <td class="highlight">38</td>
+              <td>96-99</td>
+              <td>116-119</td>
+              <td>94</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Accessories Size Chart -->
+      <div id="accessories-tab" class="size-tab-content">
+        <div class="size-chart-grid">
+          <div class="size-card">
+            <h4>{{ 'general.hats' | t }}</h4>
+            <div class="size-value">M</div>
+            <div class="size-range">57-58 cm</div>
+          </div>
+          <div class="size-card">
+            <h4>{{ 'general.belts' | t }}</h4>
+            <div class="size-value">L</div>
+            <div class="size-range">105-110 cm</div>
+          </div>
+          <div class="size-card">
+            <h4>{{ 'general.gloves' | t }}</h4>
+            <div class="size-value">M</div>
+            <div class="size-range">18-19 cm</div>
+          </div>
+          <div class="size-card">
+            <h4>{{ 'general.socks' | t }}</h4>
+            <div class="size-value">9-11</div>
+            <div class="size-range">41-46 EU</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- International Size Chart -->
+      <div id="international-tab" class="size-tab-content">
+        <table class="size-table">
+          <thead>
+            <tr>
+              <th>{{ 'general.international' | t }}</th>
+              <th>US</th>
+              <th>UK</th>
+              <th>EU</th>
+              <th>JP</th>
+              <th>KR</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="highlight">XS</td>
+              <td>34-36</td>
+              <td>6-8</td>
+              <td>44-46</td>
+              <td>7-9</td>
+              <td>85-90</td>
+            </tr>
+            <tr>
+              <td class="highlight">S</td>
+              <td>36-38</td>
+              <td>8-10</td>
+              <td>46-48</td>
+              <td>9-11</td>
+              <td>90-95</td>
+            </tr>
+            <tr>
+              <td class="highlight">M</td>
+              <td>38-40</td>
+              <td>10-12</td>
+              <td>48-50</td>
+              <td>11-13</td>
+              <td>95-100</td>
+            </tr>
+            <tr>
+              <td class="highlight">L</td>
+              <td>40-42</td>
+              <td>12-14</td>
+              <td>50-52</td>
+              <td>13-15</td>
+              <td>100-105</td>
+            </tr>
+            <tr>
+              <td class="highlight">XL</td>
+              <td>42-44</td>
+              <td>14-16</td>
+              <td>52-54</td>
+              <td>15-17</td>
+              <td>105-110</td>
+            </tr>
+            <tr>
+              <td class="highlight">XXL</td>
+              <td>44-46</td>
+              <td>16-18</td>
+              <td>54-56</td>
+              <td>17-19</td>
+              <td>110-115</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Measurement Tips -->
+      <div class="measurement-tips">
+        <h4>{{ 'general.measurement_tips' | t }}</h4>
+        <ul>
+          <li>{{ 'general.use_flexible_tape' | t }}</li>
+          <li>{{ 'general.measure_over_underwear' | t }}</li>
+          <li>{{ 'general.keep_tape_level' | t }}</li>
+          <li>{{ 'general.dont_pull_too_tight' | t }}</li>
+          <li>{{ 'general.measure_in_cm_or_inches' | t }}</li>
+        </ul>
+      </div>
+
+      <!-- Fit Preference -->
+      <div class="fit-preference">
+        <span style="font-weight: 600; margin-right: 1rem;">{{ 'general.preferred_fit' | t }}:</span>
+        <button class="fit-option" onclick="window.theme.selectFit('tight')">{{ 'general.tight' | t }}</button>
+        <button class="fit-option selected" onclick="window.theme.selectFit('regular')">{{ 'general.regular' | t }}</button>
+        <button class="fit-option" onclick="window.theme.selectFit('loose')">{{ 'general.loose' | t }}</button>
+      </div>
+
+      <!-- Size Recommendation -->
+      <div class="conversion-chart">
+        <h4>{{ 'general.size_recommendation' | t }}</h4>
+        <p style="color: #6b7280; margin-bottom: 1rem;">{{ 'general.enter_measurements' | t }}</p>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+          <input type="number" placeholder="{{ 'general.chest' | t }} (cm)" class="flex-1 min-w-[120px] p-2 border rounded" id="chest-input">
+          <input type="number" placeholder="{{ 'general.waist' | t }} (cm)" class="flex-1 min-w-[120px] p-2 border rounded" id="waist-input">
+          <button onclick="window.theme.calculateSize()" class="btn-primary">{{ 'general.calculate' | t }}</button>
+        </div>
+        <div id="size-result" class="mt-4 hidden">
+          <div class="temple-border bg-white p-4 inline-block">
+            <strong>{{ 'general.recommended_size' | t }}: <span id="recommended-size"></span></strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Size Guide Modal System
+  window.theme = window.theme || {};
+
+  window.theme.openSizeGuide = function() {
+    const modal = document.getElementById('size-guide-modal');
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  };
+
+  window.theme.closeSizeGuide = function() {
+    const modal = document.getElementById('size-guide-modal');
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+  };
+
+  window.theme.showSizeTab = function(tabName) {
+    // Hide all tabs
+    document.querySelectorAll('.size-tab-content').forEach(tab => {
+      tab.classList.remove('active');
+    });
+
+    // Remove active class from all tab buttons
+    document.querySelectorAll('.size-tab').forEach(tab => {
+      tab.classList.remove('active');
+    });
+
+    // Show selected tab
+    document.getElementById(`${tabName}-tab`).classList.add('active');
+
+    // Add active class to clicked tab button
+    event.target.classList.add('active');
+  };
+
+  window.theme.selectFit = function(fitType) {
+    // Remove selected class from all fit options
+    document.querySelectorAll('.fit-option').forEach(option => {
+      option.classList.remove('selected');
+    });
+
+    // Add selected class to clicked option
+    event.target.classList.add('selected');
+
+    // Store preference
+    localStorage.setItem('preferred-fit', fitType);
+    console.log('Selected fit preference:', fitType);
+  };
+
+  window.theme.calculateSize = function() {
+    const chest = parseFloat(document.getElementById('chest-input').value);
+    const waist = parseFloat(document.getElementById('waist-input').value);
+
+    if (!chest || !waist) {
+      alert('{{ 'general.enter_both_measurements' | t }}');
+      return;
+    }
+
+    let recommendedSize = '';
+    const preferredFit = localStorage.getItem('preferred-fit') || 'regular';
+
+    // Simple size calculation based on chest measurement
+    if (chest < 88) {
+      recommendedSize = 'XS';
+    } else if (chest < 92) {
+      recommendedSize = 'S';
+    } else if (chest < 96) {
+      recommendedSize = 'M';
+    } else if (chest < 100) {
+      recommendedSize = 'L';
+    } else if (chest < 104) {
+      recommendedSize = 'XL';
+    } else {
+      recommendedSize = 'XXL';
+    }
+
+    // Adjust for fit preference
+    if (preferredFit === 'tight' && recommendedSize !== 'XS') {
+      const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+      const currentIndex = sizes.indexOf(recommendedSize);
+      if (currentIndex > 0) {
+        recommendedSize = sizes[currentIndex - 1];
+      }
+    } else if (preferredFit === 'loose' && recommendedSize !== 'XXL') {
+      const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+      const currentIndex = sizes.indexOf(recommendedSize);
+      if (currentIndex < sizes.length - 1) {
+        recommendedSize = sizes[currentIndex + 1];
+      }
+    }
+
+    // Show result
+    document.getElementById('recommended-size').textContent = recommendedSize;
+    document.getElementById('size-result').classList.remove('hidden');
+  };
+
+  // Close modal on background click
+  document.getElementById('size-guide-modal').addEventListener('click', function(e) {
+    if (e.target === this) {
+      window.theme.closeSizeGuide();
+    }
+  });
+
+  // Close modal on escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && document.getElementById('size-guide-modal').classList.contains('active')) {
+      window.theme.closeSizeGuide();
+    }
+  });
+
+  // Initialize fit preference from localStorage
+  document.addEventListener('DOMContentLoaded', function() {
+    const savedFit = localStorage.getItem('preferred-fit');
+    if (savedFit) {
+      document.querySelectorAll('.fit-option').forEach(option => {
+        option.classList.remove('selected');
+        if (option.textContent.toLowerCase().includes(savedFit)) {
+          option.classList.add('selected');
+        }
+      });
+    }
+  });
+</script>

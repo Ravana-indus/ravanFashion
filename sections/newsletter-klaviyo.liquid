@@ -1,0 +1,442 @@
+<!-- Enhanced Newsletter Form with Klaviyo Integration -->
+<div class="newsletter-klaviyo-section" data-section-id="{{ section.id }}">
+  <div class="newsletter-form-container">
+    <div class="newsletter-content">
+      <h2 class="newsletter-title">
+        {{ section.settings.title | default: 'Join Our Tamil Heritage Community' }}
+      </h2>
+      <p class="newsletter-description">
+        {{ section.settings.description | default: 'Get exclusive access to cultural collections and stories' }}
+      </p>
+
+      <form class="newsletter-form klaviyo-newsletter"
+            action="/contact"
+            method="post"
+            id="klaviyo-newsletter-form-{{ section.id }}"
+            data-klaviyo-list="{{ section.settings.klaviyo_list_id }}">
+
+        <input type="hidden" name="form_type" value="customer">
+        <input type="hidden" name="utf8" value="✓">
+        <input type="hidden" name="contact[tags]" value="newsletter,klaviyo">
+
+        <div class="form-group">
+          <label for="newsletter-email-{{ section.id }}" class="sr-only">
+            {{ 'newsletter.email_placeholder' | t }}
+          </label>
+          <input type="email"
+                 id="newsletter-email-{{ section.id }}"
+                 name="contact[email]"
+                 placeholder="{{ 'newsletter.email_placeholder' | t }}"
+                 required
+                 class="form-input">
+        </div>
+
+        <!-- Cultural Preferences -->
+        {% if section.settings.show_cultural_preferences %}
+        <div class="cultural-preferences">
+          <fieldset>
+            <legend class="sr-only">{{ 'newsletter.preferences' | t }}</legend>
+
+            <label class="preference-option">
+              <input type="checkbox"
+                     name="contact[accepts_marketing]"
+                     value="1"
+                     required
+                     class="preference-checkbox">
+              <span class="preference-label">{{ 'newsletter.marketing_consent' | t }}</span>
+            </label>
+
+            <label class="preference-option">
+              <input type="checkbox"
+                     name="preferences[tamil_content]"
+                     value="true"
+                     class="preference-checkbox">
+              <span class="preference-label">{{ 'newsletter.tamil_content_preference' | t }}</span>
+            </label>
+
+            <label class="preference-option">
+              <input type="checkbox"
+                     name="preferences[festival_notifications]"
+                     value="true"
+                     class="preference-checkbox">
+              <span class="preference-label">{{ 'newsletter.festival_notifications' | t }}</span>
+            </label>
+          </fieldset>
+        </div>
+        {% endif %}
+
+        <button type="submit" class="btn btn-primary newsletter-submit">
+          {{ 'newsletter.subscribe' | t }}
+        </button>
+      </form>
+
+      <!-- Success/Error Messages -->
+      <div class="newsletter-messages">
+        <div class="newsletter-success hidden" id="newsletter-success-{{ section.id }}">
+          <svg class="success-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+          </svg>
+          <span>{{ 'newsletter.success_message' | t }}</span>
+        </div>
+
+        <div class="newsletter-error hidden" id="newsletter-error-{{ section.id }}">
+          <svg class="error-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+          </svg>
+          <span>{{ 'newsletter.error_message' | t }}</span>
+        </div>
+      </div>
+    </div>
+
+    {% if section.settings.show_image %}
+    <div class="newsletter-image">
+      {% if section.settings.image %}
+        <img src="{{ section.settings.image | img_url: '600x400', crop: 'center' }}"
+             alt="{{ section.settings.image_alt | default: section.settings.title }}"
+             loading="lazy">
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+document.getElementById('klaviyo-newsletter-form-{{ section.id }}').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const form = this;
+  const successMessage = document.getElementById('newsletter-success-{{ section.id }}');
+  const errorMessage = document.getElementById('newsletter-error-{{ section.id }}');
+  const submitButton = form.querySelector('.newsletter-submit');
+
+  // Hide previous messages
+  successMessage.classList.add('hidden');
+  errorMessage.classList.add('hidden');
+
+  // Disable submit button
+  submitButton.disabled = true;
+  submitButton.textContent = '{{ "newsletter.subscribing" | t }}';
+
+  const formData = new FormData(form);
+  const email = formData.get('contact[email]');
+  const preferences = {
+    prefersTamil: formData.get('preferences[tamil_content]') === 'true',
+    festivalNotifications: formData.get('preferences[festival_notifications]') === 'true'
+  };
+
+  try {
+    // Subscribe to Klaviyo
+    if (window.klaviyoService) {
+      await window.klaviyoService.subscribeToNewsletter(email, {
+        source: 'website_newsletter',
+        language_preference: preferences.prefersTamil ? 'ta' : 'en',
+        festival_notifications: preferences.festivalNotifications,
+        signup_date: new Date().toISOString(),
+        form_location: '{{ section.settings.location | default: "homepage" }}'
+      });
+    }
+
+    // Also submit to Shopify for backup
+    await fetch(form.action, {
+      method: 'POST',
+      body: formData
+    });
+
+    // Show success message
+    successMessage.classList.remove('hidden');
+    form.reset();
+
+    // Track successful signup
+    if (window.trackKlaviyoEvent) {
+      window.trackKlaviyoEvent('Newsletter Signup Success', {
+        email: email,
+        preferences: preferences,
+        form_location: '{{ section.settings.location | default: "homepage" }}'
+      });
+    }
+
+  } catch (error) {
+    console.error('Newsletter signup failed:', error);
+    errorMessage.classList.remove('hidden');
+
+    // Track failed signup
+    if (window.trackKlaviyoEvent) {
+      window.trackKlaviyoEvent('Newsletter Signup Failed', {
+        email: email,
+        error: error.message,
+        form_location: '{{ section.settings.location | default: "homepage" }}'
+      });
+    }
+  } finally {
+    // Re-enable submit button
+    submitButton.disabled = false;
+    submitButton.textContent = '{{ "newsletter.subscribe" | t }}';
+  }
+});
+</script>
+
+<style>
+.newsletter-klaviyo-section {
+  padding: {{ section.settings.padding | default: '60px 0' }};
+  background-color: {{ section.settings.background_color | default: '#FDF6EC' }};
+}
+
+.newsletter-form-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr {{ section.settings.show_image ? '1fr' : '0' }};
+  gap: {{ section.settings.gap | default: '40px' }};
+  align-items: center;
+}
+
+.newsletter-content {
+  text-align: {{ section.settings.text_align | default: 'left' }};
+}
+
+.newsletter-title {
+  font-size: {{ section.settings.title_size | default: '2rem' }};
+  font-weight: 700;
+  color: {{ section.settings.title_color | default: '#1C1C1C' }};
+  margin-bottom: 1rem;
+}
+
+.newsletter-description {
+  font-size: {{ section.settings.description_size | default: '1.1rem' }};
+  color: {{ section.settings.description_color | default: '#3A6A6A' }};
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.newsletter-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.form-group {
+  position: relative;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #D4AF37;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #6A1B1B;
+  box-shadow: 0 0 0 3px rgba(106, 27, 27, 0.1);
+}
+
+.cultural-preferences {
+  background-color: rgba(255, 255, 255, 0.5);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+}
+
+.preference-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+  cursor: pointer;
+}
+
+.preference-checkbox {
+  width: 1.25rem;
+  height: 1.25rem;
+  accent-color: #D4AF37;
+}
+
+.preference-label {
+  font-size: 0.9rem;
+  color: #4B5563;
+}
+
+.newsletter-submit {
+  width: 100%;
+  padding: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.newsletter-messages {
+  margin-top: 1rem;
+  min-height: 2rem;
+}
+
+.newsletter-success,
+.newsletter-error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.newsletter-success {
+  background-color: #D1FAE5;
+  color: #065F46;
+}
+
+.newsletter-error {
+  background-color: #FEE2E2;
+  color: #991B1B;
+}
+
+.success-icon {
+  color: #10B981;
+}
+
+.error-icon {
+  color: #EF4444;
+}
+
+.newsletter-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+  .newsletter-form-container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .newsletter-content {
+    text-align: center;
+  }
+
+  .newsletter-form {
+    margin: 0 auto;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Klaviyo Newsletter",
+  "tag": "section",
+  "class": "newsletter-klaviyo-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Join Our Tamil Heritage Community"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Get exclusive access to cultural collections and stories, plus 10% off your first order."
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background Image"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Image Alt Text"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_image",
+      "label": "Show Image",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cultural_preferences",
+      "label": "Show Cultural Preferences",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "klaviyo_list_id",
+      "label": "Klaviyo List ID",
+      "info": "Leave empty to use default list"
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Text Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "text",
+      "id": "location",
+      "label": "Form Location",
+      "default": "homepage",
+      "info": "For tracking purposes"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "Section Padding",
+      "default": "60px 0"
+    },
+    {
+      "type": "text",
+      "id": "gap",
+      "label": "Content Gap",
+      "default": "40px"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#FDF6EC"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title Color",
+      "default": "#1C1C1C"
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Description Color",
+      "default": "#3A6A6A"
+    },
+    {
+      "type": "text",
+      "id": "title_size",
+      "label": "Title Font Size",
+      "default": "2rem"
+    },
+    {
+      "type": "text",
+      "id": "description_size",
+      "label": "Description Font Size",
+      "default": "1.1rem"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Klaviyo Newsletter",
+      "category": "Email Marketing"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,34 @@
+{%- comment -%}
+  Translation helper snippet
+  Usage: {% render 'translation', key: 'general.welcome', default: 'Welcome' %}
+{%- endcomment -%}
+
+{%- assign translation_key = key | split: '.' -%}
+{%- assign translation_value = nil -%}
+
+{%- comment -%} Try to get translation from Shopify's built-in localization first {%- endcomment -%}
+{%- capture shopify_translation -%}
+  {{ key | t }}
+{%- endcapture -%}
+
+{%- if shopify_translation contains 'translation missing' -%}
+  {%- comment -%} Fallback to manual translation logic {%- endcomment -%}
+  {%- case translation_key.size -%}
+    {%- when 1 -%}
+      {%- assign translation_value = localization.translations[translation_key[0]] -%}
+    {%- when 2 -%}
+      {%- assign translation_value = localization.translations[translation_key[0]][translation_key[1]] -%}
+    {%- when 3 -%}
+      {%- assign translation_value = localization.translations[translation_key[0]][translation_key[1]][translation_key[2]] -%}
+    {%- else -%}
+      {%- assign translation_value = nil -%}
+  {%- endcase -%}
+
+  {%- if translation_value == nil or translation_value == blank -%}
+    {%- assign translation_value = default -%}
+  {%- endif -%}
+
+  {{- translation_value -}}
+{%- else -%}
+  {{- shopify_translation -}}
+{%- endif -%}

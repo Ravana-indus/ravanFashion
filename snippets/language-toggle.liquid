@@ -1,0 +1,27 @@
+<div class="lang-toggle" role="group" aria-label="Language selector">
+  <form method="post" action="/localization" class="flex items-center space-x-1">
+    <input type="hidden" name="return_to" value="{{ request.path }}" />
+
+    <button
+      type="submit"
+      name="locale_code"
+      value="en"
+      class="px-3 py-1 rounded-full text-sm font-medium transition-all {% if request.locale.iso_code == 'en' %}bg-gold text-white{% else %}text-gray-600 hover:bg-gray-100{% endif %}"
+      aria-label="Switch to English"
+      aria-pressed="{% if request.locale.iso_code == 'en' %}true{% else %}false{% endif %}"
+    >
+      EN
+    </button>
+
+    <button
+      type="submit"
+      name="locale_code"
+      value="ta"
+      class="px-3 py-1 rounded-full text-sm font-medium transition-all {% if request.locale.iso_code == 'ta' %}bg-gold text-white{% else %}text-gray-600 hover:bg-gray-100{% endif %}"
+      aria-label="Switch to Tamil"
+      aria-pressed="{% if request.locale.iso_code == 'ta' %}true{% else %}false{% endif %}"
+    >
+      தமிழ்
+    </button>
+  </form>
+</div>

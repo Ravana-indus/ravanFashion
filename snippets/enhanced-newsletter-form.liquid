@@ -1,0 +1,107 @@
+{%- comment -%}
+  Enhanced Newsletter Form Snippet
+  Features improved UX with success/error states and cultural elements
+{%- endcomment -%}
+
+<div class="enhanced-newsletter-form">
+  <form class="newsletter-form space-y-4" onsubmit="window.theme.handleEnhancedNewsletterSubmit(event)">
+    <div class="relative">
+      <input
+        type="email"
+        id="enhanced-newsletter-email"
+        name="email"
+        required
+        placeholder="{% render 'translation', key: 'newsletter.placeholder', default: 'your@email.com' %}"
+        class="w-full px-6 py-4 rounded-full text-charcoal-black placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-gold focus:ring-opacity-50 text-lg"
+        aria-label="{% render 'translation', key: 'forms.email', default: 'Email Address' %}"
+      >
+      <div class="absolute right-2 top-1/2 transform -translate-y-1/2">
+        <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Name Fields -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <input
+        type="text"
+        id="enhanced-newsletter-first-name"
+        name="first_name"
+        placeholder="{% render 'translation', key: 'forms.first_name', default: 'First Name' %}"
+        class="w-full px-6 py-3 rounded-full text-charcoal-black placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-gold focus:ring-opacity-50"
+        aria-label="{% render 'translation', key: 'forms.first_name', default: 'First Name' %}"
+      >
+      <input
+        type="text"
+        id="enhanced-newsletter-last-name"
+        name="last_name"
+        placeholder="{% render 'translation', key: 'forms.last_name', default: 'Last Name' %}"
+        class="w-full px-6 py-3 rounded-full text-charcoal-black placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-gold focus:ring-opacity-50"
+        aria-label="{% render 'translation', key: 'forms.last_name', default: 'Last Name' %}"
+      >
+    </div>
+
+    <!-- Interest Selection -->
+    <div class="space-y-2">
+      <label class="block text-sm font-medium text-gray-300">
+        {% render 'translation', key: 'newsletter.interests', default: 'I\'m interested in:' %}
+      </label>
+      <div class="grid grid-cols-2 gap-3">
+        <label class="flex items-center space-x-2 cursor-pointer">
+          <input type="checkbox" name="interests[]" value="mens" class="rounded text-gold focus:ring-gold">
+          <span class="text-sm">{% render 'translation', key: 'newsletter.mens', default: 'Men\'s Fashion' %}</span>
+        </label>
+        <label class="flex items-center space-x-2 cursor-pointer">
+          <input type="checkbox" name="interests[]" value="womens" class="rounded text-gold focus:ring-gold">
+          <span class="text-sm">{% render 'translation', key: 'newsletter.womens', default: 'Women\'s Fashion' %}</span>
+        </label>
+        <label class="flex items-center space-x-2 cursor-pointer">
+          <input type="checkbox" name="interests[]" value="accessories" class="rounded text-gold focus:ring-gold">
+          <span class="text-sm">{% render 'translation', key: 'newsletter.accessories', default: 'Accessories' %}</span>
+        </label>
+        <label class="flex items-center space-x-2 cursor-pointer">
+          <input type="checkbox" name="interests[]" value="cultural" class="rounded text-gold focus:ring-gold">
+          <span class="text-sm">{% render 'translation', key: 'newsletter.cultural', default: 'Cultural Events' %}</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <button
+      type="submit"
+      class="w-full bg-gold text-charcoal-black font-bold py-4 px-8 rounded-full hover:bg-yellow-500 transition-all duration-300 transform hover:scale-105 text-lg flex items-center justify-center space-x-2"
+    >
+      <span>{% render 'translation', key: 'newsletter.enhanced_button', default: 'Join the Community' %}</span>
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+      </svg>
+    </button>
+  </form>
+
+  <!-- Success/Error Messages -->
+  <div id="enhanced-newsletter-messages" class="mt-4 space-y-2">
+    <!-- Messages will be inserted here by JavaScript -->
+  </div>
+
+  <!-- Social Links -->
+  <div class="mt-8 text-center">
+    <p class="text-sm text-gray-400 mb-4">
+      {% render 'translation', key: 'newsletter.follow_us', default: 'Follow us on social media' %}
+    </p>
+    <div class="flex justify-center space-x-4">
+      <a href="#" class="w-10 h-10 bg-gold bg-opacity-20 rounded-full flex items-center justify-center hover:bg-opacity-30 transition-colors">
+        <span class="text-gold font-bold">f</span>
+      </a>
+      <a href="#" class="w-10 h-10 bg-gold bg-opacity-20 rounded-full flex items-center justify-center hover:bg-opacity-30 transition-colors">
+        <span class="text-gold font-bold">ig</span>
+      </a>
+      <a href="#" class="w-10 h-10 bg-gold bg-opacity-20 rounded-full flex items-center justify-center hover:bg-opacity-30 transition-colors">
+        <span class="text-gold font-bold">tw</span>
+      </a>
+      <a href="#" class="w-10 h-10 bg-gold bg-opacity-20 rounded-full flex items-center justify-center hover:bg-opacity-30 transition-colors">
+        <span class="text-gold font-bold">yt</span>
+      </a>
+    </div>
+  </div>
+</div>

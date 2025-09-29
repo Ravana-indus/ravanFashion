@@ -1,0 +1,291 @@
+{
+  "tamilProducts": [
+    {
+      "id": 123456789,
+      "title": "பாரம்பரிய பட்டு சேலை",
+      "handle": "traditional-silk-saree",
+      "description": "அழகான பாரம்பரிய பட்டு சேலை, நுட்பமான வடிவமைப்புகளுடன்",
+      "price": 4999,
+      "compare_at_price": 6999,
+      "available": true,
+      "featured_image": "https://cdn.shopify.com/s/files/1/0000/0000/0000/products/traditional-silk-saree.jpg",
+      "images": [
+        {
+          "id": 123456789,
+          "src": "https://cdn.shopify.com/s/files/1/0000/0000/0000/products/traditional-silk-saree-front.jpg",
+          "alt": "பாரம்பரிய பட்டு சேலை - முன் பார்வை"
+        },
+        {
+          "id": 123456790,
+          "src": "https://cdn.shopify.com/s/files/1/0000/0000/0000/products/traditional-silk-saree-back.jpg",
+          "alt": "பாரம்பரிய பட்டு சேலை - பின் பார்வை"
+        }
+      ],
+      "variants": [
+        {
+          "id": 123456789,
+          "title": "சிவப்பு",
+          "price": 4999,
+          "compare_at_price": 6999,
+          "available": true,
+          "option1": "சிவப்பு",
+          "sku": "SAREE-RED-001"
+        },
+        {
+          "id": 123456790,
+          "title": "நீலம்",
+          "price": 4999,
+          "compare_at_price": 6999,
+          "available": true,
+          "option1": "நீலம்",
+          "sku": "SAREE-BLUE-001"
+        }
+      ],
+      "options": [
+        {
+          "name": "நிறம்",
+          "position": 1,
+          "values": ["சிவப்பு", "நீலம்", "பச்சை"]
+        }
+      ],
+      "tags": ["சேலை", "பாரம்பரிய", "பட்டு", "பண்டிகை"],
+      "type": "பாரம்பரிய உடை",
+      "vendor": "ராவன் பேஷன்",
+      "culturalInfo": {
+        "significance": "பண்டிகை காலங்களில் அணிவதற்கு ஏற்ற பாரம்பரிய உடை",
+        "occasions": ["தீபாவளி", "பொங்கல்", "தைப்பூசம்"],
+        "care": "டிரை க்ளீனிங் பரிந்துரைக்கப்படுகிறது",
+        "material": "தூய பட்டு"
+      }
+    },
+    {
+      "id": 123456790,
+      "title": "வேட்டி மற்றும் சேலை",
+      "handle": "veshti-and-shirt",
+      "description": "பாரம்பரிய வேட்டி மற்றும் பொருத்தமான சட்டை",
+      "price": 2999,
+      "compare_at_price": 3999,
+      "available": true,
+      "featured_image": "https://cdn.shopify.com/s/files/1/0000/0000/0000/products/veshti-shirt.jpg",
+      "images": [
+        {
+          "id": 123456791,
+          "src": "https://cdn.shopify.com/s/files/1/0000/0000/0000/products/veshti-shirt-full.jpg",
+          "alt": "வேட்டி மற்றும் சட்டை - முழு உடை"
+        }
+      ],
+      "variants": [
+        {
+          "id": 123456791,
+          "title": "வெள்ளை",
+          "price": 2999,
+          "compare_at_price": 3999,
+          "available": true,
+          "option1": "வெள்ளை",
+          "sku": "VESHTI-WHITE-001"
+        }
+      ],
+      "options": [
+        {
+          "name": "நிறம்",
+          "position": 1,
+          "values": ["வெள்ளை", "மஞ்சள்"]
+        }
+      ],
+      "tags": ["வேட்டி", "சட்டை", "ஆண்கள்", "பாரம்பரிய"],
+      "type": "ஆண்கள் உடை",
+      "vendor": "ராவன் பேஷன்",
+      "culturalInfo": {
+        "significance": "பாரம்பரிய நிகழ்வுகளுக்கு ஏற்ற ஆண்கள் உடை",
+        "occasions": ["திருமணம்", "பண்டிகை", "சமய நிகழ்ச்சிகள்"],
+        "care": "கையால் கழுவலாம்",
+        "material": "பருத்தி"
+      }
+    },
+    {
+      "id": 123456791,
+      "title": "பாரம்பரிய நகைகள்",
+      "handle": "traditional-jewelry",
+      "description": "பாரம்பரிய தமிழ் நகைகள், தங்கம் மற்றும் வெள்ளியில்",
+      "price": 7999,
+      "compare_at_price": 9999,
+      "available": true,
+      "featured_image": "https://cdn.shopify.com/s/files/1/0000/0000/0000/products/traditional-jewelry.jpg",
+      "images": [
+        {
+          "id": 123456792,
+          "src": "https://cdn.shopify.com/s/files/1/0000/0000/0000/products/traditional-jewelry-set.jpg",
+          "alt": "பாரம்பரிய நகை தொகுப்பு"
+        }
+      ],
+      "variants": [
+        {
+          "id": 123456792,
+          "title": "தங்கம்",
+          "price": 7999,
+          "compare_at_price": 9999,
+          "available": true,
+          "option1": "தங்கம்",
+          "sku": "JEWELRY-GOLD-001"
+        },
+        {
+          "id": 123456793,
+          "title": "வெள்ளி",
+          "price": 4999,
+          "compare_at_price": 6999,
+          "available": true,
+          "option1": "வெள்ளி",
+          "sku": "JEWELRY-SILVER-001"
+        }
+      ],
+      "options": [
+        {
+          "name": "உலோகம்",
+          "position": 1,
+          "values": ["தங்கம்", "வெள்ளி"]
+        }
+      ],
+      "tags": ["நகை", "பாரம்பரிய", "தங்கம்", "வெள்ளி"],
+      "type": "நகைகள்",
+      "vendor": "ராவன் பேஷன்",
+      "culturalInfo": {
+        "significance": "பாரம்பரிய நிகழ்வுகளுக்கு ஏற்ற நகைகள்",
+        "occasions": ["திருமணம்", "பண்டிகை", "செவ்வாய் நிகழ்ச்சிகள்"],
+        "care": "மென்மையான துணியால் துடைக்கவும்",
+        "material": "22 காரட் தங்கம் / ஸ்டெர்லிங் வெள்ளி"
+      }
+    },
+    {
+      "id": 123456792,
+      "title": "பொங்கல் சிறப்பு சேலை",
+      "handle": "pongal-special-saree",
+      "description": "பொங்கல் பண்டிகைக்கு ஏற்ற சிறப்பு சேலை",
+      "price": 8999,
+      "compare_at_price": 11999,
+      "available": true,
+      "featured_image": "https://cdn.shopify.com/s/files/1/0000/0000/0000/products/pongal-saree.jpg",
+      "images": [
+        {
+          "id": 123456793,
+          "src": "https://cdn.shopify.com/s/files/1/0000/0000/0000/products/pongal-saree-design.jpg",
+          "alt": "பொங்கல் சிறப்பு சேலை வடிவமைப்பு"
+        }
+      ],
+      "variants": [
+        {
+          "id": 123456793,
+          "title": "மஞ்சள்",
+          "price": 8999,
+          "compare_at_price": 11999,
+          "available": true,
+          "option1": "மஞ்சள்",
+          "sku": "PONGAL-YELLOW-001"
+        }
+      ],
+      "options": [
+        {
+          "name": "நிறம்",
+          "position": 1,
+          "values": ["மஞ்சள்", "பச்சை"]
+        }
+      ],
+      "tags": ["பொங்கல்", "சேலை", "பண்டிகை", "பாரம்பரிய"],
+      "type": "பண்டிகை சிறப்பு",
+      "vendor": "ராவன் பேஷன்",
+      "culturalInfo": {
+        "significance": "பொங்கல் பண்டிகையை கொண்டாட சிறப்பு சேலை",
+        "occasions": ["பொங்கல்"],
+        "care": "டிரை க்ளீனிங் பரிந்துரைக்கப்படுகிறது",
+        "material": "தூய பட்டு மற்றும் கைத்தறி வேலைப்பாடு"
+      }
+    },
+    {
+      "id": 123456793,
+      "title": "தீபாவளி சிறப்பு உடை",
+      "handle": "diwali-special-outfit",
+      "description": "தீபாவளி பண்டிகைக்கு ஏற்ற சிறப்பு உடை",
+      "price": 6999,
+      "compare_at_price": 8999,
+      "available": true,
+      "featured_image": "https://cdn.shopify.com/s/files/1/0000/0000/0000/products/diwali-outfit.jpg",
+      "images": [
+        {
+          "id": 123456794,
+          "src": "https://cdn.shopify.com/s/files/1/0000/0000/0000/products/diwali-special-design.jpg",
+          "alt": "தீபாவளி சிறப்பு உடை வடிவமைப்பு"
+        }
+      ],
+      "variants": [
+        {
+          "id": 123456794,
+          "title": "சிவப்பு மற்றும் தங்கம்",
+          "price": 6999,
+          "compare_at_price": 8999,
+          "available": true,
+          "option1": "சிவப்பு மற்றும் தங்கம்",
+          "sku": "DIWALI-RED-GOLD-001"
+        }
+      ],
+      "options": [
+        {
+          "name": "வண்ணம்",
+          "position": 1,
+          "values": ["சிவப்பு மற்றும் தங்கம்", "நீலம் மற்றும் வெள்ளி"]
+        }
+      ],
+      "tags": ["தீபாவளி", "உடை", "பண்டிகை", "சிறப்பு"],
+      "type": "பண்டிகை சிறப்பு",
+      "vendor": "ராவன் பேஷன்",
+      "culturalInfo": {
+        "significance": "தீபாவளி பண்டிகையை கொண்டாட சிறப்பு உடை",
+        "occasions": ["தீபாவளி"],
+        "care": "டிரை க்ளீனிங் பரிந்துரைக்கப்படுகிறது",
+        "material": "பட்டு மற்றும் ப்ரோகேட்"
+      }
+    },
+    {
+      "id": 123456794,
+      "title": "திருமண சிறப்பு சேலை",
+      "handle": "wedding-special-saree",
+      "description": "திருமண நிகழ்ச்சிகளுக்கு ஏற்ற சிறப்பு சேலை",
+      "price": 14999,
+      "compare_at_price": 19999,
+      "available": true,
+      "featured_image": "https://cdn.shopify.com/s/files/1/0000/0000/0000/products/wedding-saree.jpg",
+      "images": [
+        {
+          "id": 123456795,
+          "src": "https://cdn.shopify.com/s/files/1/0000/0000/0000/products/wedding-saree-bridal.jpg",
+          "alt": "திருமண சிறப்பு சேலை மணமகள் வடிவமைப்பு"
+        }
+      ],
+      "variants": [
+        {
+          "id": 123456795,
+          "title": "மணமகள் சிவப்பு",
+          "price": 14999,
+          "compare_at_price": 19999,
+          "available": true,
+          "option1": "மணமகள் சிவப்பு",
+          "sku": "WEDDING-BRIDE-RED-001"
+        }
+      ],
+      "options": [
+        {
+          "name": "வகை",
+          "position": 1,
+          "values": ["மணமகள் சிவப்பு", "விருந்தினர் நிறங்கள்"]
+        }
+      ],
+      "tags": ["திருமணம்", "சேலை", "மணமகள்", "சிறப்பு"],
+      "type": "திருமண சிறப்பு",
+      "vendor": "ராவன் பேஷன்",
+      "culturalInfo": {
+        "significance": "திருமண நிகழ்ச்சிகளுக்கு ஏற்ற விருப்பான சேலை",
+        "occasions": ["திருமணம்", "வாங்கானம்"],
+        "care": "டிரை க்ளீனிங் பரிந்துரைக்கப்படுகிறது",
+        "material": "தூய பட்டு மற்றும் கைத்தறி வேலைப்பாடு"
+      }
+    }
+  ]
+}

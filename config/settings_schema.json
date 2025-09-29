@@ -1,0 +1,223 @@
+{
+  "name": "Ravan Fashion Theme Settings",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Store Information"
+    },
+    {
+      "type": "text",
+      "id": "store_name",
+      "label": "Store Name",
+      "default": "Ravan Fashion"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "text",
+      "id": "logo_width",
+      "label": "Logo Width (px)",
+      "default": "180"
+    },
+    {
+      "type": "textarea",
+      "id": "store_description",
+      "label": "Store Description"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Klaviyo Integration",
+      "type": "klaviyo",
+      "settings": [
+        {
+          "type": "text",
+          "id": "klaviyo_public_key",
+          "label": "Klaviyo Public Key",
+          "info": "Your Klaviyo public API key"
+        },
+        {
+          "type": "text",
+          "id": "klaviyo_private_key",
+          "label": "Klaviyo Private Key",
+          "info": "Your Klaviyo private API key (server-side only)"
+        },
+        {
+          "type": "text",
+          "id": "klaviyo_newsletter_list",
+          "label": "Newsletter List ID",
+          "info": "Klaviyo list ID for newsletter subscribers"
+        },
+        {
+          "type": "text",
+          "id": "klaviyo_customer_list",
+          "label": "Customer List ID",
+          "info": "Klaviyo list ID for all customers"
+        },
+        {
+          "type": "text",
+          "id": "klaviyo_vip_list",
+          "label": "VIP List ID",
+          "info": "Klaviyo list ID for VIP customers"
+        }
+      ]
+    },
+    {
+      "name": "Reviews Integration",
+      "type": "reviews",
+      "settings": [
+        {
+          "type": "select",
+          "id": "reviews_app",
+          "label": "Reviews App",
+          "options": [
+            {
+              "value": "loox",
+              "label": "Loox"
+            },
+            {
+              "value": "judgeme",
+              "label": "Judge.me"
+            },
+            {
+              "value": "native",
+              "label": "Native Reviews"
+            }
+          ],
+          "default": "loox"
+        },
+        {
+          "type": "text",
+          "id": "loox_shop_id",
+          "label": "Loox Shop ID",
+          "info": "Your Loox shop identifier"
+        },
+        {
+          "type": "text",
+          "id": "judgeme_shop_domain",
+          "label": "Judge.me Shop Domain",
+          "info": "Your shop domain for Judge.me integration"
+        },
+        {
+          "type": "url",
+          "id": "reviews_app_review_url",
+          "label": "Review Submission URL",
+          "info": "URL for customers to submit reviews"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_reviews_on_collection",
+          "label": "Show ratings on collection pages",
+          "default": true
+        },
+        {
+          "type": "number",
+          "id": "reviews_per_page",
+          "label": "Reviews per page",
+          "default": 10,
+          "info": "Number of reviews to show per page"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_photo_reviews",
+          "label": "Enable photo reviews",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_video_reviews",
+          "label": "Enable video reviews",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "auto_translate_reviews",
+          "label": "Auto-translate reviews",
+          "info": "Automatically translate reviews to customer's preferred language",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "POD Integration Settings"
+        },
+        {
+          "type": "select",
+          "id": "pod_provider",
+          "label": "POD Provider",
+          "options": [
+            {
+              "value": "printful",
+              "label": "Printful"
+            },
+            {
+              "value": "printify",
+              "label": "Printify"
+            }
+          ],
+          "default": "printful"
+        },
+        {
+          "type": "text",
+          "id": "pod_api_key",
+          "label": "API Key",
+          "info": "Your POD provider API key"
+        },
+        {
+          "type": "text",
+          "id": "pod_shop_id",
+          "label": "Shop ID",
+          "info": "Your POD provider shop ID"
+        },
+        {
+          "type": "text",
+          "id": "printful_webhook_secret",
+          "label": "Printful Webhook Secret",
+          "info": "Webhook secret for Printful integration"
+        },
+        {
+          "type": "text",
+          "id": "printify_shop_id",
+          "label": "Printify Shop ID",
+          "info": "Your Printify shop ID"
+        },
+        {
+          "type": "text",
+          "id": "printify_webhook_key",
+          "label": "Printify Webhook Key",
+          "info": "Webhook key for Printify integration"
+        },
+        {
+          "type": "checkbox",
+          "id": "pod_auto_fulfill",
+          "label": "Auto-fulfill Orders",
+          "default": true,
+          "info": "Automatically send orders to POD provider"
+        },
+        {
+          "type": "checkbox",
+          "id": "pod_sync_inventory",
+          "label": "Sync Inventory",
+          "default": true,
+          "info": "Keep inventory levels synchronized"
+        },
+        {
+          "type": "checkbox",
+          "id": "pod_show_mockups",
+          "label": "Show Product Mockups",
+          "default": true,
+          "info": "Display generated product mockups"
+        },
+        {
+          "type": "checkbox",
+          "id": "pod_cultural_designs",
+          "label": "Cultural Design Support",
+          "default": true,
+          "info": "Enable cultural design features and templates"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+name: Ravan Fashion
+version: '1.0.0'
+description: 'A culturally-rich Tamil fashion e-commerce theme'
+author: 'Ravan Fashion Team'
+theme_id: '[YOUR_THEME_ID]'
+
+# Development Settings
+development:
+  theme:
+    editor_mode: 'on'
+    hot_reload: true
+    live_reload: true
+
+# Store Configuration
+store:
+  name: 'Ravan Fashion Development Store'
+  currency: 'USD'
+  timezone: 'Asia/Kolkata'
+
+# Theme Settings
+settings:
+  colors:
+    primary: '#8B4513'
+    secondary: '#D2691E'
+    accent: '#FF6B35'
+    background: '#FFF8F0'
+    text: '#2C1810'
+
+  typography:
+    primary_font: 'Playfair Display'
+    secondary_font: 'Inter'
+    tamil_font: 'Noto Sans Tamil'
+
+  features:
+    language_toggle: true
+    mobile_optimized: true
+    accessibility_enhanced: true

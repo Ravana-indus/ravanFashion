@@ -1,0 +1,65 @@
+<div class="py-12 px-4 bg-gradient-to-br from-cream-white to-gray-50">
+  <div class="container mx-auto">
+    <div class="max-w-4xl mx-auto">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-bold text-charcoal-black mb-4">
+          {% render 'translation', key: 'proverbs.section_title', default: 'Tamil Wisdom' %}
+        </h2>
+        <p class="text-xl text-gold font-tamil mb-2">
+          {% render 'translation', key: 'proverbs.section_subtitle_tamil', default: 'தமிழ் பழமொழிகள்' %}
+        </p>
+        <p class="text-gray-600 max-w-2xl mx-auto">
+          {% render 'translation', key: 'proverbs.section_description', default: 'Discover the timeless wisdom of Tamil culture through traditional proverbs that have been passed down through generations.' %}
+        </p>
+      </div>
+
+      {% render 'tamil-proverbs' %}
+
+      <div class="text-center mt-12">
+        <div class="bg-gold bg-opacity-10 p-6 rounded-lg border border-gold border-opacity-30">
+          <h3 class="text-lg font-semibold text-deep-maroon mb-2">
+            {% render 'translation', key: 'proverbs.learn_more', default: 'Learn More About Tamil Culture' %}
+          </h3>
+          <p class="text-gray-700 mb-4">
+            {% render 'translation', key: 'proverbs.learn_more_desc', default: 'Explore our collection of traditional Tamil fashion and connect with your heritage.' %}
+          </p>
+          <a href="/pages/about-tamil-culture" class="inline-block bg-deep-maroon text-white px-6 py-3 rounded-full hover:bg-gold hover:text-charcoal-black transition-all duration-300 transform hover:scale-105">
+            {% render 'translation', key: 'proverbs.explore_button', default: 'Explore Our Heritage' %}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Tamil Proverbs",
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section Title",
+      "default": "Tamil Wisdom"
+    },
+    {
+      "type": "text",
+      "id": "section_subtitle_tamil",
+      "label": "Section Subtitle (Tamil)",
+      "default": "தமிழ் பழமொழிகள்"
+    },
+    {
+      "type": "textarea",
+      "id": "section_description",
+      "label": "Section Description",
+      "default": "Discover the timeless wisdom of Tamil culture through traditional proverbs that have been passed down through generations."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Tamil Proverbs",
+      "category": "Cultural Content"
+    }
+  ]
+}
+{% endschema %}

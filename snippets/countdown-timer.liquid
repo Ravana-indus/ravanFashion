@@ -1,0 +1,74 @@
+{%- comment -%}
+  Countdown Timer Snippet
+  Usage: {% render 'countdown-timer', target_date: '2024-12-31T23:59:59', title: 'Special Offer' %}
+{%- endcomment -%}
+
+{%- assign target_date = target_date | default: '2024-12-31T23:59:59' -%}
+{%- assign title = title | default: 'Special Offer' -%}
+{%- assign subtitle = subtitle | default: 'Limited Time Offer' -%}
+
+<div class="countdown-timer bg-gradient-to-r from-deep-maroon to-gold text-white p-6 rounded-lg shadow-lg">
+  <div class="text-center mb-4">
+    <h3 class="text-2xl font-bold text-cream-white mb-2">
+      {% render 'translation', key: 'countdown.title', default: title %}
+    </h3>
+    <p class="text-gold font-medium">
+      {% render 'translation', key: 'countdown.subtitle', default: subtitle %}
+    </p>
+  </div>
+
+  <div class="countdown-display grid grid-cols-4 gap-4 text-center" data-target-date="{{ target_date }}">
+    <!-- Days -->
+    <div class="countdown-item">
+      <div class="countdown-number text-3xl font-bold bg-black bg-opacity-30 rounded-lg p-3 mb-2" data-unit="days">00</div>
+      <div class="countdown-label text-sm uppercase tracking-wider text-gray-300">
+        {% render 'translation', key: 'countdown.days', default: 'Days' %}
+      </div>
+    </div>
+
+    <!-- Hours -->
+    <div class="countdown-item">
+      <div class="countdown-number text-3xl font-bold bg-black bg-opacity-30 rounded-lg p-3 mb-2" data-unit="hours">00</div>
+      <div class="countdown-label text-sm uppercase tracking-wider text-gray-300">
+        {% render 'translation', key: 'countdown.hours', default: 'Hours' %}
+      </div>
+    </div>
+
+    <!-- Minutes -->
+    <div class="countdown-item">
+      <div class="countdown-number text-3xl font-bold bg-black bg-opacity-30 rounded-lg p-3 mb-2" data-unit="minutes">00</div>
+      <div class="countdown-label text-sm uppercase tracking-wider text-gray-300">
+        {% render 'translation', key: 'countdown.minutes', default: 'Minutes' %}
+      </div>
+    </div>
+
+    <!-- Seconds -->
+    <div class="countdown-item">
+      <div class="countdown-number text-3xl font-bold bg-black bg-opacity-30 rounded-lg p-3 mb-2" data-unit="seconds">00</div>
+      <div class="countdown-label text-sm uppercase tracking-wider text-gray-300">
+        {% render 'translation', key: 'countdown.seconds', default: 'Seconds' %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="mt-6">
+    <div class="countdown-progress bg-black bg-opacity-30 rounded-full h-2 overflow-hidden">
+      <div class="countdown-progress-bar bg-gold h-full transition-all duration-1000 ease-linear" style="width: 100%"></div>
+    </div>
+  </div>
+
+  <!-- Call to Action -->
+  <div class="mt-6 text-center">
+    <a href="/collections/sale" class="inline-block bg-gold text-charcoal-black font-bold py-2 px-6 rounded-full hover:bg-yellow-500 transition-colors duration-300 transform hover:scale-105">
+      {% render 'translation', key: 'countdown.cta', default: 'Shop the Sale' %}
+    </a>
+  </div>
+
+  <!-- Tamil Cultural Note -->
+  <div class="mt-4 text-center">
+    <p class="text-xs text-gray-300 font-tamil">
+      {% render 'translation', key: 'countdown.cultural_note', default: 'விரைவில் முடிவடையும் சலுகை' %}
+    </p>
+  </div>
+</div>

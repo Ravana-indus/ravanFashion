@@ -1,0 +1,32 @@
+{
+  "current": {
+    "colors": {
+      "primary": "#8B4513",
+      "secondary": "#D2691E",
+      "accent": "#FF6B35",
+      "background": "#FFF8F0",
+      "text": "#2C1810"
+    },
+    "typography": {
+      "primary_font": "Playfair Display",
+      "secondary_font": "Inter",
+      "tamil_font": "Noto Sans Tamil"
+    },
+    "features": {
+      "language_toggle": true,
+      "mobile_optimized": true,
+      "accessibility_enhanced": true
+    },
+    "branding": {
+      "tamil_brand_name": "ரவன் ஃபேஷன்",
+      "brand_description": "Authentic Tamil heritage streetwear for the global diaspora",
+      "logo": null
+    },
+    "social": {
+      "facebook_link": "https://facebook.com/ravanfashion",
+      "instagram_link": "https://instagram.com/ravanfashion",
+      "twitter_link": "https://twitter.com/ravanfashion",
+      "youtube_link": "https://youtube.com/ravanfashion"
+    }
+  }
+}

@@ -1,0 +1,97 @@
+{%- comment -%}
+  Featured Collections Grid Snippet
+  Displays product collections in a responsive grid layout
+{%- endcomment -%}
+
+<div class="featured-collections">
+  <div class="text-center mb-12">
+    <h2 class="text-4xl font-bold text-charcoal-black mb-4">
+      {% render 'translation', key: 'collections.title', default: 'Featured Collections' %}
+    </h2>
+    <p class="text-xl text-gold font-tamil mb-2">
+      {% render 'translation', key: 'collections.subtitle_tamil', default: 'சிறப்பு தொகுப்புகள்' %}
+    </p>
+    <p class="text-gray-600 max-w-2xl mx-auto">
+      {% render 'translation', key: 'collections.description', default: 'Explore our curated collections that celebrate Tamil heritage through contemporary fashion.' %}
+    </p>
+  </div>
+
+  <div class="collections-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    {%- assign collections_to_show = collections | slice: 0, 6 -%}
+
+    {%- for collection in collections_to_show -%}
+      {%- if collection.handle != 'frontpage' and collection.handle != 'all' and collection.products_count > 0 -%}
+        <div class="collection-card group cursor-pointer transform transition-all duration-500 hover:scale-105" onclick="window.location.href='{{ collection.url }}'">
+          <!-- Collection Image -->
+          <div class="collection-image relative overflow-hidden rounded-lg mb-4 aspect-[4/3]">
+            {%- if collection.image -%}
+              <img
+                src="{{ collection.image | image_url: width: 600, height: 450, crop: 'center' }}"
+                alt="{{ collection.title | escape }}"
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                loading="lazy"
+              >
+            {%- elsif collection.products.first and collection.products.first.featured_image -%}
+              <img
+                src="{{ collection.products.first.featured_image | image_url: width: 600, height: 450, crop: 'center' }}"
+                alt="{{ collection.title | escape }}"
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                loading="lazy"
+              >
+            {%- else -%}
+              <div class="w-full h-full bg-gradient-to-br from-gold to-deep-maroon flex items-center justify-center">
+                <span class="text-6xl text-white font-tamil">ர</span>
+              </div>
+            {%- endif -%}
+
+            <!-- Overlay -->
+            <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-500 flex items-center justify-center">
+              <div class="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                <span class="text-2xl font-bold">{% render 'translation', key: 'collections.shop_now', default: 'Shop Now' %}</span>
+              </div>
+            </div>
+
+            <!-- Collection Badge -->
+            {%- if collection.metafields.custom.badge_text -%}
+              <div class="absolute top-4 left-4 bg-gold text-charcoal-black px-3 py-1 rounded-full text-sm font-semibold">
+                {{ collection.metafields.custom.badge_text }}
+              </div>
+            {%- endif -%}
+          </div>
+
+          <!-- Collection Info -->
+          <div class="collection-info text-center">
+            <h3 class="text-xl font-bold text-charcoal-black mb-2 group-hover:text-gold transition-colors">
+              {{ collection.title }}
+            </h3>
+            <p class="text-gray-600 text-sm mb-3 line-clamp-2">
+              {{ collection.description | strip_html | truncate: 100 }}
+            </p>
+            <div class="flex items-center justify-center space-x-4 text-sm text-gray-500">
+              <span class="flex items-center">
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                </svg>
+                {{ collection.products_count }} {% render 'translation', key: 'collections.products', default: 'products' %}
+              </span>
+            </div>
+
+            <!-- Cultural Tag -->
+            <div class="mt-3">
+              <span class="inline-block bg-gold bg-opacity-10 text-gold px-3 py-1 rounded-full text-xs font-medium">
+                {% render 'translation', key: 'collections.cultural_tag', default: 'Tamil Heritage' %}
+              </span>
+            </div>
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+
+  <!-- View All Collections Button -->
+  <div class="text-center mt-12">
+    <a href="/collections" class="inline-block bg-gold text-charcoal-black font-bold py-3 px-8 rounded-full hover:bg-yellow-500 transition-all duration-300 transform hover:scale-105">
+      {% render 'translation', key: 'collections.view_all', default: 'View All Collections' %}
+    </a>
+  </div>
+</div>

@@ -1,0 +1,58 @@
+<header class="sticky top-0 z-50 bg-cream-white border-b border-deep-maroon/20 backdrop-blur-sm" data-header>
+  <div class="container mx-auto px-4">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo with Tamil script -->
+      <div class="flex items-center space-x-2">
+        {% if settings.logo %}
+          <img
+            src="{{ settings.logo | image_url: width: 100 }}"
+            alt="{{ shop.name }}"
+            class="h-8 w-auto"
+            loading="lazy"
+          >
+        {% else %}
+          <div class="h-8 w-8 bg-deep-maroon rounded flex items-center justify-center">
+            <span class="text-white font-bold text-lg">R</span>
+          </div>
+        {% endif %}
+        <span class="font-tamil text-xl text-deep-maroon">{{ settings.tamil_brand_name }}</span>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <nav class="hidden lg:flex items-center space-x-8">
+        {% for link in linklists.main-menu.links %}
+          <a
+            href="{{ link.url }}"
+            class="text-charcoal-black hover:text-deep-maroon transition-colors duration-200 font-medium"
+          >
+            {{ link.title }}
+          </a>
+        {% endfor %}
+      </nav>
+
+      <!-- Actions -->
+      <div class="flex items-center space-x-4">
+        {% render 'language-toggle' %}
+        {% render 'search-toggle' %}
+        {% render 'cart-icon' %}
+        {% render 'mobile-menu-toggle' %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Navigation -->
+  <nav class="lg:hidden border-t border-deep-maroon/20 bg-cream-white">
+    <div class="container mx-auto px-4">
+      <div class="flex items-center justify-between h-12">
+        {% for link in linklists.main-menu.links %}
+          <a
+            href="{{ link.url }}"
+            class="text-charcoal-black hover:text-deep-maroon transition-colors duration-200 text-sm font-medium"
+          >
+            {{ link.title }}
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  </nav>
+</header>

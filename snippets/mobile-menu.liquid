@@ -1,0 +1,52 @@
+<div class="fixed inset-0 z-50 hidden" data-mobile-menu>
+  <div class="fixed inset-0 bg-black bg-opacity-50" onclick="window.theme.toggleMobileMenu()"></div>
+  <div class="fixed right-0 top-0 h-full w-full max-w-md bg-white shadow-xl transform translate-x-full transition-transform duration-300">
+    <div class="p-6 border-b border-gray-200">
+      <div class="flex items-center justify-between">
+        <h2 class="text-xl font-semibold text-charcoal-black">{% render 'translation', key: 'mobile.menu_title', default: 'Menu' %}</h2>
+        <button
+          class="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          onclick="window.theme.toggleMobileMenu()"
+          aria-label="{% render 'translation', key: 'accessibility.close_menu', default: 'Close menu' %}"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="p-6">
+      <nav class="space-y-4">
+        {% for link in linklists.main-menu.links %}
+          <a
+            href="{{ link.url }}"
+            class="block text-lg font-medium text-charcoal-black hover:text-deep-maroon transition-colors py-2"
+            onclick="window.theme.toggleMobileMenu()"
+          >
+            {{ link.title }}
+          </a>
+        {% endfor %}
+      </nav>
+
+      <div class="mt-8 pt-8 border-t border-gray-200">
+        <h3 class="font-semibold mb-4">{% render 'translation', key: 'footer.quick_links', default: 'Quick Links' %}</h3>
+        <nav class="space-y-2">
+          {% for link in linklists.footer-quick.links %}
+            <a
+              href="{{ link.url }}"
+              class="block text-charcoal-black hover:text-deep-maroon transition-colors py-1"
+              onclick="window.theme.toggleMobileMenu()"
+            >
+              {{ link.title }}
+            </a>
+          {% endfor %}
+        </nav>
+      </div>
+
+      <div class="mt-8 pt-8 border-t border-gray-200">
+        {% render 'language-toggle' %}
+      </div>
+    </div>
+  </div>
+</div>

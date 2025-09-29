@@ -1,0 +1,563 @@
+<!-- POD Mockup Display Snippet -->
+<div class="pod-mockup-display" data-product-id="{{ product.id }}">
+
+  <!-- Main Mockup Gallery -->
+  <div class="mockup-gallery">
+    {% if product.metafields.pod.mockups %}
+      {% for mockup in product.metafields.pod.mockups %}
+        <div class="mockup-item {% if forloop.first %}active{% endif %}" data-view="{{ mockup.view }}">
+          <img src="{{ mockup.url }}"
+               alt="{{ product.title }} - {{ mockup.view }} view"
+               class="mockup-image"
+               data-view="{{ mockup.view }}"
+               loading="lazy">
+          {% if mockup.cultural_overlay %}
+            <div class="cultural-overlay">
+              <span class="cultural-badge">{{ mockup.cultural_overlay }}</span>
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    {% else %}
+      <!-- Fallback mockup display -->
+      <div class="mockup-item active" data-view="front">
+        <img src="{{ product.featured_image | img_url: '800x800' }}"
+             alt="{{ product.title }}"
+             class="mockup-image"
+             data-view="front"
+             loading="lazy">
+        <div class="cultural-overlay">
+          <span class="cultural-badge">🌾 Heritage Design</span>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Mockup Controls -->
+  <div class="mockup-controls">
+    <button class="view-btn active" data-view="front" title="Front View">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
+      </svg>
+      Front
+    </button>
+    <button class="view-btn" data-view="back" title="Back View">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
+      </svg>
+      Back
+    </button>
+    {% if product.metafields.pod.mockups and product.metafields.pod.mockups.size > 2 %}
+      <button class="view-btn" data-view="side" title="Side View">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+        </svg>
+        Side
+      </button>
+      <button class="view-btn" data-view="detail" title="Detail View">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2l-5.5 9h11z M17.5 11L12 20l-5.5-9z M12 20l5.5-9h-11z"/>
+        </svg>
+        Detail
+      </button>
+    {% endif %}
+  </div>
+
+  <!-- Mockup Actions -->
+  <div class="mockup-actions">
+    <button class="action-btn zoom-btn" onclick="zoomMockup(this)" title="Zoom">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+      </svg>
+      Zoom
+    </button>
+    <button class="action-btn fullscreen-btn" onclick="fullscreenMockup(this)" title="Fullscreen">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+      </svg>
+      Fullscreen
+    </button>
+  </div>
+
+  <!-- Cultural Design Information -->
+  {% if product.metafields.pod.cultural_design %}
+    <div class="cultural-design-info">
+      <h3 class="cultural-title">🌾 Cultural Heritage Design</h3>
+      <div class="cultural-content">
+        <p class="cultural-description">
+          {{ product.metafields.pod.cultural_design.description }}
+        </p>
+
+        {% if product.metafields.pod.cultural_design.symbols %}
+          <div class="cultural-symbols">
+            <h4>Traditional Symbols:</h4>
+            <ul>
+              {% for symbol in product.metafields.pod.cultural_design.symbols %}
+                <li>
+                  <span class="symbol">{{ symbol.icon }}</span>
+                  <span class="meaning">{{ symbol.name }} - {{ symbol.meaning }}</span>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+
+        {% if product.metafields.pod.cultural_design.story %}
+          <div class="cultural-story">
+            <h4>Design Story:</h4>
+            <p>{{ product.metafields.pod.cultural_design.story }}</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+
+  <!-- Production Information -->
+  <div class="production-info">
+    <h4>🏭 Production Details</h4>
+    <div class="production-details">
+      <div class="detail-item">
+        <span class="detail-icon">⏱️</span>
+        <span class="detail-text">
+          Production: {{ product.metafields.pod.production_time | default: '2-5 business days' }}
+        </span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-icon">🌍</span>
+        <span class="detail-text">
+          Made in: {{ product.metafields.pod.production_location | default: 'Nearest facility' }}
+        </span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-icon">♻️</span>
+        <span class="detail-text">
+          {{ product.metafields.pod.sustainability_info | default: 'Sustainable materials' }}
+        </span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-icon">🎨</span>
+        <span class="detail-text">
+          Print: {{ product.metafields.pod.print_method | default: 'Direct-to-garment' }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quality Guarantee -->
+  <div class="quality-guarantee">
+    <h4>✨ Quality Guarantee</h4>
+    <p>
+      Each piece is carefully crafted with attention to cultural authenticity
+      and modern quality standards. We stand behind our products with a
+      satisfaction guarantee.
+    </p>
+    <div class="guarantee-badges">
+      <span class="badge">Premium Quality</span>
+      <span class="badge">Cultural Authenticity</span>
+      <span class="badge">Satisfaction Guaranteed</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const mockupDisplay = document.querySelector('.pod-mockup-display');
+  if (!mockupDisplay) return;
+
+  const viewButtons = mockupDisplay.querySelectorAll('.view-btn');
+  const mockupItems = mockupDisplay.querySelectorAll('.mockup-item');
+
+  // View switching functionality
+  viewButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const view = this.dataset.view;
+
+      // Update active button
+      viewButtons.forEach(btn => btn.classList.remove('active'));
+      this.classList.add('active');
+
+      // Update active mockup
+      mockupItems.forEach(item => {
+        if (item.dataset.view === view) {
+          item.classList.add('active');
+        } else {
+          item.classList.remove('active');
+        }
+      });
+    });
+  });
+
+  // Track mockup views
+  mockupItems.forEach(item => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          trackMockupView(item.dataset.view);
+        }
+      });
+    });
+
+    observer.observe(item);
+  });
+});
+
+function zoomMockup(button) {
+  const mockupDisplay = button.closest('.pod-mockup-display');
+  const activeMockup = mockupDisplay.querySelector('.mockup-item.active img');
+
+  if (!activeMockup) return;
+
+  const modal = document.createElement('div');
+  modal.className = 'mockup-zoom-modal';
+  modal.innerHTML = `
+    <div class="zoom-modal-content">
+      <img src="${activeMockup.src}" alt="${activeMockup.alt}" class="zoomed-image">
+      <button class="close-zoom" onclick="this.closest('.mockup-zoom-modal').remove()">&times;</button>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  // Close on background click
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.remove();
+    }
+  });
+
+  // Track zoom interaction
+  trackMockupInteraction('zoom');
+}
+
+function fullscreenMockup(button) {
+  const mockupDisplay = button.closest('.pod-mockup-display');
+  const activeMockup = mockupDisplay.querySelector('.mockup-item.active');
+
+  if (!activeMockup) return;
+
+  if (activeMockup.requestFullscreen) {
+    activeMockup.requestFullscreen();
+  } else if (activeMockup.webkitRequestFullscreen) {
+    activeMockup.webkitRequestFullscreen();
+  } else if (activeMockup.msRequestFullscreen) {
+    activeMockup.msRequestFullscreen();
+  }
+
+  trackMockupInteraction('fullscreen');
+}
+
+function trackMockupView(view) {
+  if (window.trackKlaviyoEvent) {
+    window.trackKlaviyoEvent('Mockup Viewed', {
+      view: view,
+      product_id: document.querySelector('.pod-mockup-display').dataset.productId
+    });
+  }
+}
+
+function trackMockupInteraction(action) {
+  if (window.trackKlaviyoEvent) {
+    window.trackKlaviyoEvent('Mockup Interaction', {
+      action: action,
+      product_id: document.querySelector('.pod-mockup-display').dataset.productId
+    });
+  }
+}
+</script>
+
+<style>
+.pod-mockup-display {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 2rem 0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.mockup-gallery {
+  position: relative;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.mockup-item {
+  display: none;
+  position: relative;
+}
+
+.mockup-item.active {
+  display: block;
+}
+
+.mockup-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  cursor: zoom-in;
+  transition: transform 0.2s;
+}
+
+.mockup-image:hover {
+  transform: scale(1.02);
+}
+
+.cultural-overlay {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(106, 27, 27, 0.9);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.cultural-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.mockup-controls {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.view-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border: 2px solid #D4AF37;
+  background: white;
+  color: #6A1B1B;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.view-btn:hover {
+  background: #FDF6EC;
+}
+
+.view-btn.active {
+  background: #6A1B1B;
+  color: white;
+  border-color: #6A1B1B;
+}
+
+.mockup-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid #E5E7EB;
+  background: white;
+  color: #4B5563;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.action-btn:hover {
+  background: #F3F4F6;
+  border-color: #D4AF37;
+}
+
+.cultural-design-info {
+  background: #FDF6EC;
+  border-left: 4px solid #D4AF37;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border-radius: 0 8px 8px 0;
+}
+
+.cultural-title {
+  color: #6A1B1B;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.cultural-symbols ul {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+.cultural-symbols li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+  color: #3A6A6A;
+}
+
+.cultural-story {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #E5E7EB;
+}
+
+.production-info {
+  margin-bottom: 2rem;
+}
+
+.production-info h4 {
+  color: #6A1B1B;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.production-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: #F9FAFB;
+  border-radius: 0.5rem;
+}
+
+.detail-icon {
+  font-size: 1.25rem;
+}
+
+.detail-text {
+  color: #4B5563;
+  font-size: 0.875rem;
+}
+
+.quality-guarantee {
+  text-align: center;
+  padding: 1.5rem;
+  background: #F3F4F6;
+  border-radius: 0.5rem;
+}
+
+.quality-guarantee h4 {
+  color: #6A1B1B;
+  margin-bottom: 1rem;
+}
+
+.quality-guarantee p {
+  color: #4B5563;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.guarantee-badges {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.badge {
+  background: #D4AF37;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* Modal Styles */
+.mockup-zoom-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.zoom-modal-content {
+  position: relative;
+  max-width: 90%;
+  max-height: 90%;
+}
+
+.zoomed-image {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 8px;
+}
+
+.close-zoom {
+  position: absolute;
+  top: -2rem;
+  right: 0;
+  background: white;
+  border: none;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.close-zoom:hover {
+  background: #F3F4F6;
+  transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+  .pod-mockup-display {
+    padding: 1rem;
+  }
+
+  .mockup-controls {
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+
+  .view-btn {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+  }
+
+  .mockup-actions {
+    gap: 0.5rem;
+  }
+
+  .production-details {
+    grid-template-columns: 1fr;
+  }
+
+  .guarantee-badges {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .detail-item {
+    padding: 0.5rem;
+  }
+}
+</style>

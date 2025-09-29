@@ -1,0 +1,44 @@
+{% render 'header' %}
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "text",
+      "id": "tamil_brand_name",
+      "label": "Tamil Brand Name",
+      "default": "ரவன் ஃபேஷன்"
+    },
+    {
+      "type": "textarea",
+      "id": "brand_description",
+      "label": "Brand Description",
+      "default": "Traditional Tamil fashion with contemporary style"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_language_toggle",
+      "label": "Show Language Toggle",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_search",
+      "label": "Enable Search",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_account",
+      "label": "Enable Account",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

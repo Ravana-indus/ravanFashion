@@ -1,0 +1,85 @@
+<footer class="bg-charcoal-black text-cream-white pt-12 pb-6">
+  <div class="container mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+      <!-- Brand Column -->
+      <div class="space-y-4">
+        <div class="flex items-center space-x-2">
+          {% if settings.logo %}
+            <img
+              src="{{ settings.logo | image_url: width: 100 }}"
+              alt="{{ shop.name }}"
+              class="h-8 w-auto"
+              loading="lazy"
+            >
+          {% else %}
+            <div class="h-8 w-8 bg-gold rounded flex items-center justify-center">
+              <span class="text-charcoal-black font-bold text-lg">R</span>
+            </div>
+          {% endif %}
+          <span class="font-tamil text-xl text-gold">{{ settings.tamil_brand_name }}</span>
+        </div>
+        <p class="text-sm text-gray-300">{{ settings.brand_description }}</p>
+        <div class="flex space-x-4">
+          {% render 'social-icons' %}
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div>
+        <h3 class="font-semibold mb-4 text-gold">
+          {% render 'translation', key: 'footer.quick_links', default: 'Quick Links' %}
+        </h3>
+        <ul class="space-y-2 text-sm">
+          {% for link in linklists.footer-quick.links %}
+            <li>
+              <a
+                href="{{ link.url }}"
+                class="text-gray-300 hover:text-gold transition-colors duration-200"
+              >
+                {{ link.title }}
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <!-- Legal -->
+      <div>
+        <h3 class="font-semibold mb-4 text-gold">
+          {% render 'translation', key: 'footer.legal', default: 'Legal' %}
+        </h3>
+        <ul class="space-y-2 text-sm">
+          {% for link in linklists.footer-legal.links %}
+            <li>
+              <a
+                href="{{ link.url }}"
+                class="text-gray-300 hover:text-gold transition-colors duration-200"
+              >
+                {{ link.title }}
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <!-- Newsletter -->
+      <div>
+        <h3 class="font-semibold mb-4 text-gold">
+          {% render 'translation', key: 'newsletter.title', default: 'Stay Connected' %}
+        </h3>
+        {% render 'newsletter-signup' %}
+      </div>
+    </div>
+
+    <!-- Bottom Bar with Cultural Pattern -->
+    <div class="border-t border-gray-700 pt-6 relative overflow-hidden">
+      <div class="absolute inset-0 opacity-5">
+        <div class="h-8 bg-repeat" style="background-image: url('data:image/svg+xml,%3Csvg width=\\'60\\' height=\\'60\\' viewBox=\\'0 0 60 60\\' xmlns=\\'http://www.w3.org/2000/svg\\'%3E%3Cg fill=\\'none\\' fill-rule=\\'evenodd\\'%3E%3Cg fill=\\'%23D4AF37\\'%3E%3Cpath d=\\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+      </div>
+      <div class="relative z-10 text-center text-sm text-gray-400">
+        <p>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</p>
+        <p class="mt-1">ரவன் ஃபேஷன் - Celebrating Tamil Heritage</p>
+      </div>
+    </div>
+  </div>
+</footer>

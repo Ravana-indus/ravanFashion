@@ -1,0 +1,378 @@
+<!-- Native Product Reviews Fallback -->
+<div class="native-reviews" data-product-id="{{ product.id }}">
+
+  <!-- Reviews Summary -->
+  <div class="native-reviews-summary mb-6 text-center">
+    {% assign review_count = product.metafields.reviews.count | default: 0 %}
+    {% assign average_rating = product.metafields.reviews.average | default: 0 %}
+
+    {% if review_count > 0 %}
+      <div class="rating-summary">
+        <div class="stars-display flex justify-center items-center mb-2">
+          {% for i in (1..5) %}
+            <svg class="w-6 h-6 {% if i <= average_rating %}text-gold{% else %}text-gray-300{% endif %}"
+                 fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+            </svg>
+          {% endfor %}
+        </div>
+        <p class="rating-text">
+          <span class="average-rating font-bold text-lg">{{ average_rating }}</span>
+          out of 5
+          <span class="review-count text-muted-teal">({{ review_count }} reviews)</span>
+        </p>
+      </div>
+    {% else %}
+      <div class="no-reviews-yet">
+        <p class="text-muted-teal">{{ 'reviews.no_reviews' | t }}</p>
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Write Review Form -->
+  <div class="native-review-form mb-8">
+    <div class="form-container bg-gold/10 rounded-lg p-6">
+      <h3 class="text-lg font-bold text-charcoal-black mb-4">
+        {{ 'reviews.write_review' | t }}
+      </h3>
+      <form id="native-review-form-{{ product.id }}" class="review-form">
+        <input type="hidden" name="product_id" value="{{ product.id }}">
+
+        <!-- Rating Input -->
+        <div class="form-group mb-4">
+          <label class="block text-sm font-medium text-charcoal-black mb-2">
+            Rating *
+          </label>
+          <div class="star-rating-input flex gap-1" data-rating="0">
+            {% for i in (1..5) %}
+              <button type="button"
+                      class="star-btn w-8 h-8 text-gray-300 hover:text-gold focus:outline-none focus:text-gold transition-colors"
+                      data-rating="{{ i }}">
+                <svg fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                </svg>
+              </button>
+            {% endfor %}
+          </div>
+          <input type="hidden" name="rating" value="0" required>
+        </div>
+
+        <!-- Review Title -->
+        <div class="form-group mb-4">
+          <label for="review-title-{{ product.id }}" class="block text-sm font-medium text-charcoal-black mb-2">
+            Review Title *
+          </label>
+          <input type="text"
+                 id="review-title-{{ product.id }}"
+                 name="title"
+                 required
+                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent">
+        </div>
+
+        <!-- Review Content -->
+        <div class="form-group mb-4">
+          <label for="review-content-{{ product.id }}" class="block text-sm font-medium text-charcoal-black mb-2">
+            Your Review *
+          </label>
+          <textarea id="review-content-{{ product.id }}"
+                    name="content"
+                    rows="4"
+                    required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent"></textarea>
+        </div>
+
+        <!-- Reviewer Name -->
+        <div class="form-group mb-4">
+          <label for="reviewer-name-{{ product.id }}" class="block text-sm font-medium text-charcoal-black mb-2">
+            Your Name *
+          </label>
+          <input type="text"
+                 id="reviewer-name-{{ product.id }}"
+                 name="reviewer_name"
+                 required
+                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent">
+        </div>
+
+        <!-- Reviewer Email -->
+        <div class="form-group mb-4">
+          <label for="reviewer-email-{{ product.id }}" class="block text-sm font-medium text-charcoal-black mb-2">
+            Email Address *
+          </label>
+          <input type="email"
+                 id="reviewer-email-{{ product.id }}"
+                 name="reviewer_email"
+                 required
+                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent">
+        </div>
+
+        <!-- Verified Purchase Checkbox -->
+        {% if customer %}
+          <div class="form-group mb-4">
+            <label class="flex items-center">
+              <input type="checkbox"
+                     name="verified_purchase"
+                     value="1"
+                     class="mr-2">
+              <span class="text-sm text-charcoal-black">
+                {{ 'reviews.verified_purchase' | t }}
+              </span>
+            </label>
+          </div>
+        {% endif %}
+
+        <button type="submit"
+                class="btn btn-primary w-full">
+          Submit Review
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Reviews List -->
+  <div class="native-reviews-list" id="reviews-list-{{ product.id }}">
+    <!-- Reviews will be loaded here via JavaScript -->
+    <div class="loading-reviews text-center py-8">
+      <p class="text-muted-teal">Loading reviews...</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// Native Reviews JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+  const productId = {{ product.id }};
+  const form = document.getElementById(`native-review-form-${productId}`);
+  const starButtons = form.querySelectorAll('.star-btn');
+  const ratingInput = form.querySelector('input[name="rating"]');
+  const reviewsList = document.getElementById(`reviews-list-${productId}`);
+
+  // Star rating functionality
+  starButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const rating = parseInt(this.dataset.rating);
+      ratingInput.value = rating;
+
+      // Update star display
+      starButtons.forEach((btn, index) => {
+        if (index < rating) {
+          btn.classList.remove('text-gray-300');
+          btn.classList.add('text-gold');
+        } else {
+          btn.classList.remove('text-gold');
+          btn.classList.add('text-gray-300');
+        }
+      });
+    });
+
+    button.addEventListener('mouseenter', function() {
+      const rating = parseInt(this.dataset.rating);
+      starButtons.forEach((btn, index) => {
+        if (index < rating) {
+          btn.classList.add('text-gold');
+        } else {
+          btn.classList.remove('text-gold');
+        }
+      });
+    });
+  });
+
+  // Reset star display on mouse leave
+  form.querySelector('.star-rating-input').addEventListener('mouseleave', function() {
+    const currentRating = parseInt(ratingInput.value);
+    starButtons.forEach((btn, index) => {
+      if (index < currentRating) {
+        btn.classList.add('text-gold');
+        btn.classList.remove('text-gray-300');
+      } else {
+        btn.classList.remove('text-gold');
+        btn.classList.add('text-gray-300');
+      }
+    });
+  });
+
+  // Form submission
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+    const submitButton = form.querySelector('button[type="submit"]');
+    const originalText = submitButton.textContent;
+
+    // Show loading state
+    submitButton.textContent = 'Submitting...';
+    submitButton.disabled = true;
+
+    try {
+      // Simulate review submission (replace with actual API call)
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // Show success message
+      showNotification('Review submitted successfully!', 'success');
+      form.reset();
+      ratingInput.value = '0';
+      starButtons.forEach(btn => {
+        btn.classList.remove('text-gold');
+        btn.classList.add('text-gray-300');
+      });
+
+      // Track review submission
+      if (window.trackKlaviyoEvent) {
+        window.trackKlaviyoEvent('Submitted Product Review', {
+          product_id: productId,
+          rating: parseInt(ratingInput.value),
+          reviews_app: 'native'
+        });
+      }
+
+    } catch (error) {
+      console.error('Review submission failed:', error);
+      showNotification('Failed to submit review. Please try again.', 'error');
+    } finally {
+      submitButton.textContent = originalText;
+      submitButton.disabled = false;
+    }
+  });
+
+  // Load existing reviews
+  loadReviews();
+
+  async function loadReviews() {
+    try {
+      // Simulate loading reviews (replace with actual API call)
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      // Sample reviews data (replace with actual API response)
+      const sampleReviews = [
+        {
+          id: 1,
+          rating: 5,
+          title: "Beautiful cultural design!",
+          content: "This piece perfectly captures Tamil heritage with modern style. The quality is exceptional.",
+          reviewer_name: "Priya R.",
+          date: "2024-01-15",
+          verified: true
+        },
+        {
+          id: 2,
+          rating: 4,
+          title: "Great quality and fit",
+          content: "Love the attention to detail and cultural elements. Would definitely recommend.",
+          reviewer_name: "Kumar S.",
+          date: "2024-01-10",
+          verified: false
+        }
+      ];
+
+      displayReviews(sampleReviews);
+    } catch (error) {
+      console.error('Failed to load reviews:', error);
+      reviewsList.innerHTML = '<p class="text-center text-muted-teal py-4">Failed to load reviews.</p>';
+    }
+  }
+
+  function displayReviews(reviews) {
+    if (reviews.length === 0) {
+      reviewsList.innerHTML = '<p class="text-center text-muted-teal py-4">No reviews yet.</p>';
+      return;
+    }
+
+    const reviewsHTML = reviews.map(review => `
+      <div class="review-item border border-gray-200 rounded-lg p-4 mb-4">
+        <div class="review-header flex justify-between items-start mb-2">
+          <div>
+            <div class="reviewer-name font-bold text-charcoal-black">${review.reviewer_name}</div>
+            <div class="review-date text-sm text-muted-teal">${formatDate(review.date)}</div>
+          </div>
+          ${review.verified ? '<span class="verified-badge bg-green-100 text-green-800 text-xs px-2 py-1 rounded">' + '{{ 'reviews.verified_purchase' | t }}' + '</span>' : ''}
+        </div>
+        <div class="review-rating flex mb-2">
+          ${generateStars(review.rating)}
+        </div>
+        <h4 class="review-title font-semibold text-charcoal-black mb-1">${review.title}</h4>
+        <p class="review-content text-muted-teal">${review.content}</p>
+      </div>
+    `).join('');
+
+    reviewsList.innerHTML = reviewsHTML;
+  }
+
+  function generateStars(rating) {
+    let stars = '';
+    for (let i = 1; i <= 5; i++) {
+      const filled = i <= rating ? 'text-gold' : 'text-gray-300';
+      stars += `<svg class="w-4 h-4 ${filled}" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+      </svg>`;
+    }
+    return stars;
+  }
+
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  }
+
+  function showNotification(message, type) {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `fixed top-4 right-4 px-4 py-2 rounded-md text-white z-50 ${
+      type === 'success' ? 'bg-green-500' : 'bg-red-500'
+    }`;
+    notification.textContent = message;
+
+    document.body.appendChild(notification);
+
+    // Remove notification after 3 seconds
+    setTimeout(() => {
+      notification.remove();
+    }, 3000);
+  }
+});
+</script>
+
+<style>
+.native-reviews {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.star-rating-input {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.star-btn {
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.review-item {
+  transition: box-shadow 0.2s;
+}
+
+.review-item:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.verified-badge {
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .native-reviews {
+    padding: 1rem;
+  }
+
+  .review-form {
+    font-size: 0.875rem;
+  }
+}
+</style>

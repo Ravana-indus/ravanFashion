@@ -1,0 +1,636 @@
+<style>
+  .back-in-stock {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #fef3f3 0%, #fefce8 100%);
+    border-radius: 0.75rem;
+    border: 2px dashed #dc2626;
+  }
+
+  .back-in-stock.dark-theme {
+    background: linear-gradient(135deg, #451a03 0%, #78350f 100%);
+    color: white;
+    border-color: #fbbf24;
+  }
+
+  .bis-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .bis-header h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #dc2626;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .bis-header .tamil-subtitle {
+    font-size: 0.875rem;
+    color: #7c1e1e;
+    font-weight: 500;
+  }
+
+  .bis-form {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .bis-form-group {
+    margin-bottom: 1rem;
+  }
+
+  .bis-form-label {
+    display: block;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  .bis-form-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+    background: white;
+  }
+
+  .bis-form-input:focus {
+    outline: none;
+    border-color: #dc2626;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+  }
+
+  .bis-form-select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    background: white;
+    cursor: pointer;
+  }
+
+  .bis-checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .bis-checkbox {
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 2px solid #d1d5db;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .bis-checkbox:checked {
+    background: #dc2626;
+    border-color: #dc2626;
+  }
+
+  .bis-checkbox-label {
+    font-size: 0.875rem;
+    color: #6b7280;
+    cursor: pointer;
+  }
+
+  .bis-submit-btn {
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    background: #dc2626;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .bis-submit-btn:hover:not(:disabled) {
+    background: #b91c1c;
+    transform: translateY(-1px);
+  }
+
+  .bis-submit-btn:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+  }
+
+  .bis-success {
+    text-align: center;
+    padding: 1rem;
+    background: #d1fae5;
+    border: 1px solid #10b981;
+    border-radius: 0.5rem;
+    color: #065f46;
+    margin-bottom: 1rem;
+  }
+
+  .bis-error {
+    text-align: center;
+    padding: 1rem;
+    background: #fee2e2;
+    border: 1px solid #ef4444;
+    border-radius: 0.5rem;
+    color: #991b1b;
+    margin-bottom: 1rem;
+  }
+
+  .bis-info {
+    text-align: center;
+    padding: 1rem;
+    background: #dbeafe;
+    border: 1px solid #3b82f6;
+    border-radius: 0.5rem;
+    color: #1e40af;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+  }
+
+  .bis-existing-notifications {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e5e7eb;
+  }
+
+  .bis-existing-header {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 1rem;
+  }
+
+  .bis-notification-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .bis-notification-info {
+    flex: 1;
+  }
+
+  .bis-notification-product {
+    font-weight: 600;
+    color: #1f2937;
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .bis-notification-details {
+    font-size: 0.75rem;
+    color: #6b7280;
+  }
+
+  .bis-notification-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .bis-remove-btn {
+    padding: 0.25rem 0.5rem;
+    background: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .bis-remove-btn:hover {
+    background: #dc2626;
+  }
+
+  .bis-privacy-notice {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #f3f4f6;
+    border-radius: 0.5rem;
+    font-size: 0.75rem;
+    color: #6b7280;
+    text-align: center;
+  }
+
+  .loading-spinner {
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  @media (max-width: 768px) {
+    .back-in-stock {
+      margin-top: 1.5rem;
+      padding: 1rem;
+    }
+
+    .bis-header h3 {
+      font-size: 1.125rem;
+    }
+
+    .bis-form {
+      max-width: 100%;
+    }
+  }
+</style>
+
+<div class="back-in-stock" id="back-in-stock">
+  <div class="bis-header">
+    <h3>
+      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
+        <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h6a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/>
+      </svg>
+      {{ 'back_in_stock.title' | t }}
+    </h3>
+    <div class="tamil-subtitle">{{ 'back_in_stock.subtitle_tamil' | t }}</div>
+  </div>
+
+  <div id="bis-content">
+    <!-- Info Message -->
+    <div class="bis-info">
+      <svg class="w-4 h-4 inline mr-1" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+      </svg>
+      {{ 'back_in_stock.info_message' | t }}
+    </div>
+
+    <!-- Success/Error Messages -->
+    <div id="bis-success" class="bis-success" style="display: none;">
+      {{ 'back_in_stock.success_message' | t }}
+    </div>
+
+    <div id="bis-error" class="bis-error" style="display: none;">
+      {{ 'back_in_stock.error_message' | t }}
+    </div>
+
+    <!-- Notification Form -->
+    <form class="bis-form" id="bis-form" onsubmit="window.theme.backInStock.submitForm(event)">
+      <div class="bis-form-group">
+        <label class="bis-form-label" for="bis-email">{{ 'back_in_stock.email_label' | t }}</label>
+        <input
+          type="email"
+          id="bis-email"
+          class="bis-form-input"
+          placeholder="{{ 'back_in_stock.email_placeholder' | t }}"
+          required
+        >
+      </div>
+
+      <div class="bis-form-group">
+        <label class="bis-form-label" for="bis-phone">{{ 'back_in_stock.phone_label' | t }}</label>
+        <input
+          type="tel"
+          id="bis-phone"
+          class="bis-form-input"
+          placeholder="{{ 'back_in_stock.phone_placeholder' | t }}"
+        >
+      </div>
+
+      <div class="bis-form-group">
+        <label class="bis-form-label" for="bis-variant">{{ 'back_in_stock.variant_label' | t }}</label>
+        <select id="bis-variant" class="bis-form-select">
+          <option value="">{{ 'back_in_stock.any_variant' | t }}</option>
+          <option value="size-s">{{ 'back_in_stock.size_s' | t }}</option>
+          <option value="size-m">{{ 'back_in_stock.size_m' | t }}</option>
+          <option value="size-l">{{ 'back_in_stock.size_l' | t }}</option>
+          <option value="size-xl">{{ 'back_in_stock.size_xl' | t }}</option>
+        </select>
+      </div>
+
+      <div class="bis-form-group">
+        <label class="bis-form-label" for="bis-priority">{{ 'back_in_stock.priority_label' | t }}</label>
+        <select id="bis-priority" class="bis-form-select">
+          <option value="normal">{{ 'back_in_stock.priority_normal' | t }}</option>
+          <option value="high">{{ 'back_in_stock.priority_high' | t }}</option>
+        </select>
+      </div>
+
+      <div class="bis-checkbox-group">
+        <input type="checkbox" id="bis-email-notifications" class="bis-checkbox" checked>
+        <label for="bis-email-notifications" class="bis-checkbox-label">
+          {{ 'back_in_stock.email_notifications' | t }}
+        </label>
+      </div>
+
+      <div class="bis-checkbox-group">
+        <input type="checkbox" id="bis-sms-notifications" class="bis-checkbox">
+        <label for="bis-sms-notifications" class="bis-checkbox-label">
+          {{ 'back_in_stock.sms_notifications' | t }}
+        </label>
+      </div>
+
+      <button type="submit" class="bis-submit-btn" id="bis-submit-btn">
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+          <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+        </svg>
+        {{ 'back_in_stock.notify_me' | t }}
+      </button>
+    </form>
+
+    <!-- Existing Notifications -->
+    <div class="bis-existing-notifications" id="bis-existing" style="display: none;">
+      <h4 class="bis-existing-header">{{ 'back_in_stock.existing_notifications' | t }}</h4>
+      <div id="bis-notifications-list">
+        <!-- Notifications will be loaded here -->
+      </div>
+    </div>
+
+    <!-- Privacy Notice -->
+    <div class="bis-privacy-notice">
+      {{ 'back_in_stock.privacy_notice' | t }}
+    </div>
+  </div>
+</div>
+
+<script>
+  // Back in Stock Notifications System
+  window.theme = window.theme || {};
+  window.theme.backInStock = window.theme.backInStock || {};
+
+  // Configuration
+  window.theme.backInStock.config = {
+    storageKey: 'ravan-back-in-stock',
+    maxNotifications: 10,
+    notificationTimeout: 5000
+  };
+
+  // State
+  window.theme.backInStock.notifications = [];
+  window.theme.backInStock.currentProduct = null;
+
+  // Initialize back in stock
+  window.theme.backInStock.init = function(productId, productData = null) {
+    window.theme.backInStock.currentProduct = {
+      id: productId,
+      title: productData?.title || 'Product Title',
+      variants: productData?.variants || []
+    };
+
+    window.theme.backInStock.loadNotifications();
+    window.theme.backInStock.renderExistingNotifications();
+  };
+
+  // Load notifications from localStorage
+  window.theme.backInStock.loadNotifications = function() {
+    try {
+      const stored = localStorage.getItem(window.theme.backInStock.config.storageKey);
+      if (stored) {
+        window.theme.backInStock.notifications = JSON.parse(stored);
+      }
+    } catch (error) {
+      console.warn('Failed to load back in stock notifications:', error);
+      window.theme.backInStock.notifications = [];
+    }
+  };
+
+  // Save notifications to localStorage
+  window.theme.backInStock.saveNotifications = function() {
+    try {
+      localStorage.setItem(
+        window.theme.backInStock.config.storageKey,
+        JSON.stringify(window.theme.backInStock.notifications)
+      );
+    } catch (error) {
+      console.warn('Failed to save back in stock notifications:', error);
+    }
+  };
+
+  // Submit form
+  window.theme.backInStock.submitForm = function(event) {
+    event.preventDefault();
+
+    const form = event.target;
+    const submitBtn = document.getElementById('bis-submit-btn');
+    const originalText = submitBtn.innerHTML;
+
+    // Show loading state
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<div class="loading-spinner"></div>';
+
+    // Get form data
+    const notification = {
+      id: Date.now() + Math.random(),
+      productId: window.theme.backInStock.currentProduct.id,
+      productTitle: window.theme.backInStock.currentProduct.title,
+      email: form.bis_email.value,
+      phone: form.bis_phone.value,
+      variant: form.bis_variant.value,
+      priority: form.bis_priority.value,
+      emailNotifications: form.bis_email_notifications.checked,
+      smsNotifications: form.bis_sms_notifications.checked,
+      createdAt: Date.now(),
+      status: 'active'
+    };
+
+    // Simulate API call
+    setTimeout(() => {
+      // Check if notification already exists
+      const exists = window.theme.backInStock.notifications.find(
+        n => n.productId === notification.productId &&
+             n.email === notification.email &&
+             n.variant === notification.variant
+      );
+
+      if (exists) {
+        window.theme.backInStock.showError('back_in_stock.already_subscribed');
+      } else {
+        // Add notification
+        window.theme.backInStock.notifications.unshift(notification);
+
+        // Limit notifications
+        window.theme.backInStock.notifications = window.theme.backInStock.notifications.slice(
+          0, window.theme.backInStock.config.maxNotifications
+        );
+
+        window.theme.backInStock.saveNotifications();
+        window.theme.backInStock.showSuccess();
+        window.theme.backInStock.renderExistingNotifications();
+        form.reset();
+
+        // Track analytics
+        window.theme.backInStock.trackAnalytics('notification_subscribed', notification);
+      }
+
+      // Reset button
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalText;
+    }, 1500);
+  };
+
+  // Remove notification
+  window.theme.backInStock.removeNotification = function(notificationId) {
+    if (confirm('{{ 'back_in_stock.confirm_remove' | t }}')) {
+      window.theme.backInStock.notifications = window.theme.backInStock.notifications.filter(
+        n => n.id !== notificationId
+      );
+      window.theme.backInStock.saveNotifications();
+      window.theme.backInStock.renderExistingNotifications();
+      window.theme.showNotification('{{ 'back_in_stock.notification_removed' | t }}', 'success');
+    }
+  };
+
+  // Render existing notifications for current product
+  window.theme.backInStock.renderExistingNotifications = function() {
+    const container = document.getElementById('bis-existing');
+    const list = document.getElementById('bis-notifications-list');
+
+    const productNotifications = window.theme.backInStock.notifications.filter(
+      n => n.productId === window.theme.backInStock.currentProduct.id
+    );
+
+    if (productNotifications.length === 0) {
+      container.style.display = 'none';
+      return;
+    }
+
+    container.style.display = 'block';
+
+    list.innerHTML = productNotifications.map(notification => `
+      <div class="bis-notification-item">
+        <div class="bis-notification-info">
+          <div class="bis-notification-product">${notification.productTitle}</div>
+          <div class="bis-notification-details">
+            ${notification.email} • ${window.theme.backInStock.getVariantLabel(notification.variant)} •
+            {{ 'back_in_stock.priority_' + notification.priority | t }}
+          </div>
+        </div>
+        <div class="bis-notification-actions">
+          <button class="bis-remove-btn" onclick="window.theme.backInStock.removeNotification('${notification.id}')">
+            {{ 'back_in_stock.remove' | t }}
+          </button>
+        </div>
+      </div>
+    `).join('');
+  };
+
+  // Get variant label
+  window.theme.backInStock.getVariantLabel = function(variant) {
+    const labels = {
+      '': '{{ 'back_in_stock.any_variant' | t }}',
+      'size-s': '{{ 'back_in_stock.size_s' | t }}',
+      'size-m': '{{ 'back_in_stock.size_m' | t }}',
+      'size-l': '{{ 'back_in_stock.size_l' | t }}',
+      'size-xl': '{{ 'back_in_stock.size_xl' | t }}'
+    };
+    return labels[variant] || variant;
+  };
+
+  // Show success message
+  window.theme.backInStock.showSuccess = function() {
+    const success = document.getElementById('bis-success');
+    const error = document.getElementById('bis-error');
+
+    error.style.display = 'none';
+    success.style.display = 'block';
+
+    setTimeout(() => {
+      success.style.display = 'none';
+    }, window.theme.backInStock.config.notificationTimeout);
+  };
+
+  // Show error message
+  window.theme.backInStock.showError = function(key) {
+    const success = document.getElementById('bis-success');
+    const error = document.getElementById('bis-error');
+
+    success.style.display = 'none';
+    error.style.display = 'block';
+    error.textContent = '{{ key | t }}';
+
+    setTimeout(() => {
+      error.style.display = 'none';
+    }, window.theme.backInStock.config.notificationTimeout);
+  };
+
+  // Track analytics (mock implementation)
+  window.theme.backInStock.trackAnalytics = function(event, data) {
+    // In real implementation, this would send to Google Analytics, Mixpanel, etc.
+    console.log('Analytics Event:', event, data);
+  };
+
+  // Simulate stock notification (for demo purposes)
+  window.theme.backInStock.simulateStockNotification = function(productId) {
+    const notifications = window.theme.backInStock.notifications.filter(
+      n => n.productId === productId && n.status === 'active'
+    );
+
+    notifications.forEach(notification => {
+      if (notification.emailNotifications) {
+        window.theme.showNotification(
+          `📧 {{ 'back_in_stock.stock_email_sent' | t }}: ${notification.productTitle}`,
+          'success'
+        );
+      }
+
+      if (notification.smsNotifications && notification.phone) {
+        window.theme.showNotification(
+          `📱 {{ 'back_in_stock.stock_sms_sent' | t }}: ${notification.productTitle}`,
+          'success'
+        );
+      }
+
+      // Update notification status
+      notification.status = 'sent';
+      notification.sentAt = Date.now();
+    });
+
+    window.theme.backInStock.saveNotifications();
+    window.theme.backInStock.renderExistingNotifications();
+  };
+
+  // Public method to get notifications count
+  window.theme.backInStock.getNotificationsCount = function() {
+    return window.theme.backInStock.notifications.filter(n => n.status === 'active').length;
+  };
+
+  // Public method to clear all notifications
+  window.theme.backInStock.clearAllNotifications = function() {
+    if (confirm('{{ 'back_in_stock.confirm_clear_all' | t }}')) {
+      window.theme.backInStock.notifications = [];
+      window.theme.backInStock.saveNotifications();
+      window.theme.backInStock.renderExistingNotifications();
+      window.theme.showNotification('{{ 'back_in_stock.all_cleared' | t }}', 'success');
+    }
+  };
+
+  // Initialize when DOM is loaded
+  document.addEventListener('DOMContentLoaded', function() {
+    if (document.getElementById('back-in-stock')) {
+      // Auto-initialize with mock product data for demo
+      window.theme.backInStock.init(123, {
+        title: 'Traditional Tamil Silk Saree',
+        variants: ['size-s', 'size-m', 'size-l', 'size-xl']
+      });
+    }
+  });
+</script>

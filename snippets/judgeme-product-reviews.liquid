@@ -1,0 +1,225 @@
+<!-- Judge.me Product Reviews Integration -->
+<div class="judgeme-reviews" data-product-id="{{ product.id }}">
+
+  <!-- Reviews Summary -->
+  <div class="jdgm-rev-widg"
+       data-id="{{ product.id }}"
+       data-auto-install="false">
+    {{ product.metafields.judgeme.badge }}
+  </div>
+
+  <!-- Reviews List -->
+  <div class="jdgm-review-widget"
+       data-product-title="{{ product.title }}"
+       data-product-id="{{ product.id }}"
+       data-auto-install="false">
+    {{ product.metafields.judgeme.widget }}
+  </div>
+
+</div>
+
+<!-- Judge.me Script Integration -->
+<script>
+// Judge.me configuration
+window.jdgmSettings = window.jdgmSettings || {
+  shopDomain: '{{ shop.permanent_domain }}',
+  platform: 'shopify',
+  widgetVersion: '3.0',
+  customizations: {
+    primaryColor: '#6A1B1B',
+    accentColor: '#D4AF37',
+    backgroundColor: '#FDF6EC',
+    textColor: '#1C1C1C',
+    fontFamily: 'Inter, sans-serif',
+    starColor: '#D4AF37',
+    verifiedBadgeColor: '#10B981',
+    buttonColor: '#6A1B1B',
+    buttonHoverColor: '#8B0000'
+  },
+  widgetConfig: {
+    enableReviewPhotos: true,
+    enableReviewVideos: true,
+    hideEmptyReviews: false,
+    reviewsPerPage: {{ settings.reviews_per_page | default: 10 }},
+    sortOptions: ['newest', 'oldest', 'highest-rating', 'lowest-rating', 'most-helpful'],
+    defaultSort: 'newest',
+    showVerifiedBadge: true,
+    showMediaThumbnails: true,
+    showCustomerQuestions: true
+  },
+  translations: {
+    writeReview: '{{ "reviews.write_review" | t }}',
+    helpful: '{{ "reviews.helpful" | t }}',
+    verified: '{{ "reviews.verified_purchase" | t }}',
+    newest: '{{ "reviews.newest" | t }}',
+    oldest: '{{ "reviews.oldest" | t }}',
+    highest: '{{ "reviews.highest_rated" | t }}',
+    lowest: '{{ "reviews.lowest_rated" | t }}',
+    mostHelpful: '{{ "reviews.most_helpful" | t }}',
+    photoReviews: '{{ "reviews.photo_reviews" | t }}',
+    allReviews: '{{ "reviews.all_reviews" | t }}',
+    verifiedOnly: '{{ "reviews.verified_only" | t }}',
+    mediaOnly: '{{ "reviews.media_only" | t }}',
+    noReviews: '{{ "reviews.no_reviews" | t }}',
+    sortBy: '{{ "reviews.sort_by" | t }}',
+    filterBy: '{{ "reviews.filter_by" | t }}'
+  },
+  locale: '{{ request.locale.iso_code }}'
+};
+
+// Load Judge.me script
+(function() {
+  if (window.jdgmLoaded) return;
+
+  const script = document.createElement('script');
+  script.src = 'https://cdn.judge.me/{{ settings.judgeme_shop_domain }}/widget.js';
+  script.async = true;
+  script.setAttribute('data-judgeme-install', 'true');
+  document.head.appendChild(script);
+
+  window.jdgmLoaded = true;
+
+  // Track review views
+  if (window.trackKlaviyoEvent) {
+    window.trackKlaviyoEvent('Viewed Product Reviews', {
+      product_id: {{ product.id }},
+      product_name: '{{ product.title | escape }}',
+      reviews_app: 'judgeme'
+    });
+  }
+
+  // Custom styling injection
+  const customStyles = document.createElement('style');
+  customStyles.textContent = `
+    .jdgm-widget {
+      font-family: 'Inter', sans-serif !important;
+      background: white !important;
+      border-radius: 12px !important;
+      padding: 2rem !important;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .jdgm-prev-badge__text {
+      color: #1C1C1C !important;
+    }
+
+    .jdgm-prev-badge__stars {
+      color: #D4AF37 !important;
+    }
+
+    .jdgm-star {
+      color: #D4AF37 !important;
+    }
+
+    .jdgm-rev {
+      border: 1px solid #E5E7EB !important;
+      border-radius: 8px !important;
+      margin-bottom: 1rem !important;
+      padding: 1.5rem !important;
+      background: white !important;
+      transition: all 0.2s !important;
+    }
+
+    .jdgm-rev:hover {
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .jdgm-rev__header {
+      border-bottom: 1px solid #E5E7EB !important;
+      padding-bottom: 0.75rem !important;
+      margin-bottom: 1rem !important;
+    }
+
+    .jdgm-rev__author {
+      color: #6A1B1B !important;
+      font-weight: 600 !important;
+    }
+
+    .jdgm-rev__timestamp {
+      color: #6B7280 !important;
+      font-size: 0.875rem !important;
+    }
+
+    .jdgm-rev__body {
+      color: #1C1C1C !important;
+      line-height: 1.6 !important;
+    }
+
+    .jdgm-rev__buyer-badge {
+      background-color: #D1FAE5 !important;
+      color: #065F46 !important;
+      padding: 2px 8px !important;
+      border-radius: 4px !important;
+      font-size: 0.75rem !important;
+    }
+
+    .jdgm-write-rev-link {
+      background-color: #6A1B1B !important;
+      color: white !important;
+      border: none !important;
+      padding: 0.75rem 1.5rem !important;
+      border-radius: 0.5rem !important;
+      font-weight: 600 !important;
+      transition: all 0.2s !important;
+      display: inline-block !important;
+      text-decoration: none !important;
+    }
+
+    .jdgm-write-rev-link:hover {
+      background-color: #8B0000 !important;
+      transform: translateY(-2px) !important;
+    }
+
+    .jdgm-sort-dropdown {
+      border: 1px solid #D4AF37 !important;
+      border-radius: 0.5rem !important;
+      padding: 0.5rem !important;
+      background-color: white !important;
+      color: #1C1C1C !important;
+    }
+
+    .jdgm-paginate {
+      margin-top: 2rem !important;
+    }
+
+    .jdgm-paginate__page {
+      background-color: white !important;
+      border: 1px solid #D4AF37 !important;
+      color: #6A1B1B !important;
+      margin: 0 0.25rem !important;
+      padding: 0.5rem 0.75rem !important;
+      border-radius: 0.25rem !important;
+      transition: all 0.2s !important;
+    }
+
+    .jdgm-paginate__page:hover {
+      background-color: #D4AF37 !important;
+      color: white !important;
+    }
+
+    .jdgm-paginate__page--current {
+      background-color: #6A1B1B !important;
+      color: white !important;
+      border-color: #6A1B1B !important;
+    }
+
+    @media (max-width: 768px) {
+      .jdgm-widget {
+        padding: 1rem !important;
+      }
+
+      .jdgm-rev {
+        padding: 1rem !important;
+        margin-bottom: 0.75rem !important;
+      }
+
+      .jdgm-write-rev-link {
+        width: 100% !important;
+        text-align: center !important;
+      }
+    }
+  `;
+
+  document.head.appendChild(customStyles);
+})();
+</script>

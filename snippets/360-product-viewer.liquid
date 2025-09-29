@@ -1,0 +1,1173 @@
+{%- comment -%}
+360° Product Viewer Snippet
+Interactive 360-degree product viewer with rotation, zoom, and hotspots
+{%- endcomment -%}
+
+<div class="360-product-viewer" data-section-id="{{ section.id }}" data-product-id="{{ product.id }}">
+  <!-- 360° Viewer Container -->
+  <div class="viewer-container relative bg-gray-50 rounded-lg overflow-hidden" role="region" aria-label="{{ 'products.360_viewer.title' | t }}">
+
+    <!-- Main 360° Display -->
+    <div class="main-360-display relative aspect-square bg-white" id="360-display">
+      <canvas
+        id="360-canvas"
+        class="w-full h-full cursor-grab active:cursor-grabbing"
+        role="img"
+        aria-label="{{ 'products.360_viewer.interactive_product_view' | t }}"
+        tabindex="0"
+      ></canvas>
+
+      <!-- Loading Indicator -->
+      <div class="loading-indicator absolute inset-0 bg-white bg-opacity-90 flex items-center justify-center" role="status" aria-live="polite">
+        <div class="text-center">
+          <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-yellow-400 mx-auto mb-4"></div>
+          <p class="text-gray-600">{{ 'products.360_viewer.loading_images' | t }}</p>
+          <div class="progress-bar mt-2 w-48 bg-gray-200 rounded-full h-2">
+            <div class="progress-fill bg-yellow-400 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rotation Controls -->
+      <div class="rotation-controls absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-60 rounded-full px-4 py-2 flex items-center gap-4">
+        <button
+          class="rotate-btn p-2 text-white hover:text-yellow-400 transition-colors"
+          aria-label="{{ 'products.360_viewer.rotate_left' | t }}"
+          data-action="rotate-left"
+        >
+          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"/>
+          </svg>
+        </button>
+
+        <button
+          class="play-pause-rotation p-2 text-white hover:text-yellow-400 transition-colors"
+          aria-label="{{ 'products.360_viewer.auto_rotate' | t }}"
+          data-action="toggle-auto-rotate"
+        >
+          <svg class="w-6 h-6 play-icon" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"/>
+          </svg>
+          <svg class="w-6 h-6 pause-icon hidden" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z"/>
+          </svg>
+        </button>
+
+        <button
+          class="rotate-btn p-2 text-white hover:text-yellow-400 transition-colors"
+          aria-label="{{ 'products.360_viewer.rotate_right' | t }}"
+          data-action="rotate-right"
+        >
+          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Zoom Controls -->
+      <div class="zoom-controls absolute top-4 right-4 bg-black bg-opacity-60 rounded-lg p-2 flex flex-col gap-2">
+        <button
+          class="zoom-btn p-2 text-white hover:text-yellow-400 transition-colors"
+          aria-label="{{ 'products.360_viewer.zoom_in' | t }}"
+          data-action="zoom-in"
+        >
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"/>
+            <path fill-rule="evenodd" d="M8 5a1 1 0 011 1v1h1a1 1 0 110 2H9v1a1 1 0 11-2 0V9H6a1 1 0 110-2h1V6a1 1 0 011-1z"/>
+          </svg>
+        </button>
+
+        <div class="zoom-level text-white text-xs text-center py-1">
+          <span id="zoom-percentage">100%</span>
+        </div>
+
+        <button
+          class="zoom-btn p-2 text-white hover:text-yellow-400 transition-colors"
+          aria-label="{{ 'products.360_viewer.zoom_out' | t }}"
+          data-action="zoom-out"
+        >
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"/>
+            <path fill-rule="evenodd" d="M5 8a1 1 0 011-1h4a1 1 0 110 2H6a1 1 0 01-1-1z"/>
+          </svg>
+        </button>
+
+        <button
+          class="zoom-btn p-2 text-white hover:text-yellow-400 transition-colors"
+          aria-label="{{ 'products.360_viewer.reset_zoom' | t }}"
+          data-action="reset-zoom"
+        >
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- View Mode Selector -->
+      <div class="view-mode-selector absolute top-4 left-4 bg-black bg-opacity-60 rounded-lg p-2">
+        <button
+          class="mode-btn p-2 text-white hover:text-yellow-400 transition-colors active"
+          aria-label="{{ 'products.360_viewer.spin_mode' | t }}"
+          data-mode="spin"
+          title="{{ 'products.360_viewer.spin_mode' | t }}"
+        >
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"/>
+          </svg>
+        </button>
+
+        <button
+          class="mode-btn p-2 text-white hover:text-yellow-400 transition-colors"
+          aria-label="{{ 'products.360_viewer.orbit_mode' | t }}"
+          data-mode="orbit"
+          title="{{ 'products.360_viewer.orbit_mode' | t }}"
+        >
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+            <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"/>
+          </svg>
+        </button>
+
+        <button
+          class="mode-btn p-2 text-white hover:text-yellow-400 transition-colors"
+          aria-label="{{ 'products.360_viewer.pan_mode' | t }}"
+          data-mode="pan"
+          title="{{ 'products.360_viewer.pan_mode' | t }}"
+        >
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Hotspots -->
+      <div class="hotspots-container absolute inset-0 pointer-events-none" id="hotspots-container">
+        <!-- Hotspots will be dynamically added here -->
+      </div>
+
+      <!-- Fullscreen Button -->
+      <button
+        class="fullscreen-btn absolute bottom-4 right-4 bg-black bg-opacity-60 text-white p-3 rounded-full hover:bg-opacity-80 transition-all"
+        aria-label="{{ 'products.360_viewer.fullscreen' | t }}"
+        data-action="toggle-fullscreen"
+      >
+        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+          <path class="enter-fullscreen-icon" fill-rule="evenodd" d="M3 4a1 1 0 011-1h4a1 1 0 010 2H6.414l2.293 2.293a1 1 0 11-1.414 1.414L5 6.414V8a1 1 0 01-2 0V4zm9 1a1 1 0 110-2h4a1 1 0 011 1v4a1 1 0 11-2 0V6.414l-2.293 2.293a1 1 0 11-1.414-1.414L13.586 5H12zm-9 7a1 1 0 012 0v1.586l2.293-2.293a1 1 0 111.414 1.414L6.414 15H8a1 1 0 110 2H4a1 1 0 01-1-1v-4zm13-1a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 110-2h1.586l-2.293-2.293a1 1 0 111.414-1.414L15 13.586V12a1 1 0 011-1z"/>
+          <path class="exit-fullscreen-icon hidden" fill-rule="evenodd" d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Thumbnail Strip -->
+    <div class="thumbnail-strip mt-4 bg-gray-100 rounded-lg p-4">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-lg font-semibold text-gray-900">{{ 'products.360_viewer.360_views' | t }}</h3>
+        <div class="thumbnail-controls flex items-center gap-2">
+          <button
+            class="thumb-nav-btn p-2 rounded-lg bg-gray-300 hover:bg-gray-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            aria-label="{{ 'products.360_viewer.previous_view' | t }}"
+            data-thumb-direction="prev"
+          >
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"/>
+            </svg>
+          </button>
+          <button
+            class="thumb-nav-btn p-2 rounded-lg bg-gray-300 hover:bg-gray-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            aria-label="{{ 'products.360_viewer.next_view' | t }}"
+            data-thumb-direction="next"
+          >
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="thumbnail-container flex gap-3 overflow-x-auto" id="thumbnail-container">
+        <!-- Thumbnails will be dynamically added here -->
+      </div>
+    </div>
+
+    <!-- 360° Settings Panel -->
+    <div class="settings-panel mt-6 bg-white rounded-lg border border-gray-200 p-6">
+      <h3 class="text-lg font-semibold text-gray-900 mb-4">{{ 'products.360_viewer.viewer_settings' | t }}</h3>
+
+      <div class="settings-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Rotation Speed -->
+        <div class="setting-group">
+          <label class="block text-sm font-medium text-gray-700 mb-2">{{ 'products.360_viewer.rotation_speed' | t }}</label>
+          <input type="range" id="rotation-speed" min="1" max="10" value="5" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+          <div class="flex justify-between text-xs text-gray-500 mt-1">
+            <span>Slow</span>
+            <span>Fast</span>
+          </div>
+        </div>
+
+        <!-- Auto-rotate -->
+        <div class="setting-group">
+          <label class="block text-sm font-medium text-gray-700 mb-2">{{ 'products.360_viewer.auto_rotate' | t }}</label>
+          <div class="toggle-switch">
+            <input type="checkbox" id="auto-rotate-toggle" class="sr-only">
+            <label for="auto-rotate-toggle" class="flex items-center cursor-pointer">
+              <div class="relative">
+                <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
+                <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+              </div>
+              <div class="ml-3 text-gray-700 font-medium">{{ 'products.360_viewer.enabled' | t }}</div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Show Hotspots -->
+        <div class="setting-group">
+          <label class="block text-sm font-medium text-gray-700 mb-2">{{ 'products.360_viewer.show_hotspots' | t }}</label>
+          <div class="toggle-switch">
+            <input type="checkbox" id="hotspots-toggle" class="sr-only" checked>
+            <label for="hotspots-toggle" class="flex items-center cursor-pointer">
+              <div class="relative">
+                <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
+                <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+              </div>
+              <div class="ml-3 text-gray-700 font-medium">{{ 'products.360_viewer.enabled' | t }}</div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Image Quality -->
+        <div class="setting-group">
+          <label class="block text-sm font-medium text-gray-700 mb-2">{{ 'products.360_viewer.image_quality' | t }}</label>
+          <select id="image-quality" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent">
+            <option value="low">{{ 'products.360_viewer.low_quality' | t }}</option>
+            <option value="medium" selected>{{ 'products.360_viewer.medium_quality' | t }}</option>
+            <option value="high">{{ 'products.360_viewer.high_quality' | t }}</option>
+          </select>
+        </div>
+
+        <!-- Frame Count -->
+        <div class="setting-group">
+          <label class="block text-sm font-medium text-gray-700 mb-2">{{ 'products.360_viewer.frame_count' | t }}</label>
+          <select id="frame-count" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent">
+            <option value="24">24 frames</option>
+            <option value="36" selected>36 frames</option>
+            <option value="48">48 frames</option>
+            <option value="72">72 frames</option>
+          </select>
+        </div>
+
+        <!-- Inertia -->
+        <div class="setting-group">
+          <label class="block text-sm font-medium text-gray-700 mb-2">{{ 'products.360_viewer.inertia' | t }}</label>
+          <div class="toggle-switch">
+            <input type="checkbox" id="inertia-toggle" class="sr-only" checked>
+            <label for="inertia-toggle" class="flex items-center cursor-pointer">
+              <div class="relative">
+                <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
+                <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+              </div>
+              <div class="ml-3 text-gray-700 font-medium">{{ 'products.360_viewer.enabled' | t }}</div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-actions mt-6 flex gap-3">
+        <button class="save-settings-btn px-6 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors" data-action="save-settings">
+          {{ 'products.360_viewer.save_settings' | t }}
+        </button>
+        <button class="reset-settings-btn px-6 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors" data-action="reset-settings">
+          {{ 'products.360_viewer.reset_settings' | t }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Product Information Panel -->
+    <div class="info-panel mt-6 bg-blue-50 rounded-lg p-6">
+      <h3 class="text-lg font-semibold text-gray-900 mb-4">{{ 'products.360_viewer.product_information' | t }}</h3>
+
+      <div class="info-grid grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <h4 class="font-medium text-gray-900 mb-2">{{ 'products.360_viewer.current_view' | t }}</h4>
+          <div class="view-info flex items-center gap-4">
+            <div class="view-angle text-2xl font-bold text-blue-600" id="current-angle">0°</div>
+            <div class="view-details text-sm text-gray-600">
+              <div>{{ 'products.360_viewer.frame' | t }} <span id="current-frame">1</span> / <span id="total-frames">36</span></div>
+              <div>{{ 'products.360_viewer.zoom_level' | t }} <span id="current-zoom">100%</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="font-medium text-gray-900 mb-2">{{ 'products.360_viewer.interactions' | t }}</h4>
+          <div class="interaction-stats grid grid-cols-2 gap-4 text-sm">
+            <div class="stat-item">
+              <div class="stat-value text-lg font-bold text-green-600" id="rotation-count">0</div>
+              <div class="stat-label text-gray-600">{{ 'products.360_viewer.rotations' | t }}</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value text-lg font-bold text-purple-600" id="zoom-count">0</div>
+              <div class="stat-label text-gray-600">{{ 'products.360_viewer.zooms' | t }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* 360° Viewer Styles */
+.viewer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.main-360-display {
+  position: relative;
+  overflow: hidden;
+}
+
+#360-canvas {
+  display: block;
+  touch-action: none;
+}
+
+.loading-indicator {
+  backdrop-filter: blur(4px);
+}
+
+.rotation-controls,
+.zoom-controls,
+.view-mode-selector {
+  backdrop-filter: blur(8px);
+}
+
+.mode-btn.active {
+  color: #d4af37;
+  background-color: rgba(212, 175, 55, 0.2);
+  border-radius: 0.375rem;
+}
+
+.thumbnail-container {
+  scrollbar-width: thin;
+  scrollbar-color: #d4af37 #f3f4f6;
+}
+
+.thumbnail-container::-webkit-scrollbar {
+  height: 6px;
+}
+
+.thumbnail-container::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 3px;
+}
+
+.thumbnail-container::-webkit-scrollbar-thumb {
+  background: #d4af37;
+  border-radius: 3px;
+}
+
+.thumbnail-item {
+  flex-shrink: 0;
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.thumbnail-item:hover {
+  transform: scale(1.05);
+  border-color: #d4af37;
+}
+
+.thumbnail-item.active {
+  border-color: #6a1b1b;
+}
+
+.thumbnail-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hotspot {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  background-color: #d4af37;
+  border: 2px solid white;
+  border-radius: 50%;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: all 0.3s ease;
+  animation: pulse 2s infinite;
+}
+
+.hotspot:hover {
+  transform: scale(1.2);
+  background-color: #6a1b1b;
+}
+
+.hotspot-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  margin-bottom: 8px;
+}
+
+.hotspot:hover .hotspot-tooltip {
+  opacity: 1;
+}
+
+.hotspot-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: rgba(0, 0, 0, 0.9);
+}
+
+.toggle-switch input:checked + label .dot {
+  transform: translateX(100%);
+  background-color: #d4af37;
+}
+
+.toggle-switch input:checked + label .block {
+  background-color: #d4af37;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(212, 175, 55, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(212, 175, 55, 0);
+  }
+}
+
+/* Range Slider Styling */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-track {
+  background: #e5e7eb;
+  height: 8px;
+  border-radius: 4px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  background: #d4af37;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  margin-top: -6px;
+}
+
+input[type="range"]::-moz-range-track {
+  background: #e5e7eb;
+  height: 8px;
+  border-radius: 4px;
+  border: none;
+}
+
+input[type="range"]::-moz-range-thumb {
+  background: #d4af37;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  border: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .zoom-controls,
+  .view-mode-selector {
+    top: 2px;
+    right: 2px;
+    padding: 1px;
+  }
+
+  .rotation-controls {
+    bottom: 2px;
+    padding: 4px;
+  }
+}
+</style>
+
+<script>
+// 360° Product Viewer JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+  class Product360Viewer {
+    constructor(container) {
+      this.container = container;
+      this.canvas = container.querySelector('#360-canvas');
+      this.ctx = this.canvas.getContext('2d');
+      this.images = [];
+      this.currentFrame = 0;
+      this.totalFrames = 36;
+      this.isLoading = true;
+      this.isAutoRotating = false;
+      this.rotationSpeed = 5;
+      this.zoom = 1;
+      this.maxZoom = 3;
+      this.minZoom = 0.5;
+      this.viewMode = 'spin'; // spin, orbit, pan
+      this.settings = {
+        autoRotate: false,
+        showHotspots: true,
+        imageQuality: 'medium',
+        frameCount: 36,
+        inertia: true
+      };
+      this.stats = {
+        rotationCount: 0,
+        zoomCount: 0,
+        interactionCount: 0
+      };
+      this.hotspots = [
+        { angle: 0, x: 0.3, y: 0.2, title: 'Premium Fabric', description: '100% pure silk material' },
+        { angle: 90, x: 0.7, y: 0.3, title: 'Intricate Design', description: 'Hand-woven patterns' },
+        { angle: 180, x: 0.5, y: 0.6, title: 'Quality Stitching', description: 'Reinforced seams' },
+        { angle: 270, x: 0.2, y: 0.7, title: 'Comfortable Fit', description: 'Ergonomic design' }
+      ];
+      this.isDragging = false;
+      this.lastX = 0;
+      this.velocityX = 0;
+      this.animationId = null;
+
+      this.init();
+    }
+
+    init() {
+      this.setupCanvas();
+      this.loadImages();
+      this.setupEventListeners();
+      this.setupHotspots();
+      this.loadSettings();
+      this.startAnimationLoop();
+    }
+
+    setupCanvas() {
+      const rect = this.canvas.getBoundingClientRect();
+      this.canvas.width = rect.width * window.devicePixelRatio;
+      this.canvas.height = rect.height * window.devicePixelRatio;
+      this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+      this.canvas.style.width = rect.width + 'px';
+      this.canvas.style.height = rect.height + 'px';
+    }
+
+    async loadImages() {
+      const imageContainer = this.container.querySelector('.thumbnail-container');
+      imageContainer.innerHTML = '';
+
+      for (let i = 0; i < this.totalFrames; i++) {
+        const img = new Image();
+        const angle = (i / this.totalFrames) * 360;
+
+        // Create placeholder images for demonstration
+        img.src = `https://picsum.photos/seed/product-360-${i}/800/800.jpg`;
+
+        img.onload = () => {
+          this.images.push(img);
+          this.updateProgress();
+
+          // Create thumbnail
+          const thumb = document.createElement('div');
+          thumb.className = `thumbnail-item ${i === 0 ? 'active' : ''}`;
+          thumb.innerHTML = `<img src="${img.src}" alt="View ${angle}°">`;
+          thumb.addEventListener('click', () => this.goToFrame(i));
+          imageContainer.appendChild(thumb);
+        };
+
+        img.onerror = () => {
+          // Create fallback image
+          const canvas = document.createElement('canvas');
+          canvas.width = 800;
+          canvas.height = 800;
+          const ctx = canvas.getContext('2d');
+
+          // Create gradient background
+          const gradient = ctx.createLinearGradient(0, 0, 800, 800);
+          gradient.addColorStop(0, '#f0f0f0');
+          gradient.addColorStop(1, '#e0e0e0');
+          ctx.fillStyle = gradient;
+          ctx.fillRect(0, 0, 800, 800);
+
+          // Add frame number
+          ctx.fillStyle = '#666';
+          ctx.font = '48px Arial';
+          ctx.textAlign = 'center';
+          ctx.fillText(`${angle}°`, 400, 400);
+
+          // Add product silhouette
+          ctx.fillStyle = '#999';
+          ctx.fillRect(200, 150, 400, 500);
+
+          img.src = canvas.toDataURL();
+          img.onload();
+        };
+      }
+    }
+
+    updateProgress() {
+      const progress = (this.images.length / this.totalFrames) * 100;
+      const progressFill = this.container.querySelector('.progress-fill');
+      progressFill.style.width = `${progress}%`;
+
+      if (this.images.length === this.totalFrames) {
+        this.isLoading = false;
+        this.container.querySelector('.loading-indicator').style.display = 'none';
+        this.render();
+      }
+    }
+
+    setupEventListeners() {
+      // Mouse events
+      this.canvas.addEventListener('mousedown', (e) => this.handleStart(e.clientX, e.clientY));
+      this.canvas.addEventListener('mousemove', (e) => this.handleMove(e.clientX, e.clientY));
+      this.canvas.addEventListener('mouseup', () => this.handleEnd());
+      this.canvas.addEventListener('mouseleave', () => this.handleEnd());
+
+      // Touch events
+      this.canvas.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        const touch = e.touches[0];
+        this.handleStart(touch.clientX, touch.clientY);
+      });
+      this.canvas.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        const touch = e.touches[0];
+        this.handleMove(touch.clientX, touch.clientY);
+      });
+      this.canvas.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        this.handleEnd();
+      });
+
+      // Mouse wheel for zoom
+      this.canvas.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        const delta = e.deltaY > 0 ? 0.9 : 1.1;
+        this.setZoom(this.zoom * delta);
+      });
+
+      // Control buttons
+      this.container.querySelector('[data-action="rotate-left"]').addEventListener('click', () => {
+        this.rotateFrame(-1);
+      });
+
+      this.container.querySelector('[data-action="rotate-right"]').addEventListener('click', () => {
+        this.rotateFrame(1);
+      });
+
+      this.container.querySelector('[data-action="toggle-auto-rotate"]').addEventListener('click', () => {
+        this.toggleAutoRotate();
+      });
+
+      this.container.querySelector('[data-action="zoom-in"]').addEventListener('click', () => {
+        this.setZoom(this.zoom * 1.2);
+      });
+
+      this.container.querySelector('[data-action="zoom-out"]').addEventListener('click', () => {
+        this.setZoom(this.zoom * 0.8);
+      });
+
+      this.container.querySelector('[data-action="reset-zoom"]').addEventListener('click', () => {
+        this.setZoom(1);
+      });
+
+      this.container.querySelector('[data-action="toggle-fullscreen"]').addEventListener('click', () => {
+        this.toggleFullscreen();
+      });
+
+      // View mode buttons
+      this.container.querySelectorAll('[data-mode]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          this.setViewMode(btn.dataset.mode);
+        });
+      });
+
+      // Settings
+      document.getElementById('rotation-speed').addEventListener('input', (e) => {
+        this.rotationSpeed = parseInt(e.target.value);
+      });
+
+      document.getElementById('auto-rotate-toggle').addEventListener('change', (e) => {
+        this.settings.autoRotate = e.target.checked;
+        if (e.target.checked) {
+          this.startAutoRotate();
+        } else {
+          this.stopAutoRotate();
+        }
+      });
+
+      document.getElementById('hotspots-toggle').addEventListener('change', (e) => {
+        this.settings.showHotspots = e.target.checked;
+        this.updateHotspots();
+      });
+
+      document.getElementById('image-quality').addEventListener('change', (e) => {
+        this.settings.imageQuality = e.target.value;
+      });
+
+      document.getElementById('frame-count').addEventListener('change', (e) => {
+        this.settings.frameCount = parseInt(e.target.value);
+      });
+
+      document.getElementById('inertia-toggle').addEventListener('change', (e) => {
+        this.settings.inertia = e.target.checked;
+      });
+
+      // Settings buttons
+      this.container.querySelector('[data-action="save-settings"]').addEventListener('click', () => {
+        this.saveSettings();
+      });
+
+      this.container.querySelector('[data-action="reset-settings"]').addEventListener('click', () => {
+        this.resetSettings();
+      });
+
+      // Keyboard navigation
+      document.addEventListener('keydown', (e) => {
+        if (document.activeElement === this.canvas) {
+          switch(e.key) {
+            case 'ArrowLeft':
+              e.preventDefault();
+              this.rotateFrame(-1);
+              break;
+            case 'ArrowRight':
+              e.preventDefault();
+              this.rotateFrame(1);
+              break;
+            case ' ':
+              e.preventDefault();
+              this.toggleAutoRotate();
+              break;
+            case '+':
+            case '=':
+              e.preventDefault();
+              this.setZoom(this.zoom * 1.2);
+              break;
+            case '-':
+              e.preventDefault();
+              this.setZoom(this.zoom * 0.8);
+              break;
+            case 'f':
+              e.preventDefault();
+              this.toggleFullscreen();
+              break;
+          }
+        }
+      });
+
+      // Window resize
+      window.addEventListener('resize', () => {
+        this.setupCanvas();
+        this.render();
+      });
+    }
+
+    handleStart(x, y) {
+      this.isDragging = true;
+      this.lastX = x;
+      this.velocityX = 0;
+      this.canvas.style.cursor = 'grabbing';
+    }
+
+    handleMove(x, y) {
+      if (!this.isDragging) return;
+
+      const deltaX = x - this.lastX;
+      const sensitivity = this.viewMode === 'spin' ? 2 : 1;
+
+      if (this.viewMode === 'spin') {
+        this.rotateFrame(-Math.round(deltaX / sensitivity));
+      } else if (this.viewMode === 'orbit') {
+        this.velocityX = deltaX * 0.5;
+        this.currentFrame = (this.currentFrame + deltaX * 0.5 + this.totalFrames) % this.totalFrames;
+        this.updateFrame();
+      }
+
+      this.lastX = x;
+      this.stats.interactionCount++;
+    }
+
+    handleEnd() {
+      this.isDragging = false;
+      this.canvas.style.cursor = 'grab';
+
+      if (this.settings.inertia && Math.abs(this.velocityX) > 1) {
+        this.applyInertia();
+      }
+    }
+
+    applyInertia() {
+      const friction = 0.95;
+
+      const animate = () => {
+        if (Math.abs(this.velocityX) < 0.1) {
+          return;
+        }
+
+        this.velocityX *= friction;
+        this.currentFrame = (this.currentFrame + this.velocityX + this.totalFrames) % this.totalFrames;
+        this.updateFrame();
+
+        requestAnimationFrame(animate);
+      };
+
+      animate();
+    }
+
+    rotateFrame(direction) {
+      this.currentFrame = (this.currentFrame + direction + this.totalFrames) % this.totalFrames;
+      this.updateFrame();
+      this.stats.rotationCount++;
+    }
+
+    goToFrame(frameIndex) {
+      this.currentFrame = frameIndex;
+      this.updateFrame();
+    }
+
+    updateFrame() {
+      if (!this.isLoading) {
+        this.render();
+        this.updateUI();
+      }
+    }
+
+    setZoom(newZoom) {
+      this.zoom = Math.max(this.minZoom, Math.min(this.maxZoom, newZoom));
+      this.render();
+      this.updateZoomUI();
+      this.stats.zoomCount++;
+    }
+
+    toggleAutoRotate() {
+      if (this.isAutoRotating) {
+        this.stopAutoRotate();
+      } else {
+        this.startAutoRotate();
+      }
+    }
+
+    startAutoRotate() {
+      this.isAutoRotating = true;
+      this.updateAutoRotateButton();
+    }
+
+    stopAutoRotate() {
+      this.isAutoRotating = false;
+      this.updateAutoRotateButton();
+    }
+
+    updateAutoRotateButton() {
+      const playIcon = this.container.querySelector('.play-icon');
+      const pauseIcon = this.container.querySelector('.pause-icon');
+
+      if (this.isAutoRotating) {
+        playIcon.classList.add('hidden');
+        pauseIcon.classList.remove('hidden');
+      } else {
+        playIcon.classList.remove('hidden');
+        pauseIcon.classList.add('hidden');
+      }
+    }
+
+    setViewMode(mode) {
+      this.viewMode = mode;
+
+      // Update UI
+      this.container.querySelectorAll('[data-mode]').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.mode === mode);
+      });
+
+      // Update cursor
+      switch(mode) {
+        case 'spin':
+          this.canvas.style.cursor = 'grab';
+          break;
+        case 'orbit':
+          this.canvas.style.cursor = 'grab';
+          break;
+        case 'pan':
+          this.canvas.style.cursor = 'move';
+          break;
+      }
+    }
+
+    render() {
+      if (this.images.length === 0) return;
+
+      const img = this.images[this.currentFrame];
+      if (!img) return;
+
+      // Clear canvas
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+      // Save context state
+      this.ctx.save();
+
+      // Apply zoom
+      const centerX = this.canvas.width / (2 * window.devicePixelRatio);
+      const centerY = this.canvas.height / (2 * window.devicePixelRatio);
+
+      this.ctx.translate(centerX, centerY);
+      this.ctx.scale(this.zoom, this.zoom);
+      this.ctx.translate(-centerX, -centerY);
+
+      // Draw image
+      const canvasWidth = this.canvas.width / window.devicePixelRatio;
+      const canvasHeight = this.canvas.height / window.devicePixelRatio;
+
+      this.ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+
+      // Restore context state
+      this.ctx.restore();
+
+      // Update hotspots
+      this.updateHotspots();
+    }
+
+    setupHotspots() {
+      const container = this.container.querySelector('#hotspots-container');
+      container.innerHTML = '';
+
+      this.hotspots.forEach((hotspot, index) => {
+        const hotspotEl = document.createElement('div');
+        hotspotEl.className = 'hotspot';
+        hotspotEl.innerHTML = `
+          <div class="hotspot-tooltip">
+            <strong>${hotspot.title}</strong><br>
+            ${hotspot.description}
+          </div>
+        `;
+
+        hotspotEl.addEventListener('click', () => {
+          this.showHotspotInfo(hotspot);
+        });
+
+        container.appendChild(hotspotEl);
+      });
+    }
+
+    updateHotspots() {
+      if (!this.settings.showHotspots) {
+        this.container.querySelectorAll('.hotspot').forEach(hotspot => {
+          hotspot.style.display = 'none';
+        });
+        return;
+      }
+
+      const canvasRect = this.canvas.getBoundingClientRect();
+      this.hotspots.forEach((hotspot, index) => {
+        const hotspotEl = this.container.querySelectorAll('.hotspot')[index];
+        if (!hotspotEl) return;
+
+        // Calculate hotspot position based on current frame
+        const frameAngle = (this.currentFrame / this.totalFrames) * 360;
+        const angleDiff = Math.abs(frameAngle - hotspot.angle);
+        const showHotspot = angleDiff < 45 || angleDiff > 315;
+
+        if (showHotspot) {
+          const x = canvasRect.left + (hotspot.x * canvasRect.width * this.zoom) + (canvasRect.width * (1 - this.zoom) / 2);
+          const y = canvasRect.top + (hotspot.y * canvasRect.height * this.zoom) + (canvasRect.height * (1 - this.zoom) / 2);
+
+          hotspotEl.style.left = `${x - 12}px`;
+          hotspotEl.style.top = `${y - 12}px`;
+          hotspotEl.style.display = 'block';
+        } else {
+          hotspotEl.style.display = 'none';
+        }
+      });
+    }
+
+    showHotspotInfo(hotspot) {
+      // Create modal or popup with hotspot information
+      const modal = document.createElement('div');
+      modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+      modal.innerHTML = `
+        <div class="bg-white rounded-lg p-6 max-w-md mx-4">
+          <h3 class="text-lg font-semibold mb-2">${hotspot.title}</h3>
+          <p class="text-gray-600 mb-4">${hotspot.description}</p>
+          <button class="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors" onclick="this.closest('.fixed').remove()">
+            Close
+          </button>
+        </div>
+      `;
+      document.body.appendChild(modal);
+    }
+
+    updateUI() {
+      // Update current angle
+      const angle = Math.round((this.currentFrame / this.totalFrames) * 360);
+      document.getElementById('current-angle').textContent = `${angle}°`;
+      document.getElementById('current-frame').textContent = this.currentFrame + 1;
+      document.getElementById('total-frames').textContent = this.totalFrames;
+
+      // Update thumbnail active state
+      this.container.querySelectorAll('.thumbnail-item').forEach((thumb, index) => {
+        thumb.classList.toggle('active', index === this.currentFrame);
+      });
+
+      // Update stats
+      document.getElementById('rotation-count').textContent = this.stats.rotationCount;
+      document.getElementById('zoom-count').textContent = this.stats.zoomCount;
+    }
+
+    updateZoomUI() {
+      const zoomPercentage = Math.round(this.zoom * 100);
+      document.getElementById('zoom-percentage').textContent = `${zoomPercentage}%`;
+      document.getElementById('current-zoom').textContent = `${zoomPercentage}%`;
+    }
+
+    toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        this.canvas.requestFullscreen().catch(err => {
+          console.log('Fullscreen error:', err);
+        });
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    startAnimationLoop() {
+      const animate = () => {
+        if (this.isAutoRotating && !this.isLoading) {
+          const speed = this.rotationSpeed / 10;
+          this.currentFrame = (this.currentFrame + speed + this.totalFrames) % this.totalFrames;
+          this.updateFrame();
+        }
+
+        this.animationId = requestAnimationFrame(animate);
+      };
+
+      animate();
+    }
+
+    saveSettings() {
+      localStorage.setItem('product360Settings', JSON.stringify(this.settings));
+      this.showNotification('Settings saved successfully!', 'success');
+    }
+
+    loadSettings() {
+      const saved = localStorage.getItem('product360Settings');
+      if (saved) {
+        this.settings = { ...this.settings, ...JSON.parse(saved) };
+
+        // Update UI
+        document.getElementById('rotation-speed').value = this.rotationSpeed;
+        document.getElementById('auto-rotate-toggle').checked = this.settings.autoRotate;
+        document.getElementById('hotspots-toggle').checked = this.settings.showHotspots;
+        document.getElementById('image-quality').value = this.settings.imageQuality;
+        document.getElementById('frame-count').value = this.settings.frameCount;
+        document.getElementById('inertia-toggle').checked = this.settings.inertia;
+
+        if (this.settings.autoRotate) {
+          this.startAutoRotate();
+        }
+      }
+    }
+
+    resetSettings() {
+      this.settings = {
+        autoRotate: false,
+        showHotspots: true,
+        imageQuality: 'medium',
+        frameCount: 36,
+        inertia: true
+      };
+
+      this.rotationSpeed = 5;
+      this.zoom = 1;
+
+      // Update UI
+      document.getElementById('rotation-speed').value = this.rotationSpeed;
+      document.getElementById('auto-rotate-toggle').checked = this.settings.autoRotate;
+      document.getElementById('hotspots-toggle').checked = this.settings.showHotspots;
+      document.getElementById('image-quality').value = this.settings.imageQuality;
+      document.getElementById('frame-count').value = this.settings.frameCount;
+      document.getElementById('inertia-toggle').checked = this.settings.inertia;
+
+      this.stopAutoRotate();
+      this.render();
+      this.updateZoomUI();
+
+      this.showNotification('Settings reset to defaults!', 'info');
+    }
+
+    showNotification(message, type = 'info') {
+      const notification = document.createElement('div');
+      notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg text-white z-50 transition-all transform translate-x-full`;
+
+      switch(type) {
+        case 'success':
+          notification.classList.add('bg-green-500');
+          break;
+        case 'error':
+          notification.classList.add('bg-red-500');
+          break;
+        default:
+          notification.classList.add('bg-blue-500');
+      }
+
+      notification.textContent = message;
+      document.body.appendChild(notification);
+
+      setTimeout(() => {
+        notification.classList.remove('translate-x-full');
+      }, 100);
+
+      setTimeout(() => {
+        notification.classList.add('translate-x-full');
+        setTimeout(() => {
+          document.body.removeChild(notification);
+        }, 300);
+      }, 3000);
+    }
+  }
+
+  // Initialize 360° viewer
+  const viewerContainers = document.querySelectorAll('.360-product-viewer');
+  viewerContainers.forEach(container => {
+    new Product360Viewer(container);
+  });
+
+  // Make available globally for Shopify integration
+  window.theme = window.theme || {};
+  window.theme.product360Viewer = Product360Viewer;
+});
+</script>

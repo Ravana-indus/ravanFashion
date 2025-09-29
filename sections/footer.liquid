@@ -1,0 +1,37 @@
+{% render 'footer' %}
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_newsletter",
+      "label": "Show Newsletter Signup",
+      "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "newsletter_description",
+      "label": "Newsletter Description",
+      "default": "Join our community for exclusive offers and cultural updates."
+    },
+    {
+      "type": "checkbox",
+      "id": "social_media_links",
+      "label": "Show Social Media Links",
+      "default": true
+    },
+    {
+      "type": "link_list",
+      "id": "footer_quick_links",
+      "label": "Quick Links Menu"
+    },
+    {
+      "type": "link_list",
+      "id": "footer_legal_links",
+      "label": "Legal Menu"
+    }
+  ]
+}
+{% endschema %}

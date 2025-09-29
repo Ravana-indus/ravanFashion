@@ -1,0 +1,1121 @@
+<style>
+  .compare-products {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #fef3f3 0%, #fefce8 100%);
+    border-radius: 0.75rem;
+    border: 2px dashed #dc2626;
+  }
+
+  .compare-products.dark-theme {
+    background: linear-gradient(135deg, #451a03 0%, #78350f 100%);
+    color: white;
+    border-color: #fbbf24;
+  }
+
+  .compare-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .compare-header h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #dc2626;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .compare-header .tamil-subtitle {
+    font-size: 0.875rem;
+    color: #7c1e1e;
+    font-weight: 500;
+  }
+
+  .compare-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .compare-filter {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .compare-filter select {
+    padding: 0.5rem 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    background: white;
+  }
+
+  .compare-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .compare-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .btn-clear-all {
+    background: #ef4444;
+    color: white;
+  }
+
+  .btn-clear-all:hover {
+    background: #dc2626;
+  }
+
+  .btn-compare-now {
+    background: #dc2626;
+    color: white;
+  }
+
+  .btn-compare-now:hover:not(:disabled) {
+    background: #b91c1c;
+  }
+
+  .btn-compare-now:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+  }
+
+  .compare-products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .compare-product-card {
+    background: white;
+    border-radius: 0.5rem;
+    border: 2px solid #e5e7eb;
+    padding: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+  }
+
+  .compare-product-card:hover {
+    border-color: #dc2626;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15);
+  }
+
+  .compare-product-card.selected {
+    border-color: #dc2626;
+    background: #fef2f2;
+  }
+
+  .compare-product-card.selected::before {
+    content: '✓';
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    background: #dc2626;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.875rem;
+  }
+
+  .compare-product-image {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 0.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .compare-product-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+  }
+
+  .compare-product-price {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #dc2626;
+    margin-bottom: 0.5rem;
+  }
+
+  .compare-product-price .compare-at {
+    font-size: 0.75rem;
+    color: #6b7280;
+    text-decoration: line-through;
+    margin-left: 0.25rem;
+  }
+
+  .compare-product-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .compare-rating-stars {
+    color: #fbbf24;
+  }
+
+  .compare-rating-value {
+    font-size: 0.75rem;
+    color: #6b7280;
+  }
+
+  .compare-product-availability {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px;
+    font-weight: 500;
+  }
+
+  .availability-in-stock {
+    background: #d1fae5;
+    color: #065f46;
+  }
+
+  .availability-out-of-stock {
+    background: #fee2e2;
+    color: #991b1b;
+  }
+
+  .compare-add-btn {
+    width: 100%;
+    padding: 0.5rem;
+    background: #f3f4f6;
+    color: #374151;
+    border: 1px solid #d1d5db;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .compare-add-btn:hover {
+    background: #e5e7eb;
+  }
+
+  .compare-add-btn.added {
+    background: #dc2626;
+    color: white;
+    border-color: #dc2626;
+  }
+
+  .compare-table-container {
+    background: white;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    margin-top: 2rem;
+    display: none;
+  }
+
+  .compare-table-container.active {
+    display: block;
+  }
+
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .compare-table th,
+  .compare-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .compare-table th {
+    background: #f9fafb;
+    font-weight: 600;
+    color: #374151;
+    position: sticky;
+    top: 0;
+  }
+
+  .compare-table tr:hover {
+    background: #f9fafb;
+  }
+
+  .compare-product-cell {
+    text-align: center;
+    vertical-align: top;
+  }
+
+  .compare-product-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .compare-product-name {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+  }
+
+  .compare-feature-value {
+    text-align: center;
+    padding: 0.75rem;
+  }
+
+  .feature-difference {
+    position: relative;
+  }
+
+  .feature-difference.better::after {
+    content: '↑';
+    color: #10b981;
+    font-weight: bold;
+    margin-left: 0.25rem;
+  }
+
+  .feature-difference.worse::after {
+    content: '↓';
+    color: #ef4444;
+    font-weight: bold;
+    margin-left: 0.25rem;
+  }
+
+  .compare-empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: #6b7280;
+  }
+
+  .compare-empty-state svg {
+    width: 4rem;
+    height: 4rem;
+    margin: 0 auto 1rem;
+    color: #d1d5db;
+  }
+
+  .compare-summary {
+    background: #f0f9ff;
+    border: 1px solid #0ea5e9;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .compare-summary h4 {
+    color: #0369a1;
+    margin-bottom: 0.5rem;
+  }
+
+  .compare-recommendation {
+    background: #f0fdf4;
+    border: 1px solid #22c55e;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-top: 1rem;
+  }
+
+  .compare-recommendation h4 {
+    color: #166534;
+    margin-bottom: 0.5rem;
+  }
+
+  .compare-loading {
+    text-align: center;
+    padding: 2rem;
+    color: #6b7280;
+  }
+
+  .loading-spinner {
+    width: 2rem;
+    height: 2rem;
+    border: 3px solid rgba(220, 38, 38, 0.3);
+    border-top: 3px solid #dc2626;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1rem;
+  }
+
+  .compare-tooltip {
+    position: relative;
+    display: inline-block;
+  }
+
+  .compare-tooltip .tooltip-text {
+    visibility: hidden;
+    width: 200px;
+    background-color: #1f2937;
+    color: white;
+    text-align: center;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -100px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 0.75rem;
+  }
+
+  .compare-tooltip:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  @media (max-width: 768px) {
+    .compare-products {
+      margin: 1.5rem 0;
+      padding: 1rem;
+    }
+
+    .compare-header h3 {
+      font-size: 1.25rem;
+    }
+
+    .compare-controls {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .compare-products-grid {
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .compare-table-container {
+      overflow-x: auto;
+    }
+
+    .compare-table {
+      min-width: 600px;
+    }
+
+    .compare-table th,
+    .compare-table td {
+      padding: 0.5rem;
+      font-size: 0.875rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .compare-products-grid {
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+
+    .compare-product-image {
+      height: 100px;
+    }
+
+    .compare-product-title {
+      font-size: 0.75rem;
+    }
+  }
+</style>
+
+<div class="compare-products" id="compare-products">
+  <div class="compare-header">
+    <h3>
+      <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z"/>
+      </svg>
+      {{ 'compare_products.title' | t }}
+    </h3>
+    <div class="tamil-subtitle">{{ 'compare_products.subtitle_tamil' | t }}</div>
+  </div>
+
+  <!-- Compare Controls -->
+  <div class="compare-controls">
+    <div class="compare-filter">
+      <label for="category-filter">{{ 'compare_products.select_category' | t }}:</label>
+      <select id="category-filter" onchange="window.theme.compareProducts.filterByCategory(this.value)">
+        <option value="all">{{ 'compare_products.all_categories' | t }}</option>
+        <option value="sarees">Sarees</option>
+        <option value="mens-wear">Men's Wear</option>
+        <option value="womens-wear">Women's Wear</option>
+        <option value="accessories">Accessories</option>
+        <option value="jewelry">Jewelry</option>
+      </select>
+
+      <label for="sort-compare">{{ 'compare_products.sort_by' | t }}:</label>
+      <select id="sort-compare" onchange="window.theme.compareProducts.sortProducts(this.value)">
+        <option value="name-asc">{{ 'compare_products.name_a_z' | t }}</option>
+        <option value="price-asc">{{ 'compare_products.price_low_high' | t }}</option>
+        <option value="price-desc">{{ 'compare_products.price_high_low' | t }}</option>
+        <option value="rating-desc">{{ 'compare_products.rating_high_low' | t }}</option>
+        <option value="newest">{{ 'compare_products.newest_first' | t }}</option>
+      </select>
+    </div>
+
+    <div class="compare-actions">
+      <button class="compare-btn btn-clear-all" onclick="window.theme.compareProducts.clearAll()">
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
+        </svg>
+        {{ 'compare_products.clear_all' | t }}
+      </button>
+      <button class="compare-btn btn-compare-now" id="compare-now-btn" onclick="window.theme.compareProducts.showComparison()" disabled>
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z"/>
+        </svg>
+        {{ 'compare_products.compare_now' | t }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div class="compare-loading" id="compare-loading" style="display: none;">
+    <div class="loading-spinner"></div>
+    {{ 'compare_products.loading' | t }}
+  </div>
+
+  <!-- Empty State -->
+  <div class="compare-empty-state" id="compare-empty">
+    <svg class="w-16 h-16 mx-auto mb-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+      <path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z"/>
+    </svg>
+    <h4 class="text-lg font-semibold mb-2">{{ 'compare_products.no_comparison' | t }}</h4>
+    <p class="text-sm mb-4">{{ 'compare_products.select_products' | t }}</p>
+    <p class="text-xs text-gray-500">{{ 'compare_products.help_text' | t }}</p>
+  </div>
+
+  <!-- Products Grid -->
+  <div class="compare-products-grid" id="compare-products-grid" style="display: none;">
+    <!-- Products will be loaded here -->
+  </div>
+
+  <!-- Comparison Table -->
+  <div class="compare-table-container" id="compare-table-container">
+    <!-- Comparison table will be generated here -->
+  </div>
+
+  <!-- Privacy Notice -->
+  <div class="text-xs text-gray-500 mt-4 text-center">
+    {{ 'compare_products.privacy_notice' | t }}
+  </div>
+</div>
+
+<script>
+  // Compare Products System
+  window.theme = window.theme || {};
+  window.theme.compareProducts = window.theme.compareProducts || {};
+
+  // Configuration
+  window.theme.compareProducts.config = {
+    maxProducts: 4,
+    storageKey: 'ravan-compare-products',
+    features: [
+      'price', 'rating', 'availability', 'material', 'size', 'color',
+      'care_instructions', 'origin', 'sustainability', 'cultural_significance'
+    ]
+  };
+
+  // State
+  window.theme.compareProducts.selectedProducts = [];
+  window.theme.compareProducts.allProducts = [];
+  window.theme.compareProducts.currentFilter = 'all';
+  window.theme.compareProducts.currentSort = 'name-asc';
+
+  // Mock product database
+  window.theme.compareProducts.productDatabase = [
+    {
+      id: 'kanjivaram-saree',
+      title: 'Traditional Kanjivaram Saree',
+      price: 299.99,
+      comparePrice: 399.99,
+      rating: 4.8,
+      reviews: 156,
+      image: 'https://picsum.photos/seed/kanjivaram/400/300.jpg',
+      category: 'sarees',
+      availability: 'in_stock',
+      material: 'Pure Silk',
+      size: '6.5 meters',
+      color: 'Traditional Red',
+      care_instructions: 'Dry clean only',
+      origin: 'Kanchipuram, Tamil Nadu',
+      sustainability: 'Handwoven',
+      cultural_significance: 'Traditional wedding wear',
+      features: {
+        material: 'Pure Silk',
+        size: '6.5 meters',
+        color: 'Traditional Red',
+        care_instructions: 'Dry clean only',
+        origin: 'Kanchipuram, Tamil Nadu',
+        sustainability: 'Handwoven',
+        cultural_significance: 'Traditional wedding wear'
+      }
+    },
+    {
+      id: 'modern-kurta',
+      title: 'Contemporary Ethnic Kurta',
+      price: 89.99,
+      comparePrice: null,
+      rating: 4.3,
+      reviews: 89,
+      image: 'https://picsum.photos/seed/kurta/400/300.jpg',
+      category: 'mens-wear',
+      availability: 'in_stock',
+      material: 'Cotton Blend',
+      size: 'S, M, L, XL',
+      color: 'Cream with Gold Embroidery',
+      care_instructions: 'Machine wash cold',
+      origin: 'Modern Design',
+      sustainability: 'Sustainable materials',
+      cultural_significance: 'Fusion wear',
+      features: {
+        material: 'Cotton Blend',
+        size: 'S, M, L, XL',
+        color: 'Cream with Gold Embroidery',
+        care_instructions: 'Machine wash cold',
+        origin: 'Modern Design',
+        sustainability: 'Sustainable materials',
+        cultural_significance: 'Fusion wear'
+      }
+    },
+    {
+      id: 'temple-jewelry',
+      title: 'Traditional Temple Jewelry Set',
+      price: 199.99,
+      comparePrice: 249.99,
+      rating: 4.9,
+      reviews: 234,
+      image: 'https://picsum.photos/seed/jewelry/400/300.jpg',
+      category: 'jewelry',
+      availability: 'in_stock',
+      material: 'Gold Plated Silver',
+      size: 'Adjustable',
+      color: 'Antique Gold',
+      care_instructions: 'Avoid water and chemicals',
+      origin: 'Traditional Craftsmen',
+      sustainability: 'Handcrafted',
+      cultural_significance: 'Temple traditional jewelry',
+      features: {
+        material: 'Gold Plated Silver',
+        size: 'Adjustable',
+        color: 'Antique Gold',
+        care_instructions: 'Avoid water and chemicals',
+        origin: 'Traditional Craftsmen',
+        sustainability: 'Handcrafted',
+        cultural_significance: 'Temple traditional jewelry'
+      }
+    },
+    {
+      id: 'festive-dress',
+      title: 'Festive Occasion Dress',
+      price: 159.99,
+      comparePrice: null,
+      rating: 4.5,
+      reviews: 67,
+      image: 'https://picsum.photos/seed/dress/400/300.jpg',
+      category: 'womens-wear',
+      availability: 'limited',
+      material: 'Silk Blend',
+      size: 'XS, S, M, L',
+      color: 'Royal Blue',
+      care_instructions: 'Dry clean recommended',
+      origin: 'Contemporary Design',
+      sustainability: 'Eco-friendly dyes',
+      cultural_significance: 'Modern festive wear',
+      features: {
+        material: 'Silk Blend',
+        size: 'XS, S, M, L',
+        color: 'Royal Blue',
+        care_instructions: 'Dry clean recommended',
+        origin: 'Contemporary Design',
+        sustainability: 'Eco-friendly dyes',
+        cultural_significance: 'Modern festive wear'
+      }
+    },
+    {
+      id: 'ethnic-scarf',
+      title: 'Handwoven Ethnic Scarf',
+      price: 49.99,
+      comparePrice: 69.99,
+      rating: 4.2,
+      reviews: 45,
+      image: 'https://picsum.photos/seed/scarf/400/300.jpg',
+      category: 'accessories',
+      availability: 'in_stock',
+      material: 'Cotton & Silk',
+      size: '70" x 20"',
+      color: 'Multi-color Traditional',
+      care_instructions: 'Hand wash cold',
+      origin: 'Village Artisans',
+      sustainability: 'Handwoven traditional',
+      cultural_significance: 'Traditional accessory',
+      features: {
+        material: 'Cotton & Silk',
+        size: '70" x 20"',
+        color: 'Multi-color Traditional',
+        care_instructions: 'Hand wash cold',
+        origin: 'Village Artisans',
+        sustainability: 'Handwoven traditional',
+        cultural_significance: 'Traditional accessory'
+      }
+    }
+  ];
+
+  // Initialize compare products
+  window.theme.compareProducts.init = function() {
+    window.theme.compareProducts.loadSelection();
+    window.theme.compareProducts.loadProducts();
+    window.theme.compareProducts.render();
+  };
+
+  // Load saved selection
+  window.theme.compareProducts.loadSelection = function() {
+    try {
+      const stored = localStorage.getItem(window.theme.compareProducts.config.storageKey);
+      if (stored) {
+        window.theme.compareProducts.selectedProducts = JSON.parse(stored);
+      }
+    } catch (error) {
+      console.warn('Failed to load compare selection:', error);
+      window.theme.compareProducts.selectedProducts = [];
+    }
+  };
+
+  // Save selection
+  window.theme.compareProducts.saveSelection = function() {
+    try {
+      localStorage.setItem(
+        window.theme.compareProducts.config.storageKey,
+        JSON.stringify(window.theme.compareProducts.selectedProducts)
+      );
+    } catch (error) {
+      console.warn('Failed to save compare selection:', error);
+    }
+  };
+
+  // Load products
+  window.theme.compareProducts.loadProducts = function() {
+    window.theme.compareProducts.allProducts = window.theme.compareProducts.productDatabase;
+  };
+
+  // Render products grid
+  window.theme.compareProducts.render = function() {
+    const grid = document.getElementById('compare-products-grid');
+    const empty = document.getElementById('compare-empty');
+    const compareBtn = document.getElementById('compare-now-btn');
+
+    let filteredProducts = window.theme.compareProducts.allProducts;
+
+    // Apply category filter
+    if (window.theme.compareProducts.currentFilter !== 'all') {
+      filteredProducts = filteredProducts.filter(product => product.category === window.theme.compareProducts.currentFilter);
+    }
+
+    // Apply sorting
+    filteredProducts = window.theme.compareProducts.sortProductsArray(filteredProducts, window.theme.compareProducts.currentSort);
+
+    if (filteredProducts.length === 0) {
+      grid.style.display = 'none';
+      empty.style.display = 'block';
+      return;
+    }
+
+    grid.style.display = 'grid';
+    empty.style.display = 'none';
+
+    grid.innerHTML = filteredProducts.map(product => {
+      const isSelected = window.theme.compareProducts.selectedProducts.some(p => p.id === product.id);
+      return `
+        <div class="compare-product-card ${isSelected ? 'selected' : ''}" onclick="window.theme.compareProducts.toggleProduct('${product.id}')">
+          <img src="${product.image}" alt="${product.title}" class="compare-product-image">
+          <h4 class="compare-product-title">${product.title}</h4>
+          <div class="compare-product-price">
+            $${product.price}
+            ${product.comparePrice ? `<span class="compare-at">$${product.comparePrice}</span>` : ''}
+          </div>
+          <div class="compare-product-rating">
+            <div class="compare-rating-stars">
+              ${window.theme.compareProducts.generateStars(product.rating)}
+            </div>
+            <span class="compare-rating-value">(${product.reviews})</span>
+          </div>
+          <div class="compare-product-availability ${product.availability === 'in_stock' ? 'availability-in-stock' : 'availability-out-of-stock'}">
+            ${product.availability === 'in_stock' ? '{{ 'compare_products.in_stock' | t }}' : '{{ 'compare_products.out_of_stock' | t }}'}
+          </div>
+          <button class="compare-add-btn ${isSelected ? 'added' : ''}" onclick="event.stopPropagation(); window.theme.compareProducts.toggleProduct('${product.id}')">
+            ${isSelected ? '{{ 'compare_products.remove_from_compare' | t }}' : '{{ 'compare_products.add_to_compare' | t }}'}
+          </button>
+        </div>
+      `;
+    }).join('');
+
+    // Update compare button
+    compareBtn.disabled = window.theme.compareProducts.selectedProducts.length < 2;
+    compareBtn.textContent = `${window.theme.compareProducts.selectedProducts.length}/4 ${window.theme.compareProducts.selectedProducts.length < 2 ? '{{ 'compare_products.select_products' | t }}' : '{{ 'compare_products.compare_now' | t }}'}`;
+  };
+
+  // Generate star rating
+  window.theme.compareProducts.generateStars = function(rating) {
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 !== 0;
+    let stars = '';
+
+    for (let i = 0; i < fullStars; i++) {
+      stars += '★';
+    }
+    if (hasHalfStar) {
+      stars += '☆';
+    }
+    for (let i = fullStars + (hasHalfStar ? 1 : 0); i < 5; i++) {
+      stars += '☆';
+    }
+
+    return stars;
+  };
+
+  // Toggle product selection
+  window.theme.compareProducts.toggleProduct = function(productId) {
+    const product = window.theme.compareProducts.allProducts.find(p => p.id === productId);
+    if (!product) return;
+
+    const existingIndex = window.theme.compareProducts.selectedProducts.findIndex(p => p.id === productId);
+
+    if (existingIndex !== -1) {
+      // Remove product
+      window.theme.compareProducts.selectedProducts.splice(existingIndex, 1);
+    } else {
+      // Add product if under limit
+      if (window.theme.compareProducts.selectedProducts.length < window.theme.compareProducts.config.maxProducts) {
+        window.theme.compareProducts.selectedProducts.push(product);
+      } else {
+        window.theme.showNotification('{{ 'compare_products.max_products_reached' | t }}', 'warning');
+        return;
+      }
+    }
+
+    window.theme.compareProducts.saveSelection();
+    window.theme.compareProducts.render();
+  };
+
+  // Clear all selections
+  window.theme.compareProducts.clearAll = function() {
+    if (window.theme.compareProducts.selectedProducts.length === 0) return;
+
+    if (confirm('{{ 'compare_products.confirm_clear_all' | t }}')) {
+      window.theme.compareProducts.selectedProducts = [];
+      window.theme.compareProducts.saveSelection();
+      window.theme.compareProducts.render();
+      document.getElementById('compare-table-container').classList.remove('active');
+      window.theme.showNotification('{{ 'compare_products.comparison_cleared' | t }}', 'success');
+    }
+  };
+
+  // Filter by category
+  window.theme.compareProducts.filterByCategory = function(category) {
+    window.theme.compareProducts.currentFilter = category;
+    window.theme.compareProducts.render();
+  };
+
+  // Sort products
+  window.theme.compareProducts.sortProducts = function(sortBy) {
+    window.theme.compareProducts.currentSort = sortBy;
+    window.theme.compareProducts.render();
+  };
+
+  // Sort products array
+  window.theme.compareProducts.sortProductsArray = function(products, sortBy) {
+    const sorted = [...products];
+
+    switch (sortBy) {
+      case 'name-asc':
+        return sorted.sort((a, b) => a.title.localeCompare(b.title));
+      case 'price-asc':
+        return sorted.sort((a, b) => a.price - b.price);
+      case 'price-desc':
+        return sorted.sort((a, b) => b.price - a.price);
+      case 'rating-desc':
+        return sorted.sort((a, b) => b.rating - a.rating);
+      case 'newest':
+        return sorted.sort((a, b) => b.id.localeCompare(a.id));
+      default:
+        return sorted;
+    }
+  };
+
+  // Show comparison table
+  window.theme.compareProducts.showComparison = function() {
+    if (window.theme.compareProducts.selectedProducts.length < 2) {
+      window.theme.showNotification('{{ 'compare_products.select_products' | t }}', 'warning');
+      return;
+    }
+
+    const container = document.getElementById('compare-table-container');
+    container.classList.add('active');
+    container.innerHTML = window.theme.compareProducts.generateComparisonTable();
+    container.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  // Generate comparison table
+  window.theme.compareProducts.generateComparisonTable = function() {
+    const products = window.theme.compareProducts.selectedProducts;
+    const features = window.theme.compareProducts.config.features;
+
+    let html = `
+      <div class="compare-summary">
+        <h4>{{ 'compare_products.comparison_summary' | t }}</h4>
+        <p>{{ 'compare_products.comparing' | t }} ${products.length} {{ 'compare_products.products' | t }}</p>
+      </div>
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>{{ 'compare_products.feature' | t }}</th>
+    `;
+
+    // Product headers
+    products.forEach(product => {
+      html += `
+        <th class="compare-product-cell">
+          <img src="${product.image}" alt="${product.title}" class="compare-product-img">
+          <div class="compare-product-name">${product.title}</div>
+        </th>
+      `;
+    });
+
+    html += `
+          </tr>
+        </thead>
+        <tbody>
+    `;
+
+    // Basic features row
+    html += `
+      <tr>
+        <td><strong>{{ 'compare_products.price' | t }}</strong></td>
+    `;
+    products.forEach(product => {
+      const minPrice = Math.min(...products.map(p => p.price));
+      const maxPrice = Math.max(...products.map(p => p.price));
+      let differenceClass = '';
+
+      if (product.price === minPrice && minPrice !== maxPrice) {
+        differenceClass = 'feature-difference better';
+      } else if (product.price === maxPrice && minPrice !== maxPrice) {
+        differenceClass = 'feature-difference worse';
+      }
+
+      html += `
+        <td class="compare-feature-value ${differenceClass}">
+          $${product.price}
+          ${product.comparePrice ? `<br><span style="text-decoration: line-through; color: #6b7280;">$${product.comparePrice}</span>` : ''}
+        </td>
+      `;
+    });
+    html += '</tr>';
+
+    // Rating row
+    html += `
+      <tr>
+        <td><strong>{{ 'compare_products.rating' | t }}</strong></td>
+    `;
+    products.forEach(product => {
+      const maxRating = Math.max(...products.map(p => p.rating));
+      let differenceClass = '';
+
+      if (product.rating === maxRating && products.some(p => p.rating !== product.rating)) {
+        differenceClass = 'feature-difference better';
+      }
+
+      html += `
+        <td class="compare-feature-value ${differenceClass}">
+          ${window.theme.compareProducts.generateStars(product.rating)} (${product.rating})
+        </td>
+      `;
+    });
+    html += '</tr>';
+
+    // Availability row
+    html += `
+      <tr>
+        <td><strong>{{ 'compare_products.availability' | t }}</strong></td>
+    `;
+    products.forEach(product => {
+      html += `
+        <td class="compare-feature-value">
+          <span class="compare-product-availability ${product.availability === 'in_stock' ? 'availability-in-stock' : 'availability-out-of-stock'}">
+            ${product.availability === 'in_stock' ? '{{ 'compare_products.in_stock' | t }}' : '{{ 'compare_products.out_of_stock' | t }}'}
+          </span>
+        </td>
+      `;
+    });
+    html += '</tr>';
+
+    // Additional features rows
+    features.forEach(feature => {
+      const featureName = feature.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+      html += `
+        <tr>
+          <td><strong>${featureName}</strong></td>
+      `;
+
+      products.forEach(product => {
+        const value = product.features[feature] || 'N/A';
+        html += `<td class="compare-feature-value">${value}</td>`;
+      });
+
+      html += '</tr>';
+    });
+
+    // Action buttons row
+    html += `
+      <tr>
+        <td><strong>{{ 'general.actions' | t }}</strong></td>
+    `;
+
+    products.forEach(product => {
+      html += `
+        <td class="compare-feature-value">
+          <button class="compare-btn btn-add-to-cart" onclick="window.theme.compareProducts.addToCart('${product.id}')" style="margin: 0.25rem; padding: 0.5rem 1rem;">
+            {{ 'compare_products.add_to_cart' | t }}
+          </button>
+          <button class="compare-btn" onclick="window.theme.compareProducts.viewDetails('${product.id}')" style="margin: 0.25rem; padding: 0.5rem 1rem; background: #f3f4f6; color: #374151;">
+            {{ 'compare_products.view_details' | t }}
+          </button>
+        </td>
+      `;
+    });
+
+    html += `
+        </tr>
+      </tbody>
+    </table>
+    `;
+
+    // Add recommendation
+    if (products.length >= 2) {
+      html += window.theme.compareProducts.generateRecommendation(products);
+    }
+
+    return html;
+  };
+
+  // Generate recommendation
+  window.theme.compareProducts.generateRecommendation = function(products) {
+    let recommendation = '';
+    let reason = '';
+
+    // Find best value (lowest price with good rating)
+    const bestValue = products.reduce((best, current) => {
+      const bestScore = best.rating / best.price;
+      const currentScore = current.rating / current.price;
+      return currentScore > bestScore ? current : best;
+    });
+
+    // Find premium choice (highest price)
+    const premiumChoice = products.reduce((best, current) =>
+      current.price > best.price ? current : best
+    );
+
+    // Find most popular (highest rating)
+    const mostPopular = products.reduce((best, current) =>
+      current.rating > best.rating ? current : best
+    );
+
+    recommendation = `
+      <div class="compare-recommendation">
+        <h4>{{ 'compare_products.recommendation' | t }}</h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+          <div>
+            <strong>{{ 'compare_products.best_value' | t }}:</strong><br>
+            ${bestValue.title}<br>
+            <span style="color: #059669;">$${bestValue.price} • Rating: ${bestValue.rating}</span>
+          </div>
+          <div>
+            <strong>{{ 'compare_products.premium_choice' | t }}:</strong><br>
+            ${premiumChoice.title}<br>
+            <span style="color: #7c2d12;">$${premiumChoice.price} • Rating: ${premiumChoice.rating}</span>
+          </div>
+          <div>
+            <strong>{{ 'compare_products.most_popular' | t }}:</strong><br>
+            ${mostPopular.title}<br>
+            <span style="color: #1e40af;">Rating: ${mostPopular.rating} • ${mostPopular.reviews} reviews</span>
+          </div>
+        </div>
+      </div>
+    `;
+
+    return recommendation;
+  };
+
+  // Add to cart
+  window.theme.compareProducts.addToCart = function(productId) {
+    const product = window.theme.compareProducts.selectedProducts.find(p => p.id === productId);
+    if (product) {
+      // Track comparison interaction
+      window.theme.compareProducts.trackInteraction('add_to_cart_from_compare', product);
+
+      // Add to cart logic
+      if (window.theme.cart && typeof window.theme.cart.addItem === 'function') {
+        window.theme.cart.addItem({
+          id: productId,
+          title: product.title,
+          price: product.price,
+          quantity: 1
+        });
+      } else {
+        window.theme.showNotification(`${product.title} added to cart`, 'success');
+      }
+    }
+  };
+
+  // View details
+  window.theme.compareProducts.viewDetails = function(productId) {
+    const product = window.theme.compareProducts.selectedProducts.find(p => p.id === productId);
+    if (product) {
+      // Track comparison interaction
+      window.theme.compareProducts.trackInteraction('view_details_from_compare', product);
+
+      // Navigate to product page (mock implementation)
+      window.theme.showNotification(`Viewing details for ${product.title}`, 'info');
+    }
+  };
+
+  // Track user interaction
+  window.theme.compareProducts.trackInteraction = function(action, product) {
+    console.log('Compare Interaction:', action, product);
+    // In real implementation, this would send to analytics
+  };
+
+  // Initialize when DOM is loaded
+  document.addEventListener('DOMContentLoaded', function() {
+    if (document.getElementById('compare-products')) {
+      window.theme.compareProducts.init();
+    }
+  });
+</script>

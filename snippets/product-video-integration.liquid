@@ -1,0 +1,907 @@
+{%- comment -%}
+Product Video Integration Snippet
+Adds video support for products with autoplay, loop controls, and seamless integration
+{%- endcomment -%}
+
+<div class="product-video-integration" data-section-id="{{ section.id }}" data-product-id="{{ product.id }}">
+  <!-- Video Gallery Container -->
+  <div class="video-gallery-container relative bg-gray-50 rounded-lg overflow-hidden" role="region" aria-label="{{ 'products.video.product_videos' | t }}">
+
+    <!-- Main Video Display -->
+    <div class="main-video-display relative aspect-video bg-black">
+      <video
+        id="main-product-video"
+        class="main-video w-full h-full object-contain"
+        controls
+        preload="metadata"
+        playsinline
+        aria-label="{{ 'products.video.main_video' | t }}"
+        data-video-type="product"
+      >
+        <source src="" type="video/mp4" data-src-placeholder="https://assets.shopify.com/videos/default.mp4">
+        <p class="text-white p-4">{{ 'products.video.video_not_supported' | t }}</p>
+      </video>
+
+      <!-- Video Loading Overlay -->
+      <div class="video-loading-overlay absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden" role="status" aria-live="polite">
+        <div class="loading-spinner">
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-400"></div>
+          <span class="sr-only">{{ 'products.video.loading' | t }}</span>
+        </div>
+      </div>
+
+      <!-- Video Controls Overlay -->
+      <div class="video-controls-overlay absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4 opacity-0 transition-opacity duration-300">
+        <div class="flex items-center justify-between text-white">
+          <div class="video-info">
+            <h3 class="video-title text-sm font-medium" id="video-title"></h3>
+            <p class="video-duration text-xs text-gray-300" id="video-duration"></p>
+          </div>
+          <div class="video-actions flex items-center gap-2">
+            <button
+              class="play-pause-btn p-2 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 transition-all"
+              aria-label="{{ 'products.video.play_pause' | t }}"
+              data-action="toggle-play"
+            >
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <path class="play-icon" d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"/>
+                <path class="pause-icon hidden" fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z"/>
+              </svg>
+            </button>
+            <button
+              class="mute-btn p-2 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 transition-all"
+              aria-label="{{ 'products.video.mute_unmute' | t }}"
+              data-action="toggle-mute"
+            >
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <path class="unmuted-icon" fill-rule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.984 5.984 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.983 3.983 0 00-1.172-2.828 1 1 0 010-1.415z"/>
+                <path class="muted-icon hidden" d="M5.412 8.713a1 1 0 011.413 0L10 12.012l3.175-3.3a1 1 0 111.414 1.414l-3.175 3.3 3.175 3.3a1 1 0 01-1.414 1.414L10 14.84l-3.175 3.3a1 1 0 01-1.414-1.415l3.175-3.3-3.175-3.3a1 1 0 010-1.414z"/>
+              </svg>
+            </button>
+            <button
+              class="fullscreen-btn p-2 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 transition-all"
+              aria-label="{{ 'products.video.fullscreen' | t }}"
+              data-action="toggle-fullscreen"
+            >
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <path class="enter-fullscreen-icon" fill-rule="evenodd" d="M3 4a1 1 0 011-1h4a1 1 0 010 2H6.414l2.293 2.293a1 1 0 11-1.414 1.414L5 6.414V8a1 1 0 01-2 0V4zm9 1a1 1 0 110-2h4a1 1 0 011 1v4a1 1 0 11-2 0V6.414l-2.293 2.293a1 1 0 11-1.414-1.414L13.586 5H12zm-9 7a1 1 0 012 0v1.586l2.293-2.293a1 1 0 111.414 1.414L6.414 15H8a1 1 0 110 2H4a1 1 0 01-1-1v-4zm13-1a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 110-2h1.586l-2.293-2.293a1 1 0 111.414-1.414L15 13.586V12a1 1 0 011-1z"/>
+                <path class="exit-fullscreen-icon hidden" fill-rule="evenodd" d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Video Quality Selector -->
+      <div class="video-quality-selector absolute top-4 right-4 bg-black bg-opacity-60 rounded-lg p-2 hidden">
+        <button class="quality-option text-white text-sm hover:text-yellow-400 block w-full text-left px-2 py-1" data-quality="1080p">1080p HD</button>
+        <button class="quality-option text-white text-sm hover:text-yellow-400 block w-full text-left px-2 py-1" data-quality="720p">720p</button>
+        <button class="quality-option text-white text-sm hover:text-yellow-400 block w-full text-left px-2 py-1" data-quality="480p">480p</button>
+        <button class="quality-option text-white text-sm hover:text-yellow-400 block w-full text-left px-2 py-1" data-quality="360p">360p</button>
+      </div>
+    </div>
+
+    <!-- Video Thumbnail Gallery -->
+    <div class="video-thumbnail-gallery mt-4">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-lg font-semibold text-gray-900">{{ 'products.video.product_videos' | t }}</h3>
+        <div class="video-gallery-controls flex items-center gap-2">
+          <button
+            class="gallery-nav-btn prev-btn p-2 rounded-lg bg-gray-200 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            aria-label="{{ 'products.video.previous_video' | t }}"
+            data-direction="prev"
+          >
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"/>
+            </svg>
+          </button>
+          <button
+            class="gallery-nav-btn next-btn p-2 rounded-lg bg-gray-200 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            aria-label="{{ 'products.video.next_video' | t }}"
+            data-direction="next"
+          >
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="video-thumbnails-container flex gap-3 overflow-x-auto pb-2" role="list" aria-label="{{ 'products.video.video_thumbnails' | t }}">
+        <!-- Video thumbnails will be dynamically inserted here -->
+      </div>
+    </div>
+
+    <!-- Video Playlist -->
+    <div class="video-playlist mt-6 bg-gray-100 rounded-lg p-4">
+      <h3 class="text-lg font-semibold text-gray-900 mb-3">{{ 'products.video.video_playlist' | t }}</h3>
+      <div class="playlist-videos space-y-2" role="list" aria-label="{{ 'products.video.playlist_videos' | t }}">
+        <!-- Playlist videos will be dynamically inserted here -->
+      </div>
+    </div>
+
+    <!-- Video Settings Panel -->
+    <div class="video-settings-panel mt-6 bg-white rounded-lg border border-gray-200 p-4">
+      <h3 class="text-lg font-semibold text-gray-900 mb-3">{{ 'products.video.video_settings' | t }}</h3>
+      <div class="settings-grid grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="setting-group">
+          <label class="block text-sm font-medium text-gray-700 mb-2">{{ 'products.video.autoplay' | t }}</label>
+          <div class="toggle-switch">
+            <input type="checkbox" id="autoplay-toggle" class="sr-only" checked>
+            <label for="autoplay-toggle" class="flex items-center cursor-pointer">
+              <div class="relative">
+                <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
+                <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+              </div>
+              <div class="ml-3 text-gray-700 font-medium">{{ 'products.video.enabled' | t }}</div>
+            </label>
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <label class="block text-sm font-medium text-gray-700 mb-2">{{ 'products.video.loop_videos' | t }}</label>
+          <div class="toggle-switch">
+            <input type="checkbox" id="loop-toggle" class="sr-only" checked>
+            <label for="loop-toggle" class="flex items-center cursor-pointer">
+              <div class="relative">
+                <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
+                <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+              </div>
+              <div class="ml-3 text-gray-700 font-medium">{{ 'products.video.enabled' | t }}</div>
+            </label>
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <label class="block text-sm font-medium text-gray-700 mb-2">{{ 'products.video.playback_speed' | t }}</label>
+          <select id="playback-speed" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent">
+            <option value="0.5">0.5x</option>
+            <option value="0.75">0.75x</option>
+            <option value="1" selected>1x (Normal)</option>
+            <option value="1.25">1.25x</option>
+            <option value="1.5">1.5x</option>
+            <option value="2">2x</option>
+          </select>
+        </div>
+
+        <div class="setting-group">
+          <label class="block text-sm font-medium text-gray-700 mb-2">{{ 'products.video.default_quality' | t }}</label>
+          <select id="default-quality" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent">
+            <option value="1080p">1080p HD</option>
+            <option value="720p" selected>720p</option>
+            <option value="480p">480p</option>
+            <option value="360p">360p</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="settings-actions mt-4 flex gap-2">
+        <button class="save-settings-btn px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors" data-action="save-settings">
+          {{ 'products.video.save_settings' | t }}
+        </button>
+        <button class="reset-settings-btn px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors" data-action="reset-settings">
+          {{ 'products.video.reset_settings' | t }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Video Analytics -->
+    <div class="video-analytics mt-6 bg-blue-50 rounded-lg p-4">
+      <h3 class="text-lg font-semibold text-gray-900 mb-3">{{ 'products.video.video_analytics' | t }}</h3>
+      <div class="analytics-grid grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+        <div class="analytics-item">
+          <div class="analytics-value text-2xl font-bold text-blue-600" id="total-views">0</div>
+          <div class="analytics-label text-sm text-gray-600">{{ 'products.video.total_views' | t }}</div>
+        </div>
+        <div class="analytics-item">
+          <div class="analytics-value text-2xl font-bold text-green-600" id="avg-watch-time">0:00</div>
+          <div class="analytics-label text-sm text-gray-600">{{ 'products.video.avg_watch_time' | t }}</div>
+        </div>
+        <div class="analytics-item">
+          <div class="analytics-value text-2xl font-bold text-purple-600" id="completion-rate">0%</div>
+          <div class="analytics-label text-sm text-gray-600">{{ 'products.video.completion_rate' | t }}</div>
+        </div>
+        <div class="analytics-item">
+          <div class="analytics-value text-2xl font-bold text-orange-600" id="engagement-score">0</div>
+          <div class="analytics-label text-sm text-gray-600">{{ 'products.video.engagement_score' | t }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* Video Integration Styles */
+.video-gallery-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.main-video-display {
+  position: relative;
+  overflow: hidden;
+}
+
+.main-video {
+  transition: transform 0.3s ease;
+}
+
+.video-loading-overlay {
+  backdrop-filter: blur(4px);
+}
+
+.video-controls-overlay {
+  transition: opacity 0.3s ease;
+}
+
+.main-video-display:hover .video-controls-overlay {
+  opacity: 1;
+}
+
+.video-thumbnails-container {
+  scrollbar-width: thin;
+  scrollbar-color: #d4af37 #f3f4f6;
+}
+
+.video-thumbnails-container::-webkit-scrollbar {
+  height: 6px;
+}
+
+.video-thumbnails-container::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 3px;
+}
+
+.video-thumbnails-container::-webkit-scrollbar-thumb {
+  background: #d4af37;
+  border-radius: 3px;
+}
+
+.video-thumbnail {
+  flex-shrink: 0;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.video-thumbnail:hover {
+  transform: scale(1.05);
+  border-color: #d4af37;
+}
+
+.video-thumbnail.active {
+  border-color: #6a1b1b;
+}
+
+.video-thumbnail-duration {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+}
+
+.playlist-video-item {
+  display: flex;
+  align-items: center;
+  gap: 3;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.playlist-video-item:hover {
+  background-color: #f3f4f6;
+}
+
+.playlist-video-item.active {
+  background-color: #fef3c7;
+  border: 1px solid #d4af37;
+}
+
+.toggle-switch input:checked + label .dot {
+  transform: translateX(100%);
+  background-color: #d4af37;
+}
+
+.toggle-switch input:checked + label .block {
+  background-color: #d4af37;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .video-quality-selector {
+    top: 2px;
+    right: 2px;
+    padding: 1px;
+  }
+
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .analytics-grid {
+    grid-template-columns: 2fr;
+  }
+}
+</style>
+
+<script>
+// Product Video Integration JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+  class ProductVideoIntegration {
+    constructor(container) {
+      this.container = container;
+      this.mainVideo = container.querySelector('#main-product-video');
+      this.videos = [];
+      this.currentVideoIndex = 0;
+      this.isPlaying = false;
+      this.settings = {
+        autoplay: true,
+        loop: true,
+        playbackSpeed: 1,
+        defaultQuality: '720p'
+      };
+      this.analytics = {
+        totalViews: 0,
+        watchTimes: [],
+        completions: 0,
+        interactions: 0
+      };
+
+      this.init();
+    }
+
+    init() {
+      this.loadMockVideos();
+      this.renderVideoThumbnails();
+      this.renderPlaylist();
+      this.setupEventListeners();
+      this.loadSettings();
+      this.loadAnalytics();
+    }
+
+    loadMockVideos() {
+      // Mock video data for demonstration
+      this.videos = [
+        {
+          id: 'video-1',
+          title: 'Product Showcase - Traditional Silk Saree',
+          url: 'https://assets.shopify.com/videos/saree-showcase.mp4',
+          thumbnail: 'https://assets.shopify.com/videos/saree-thumb.jpg',
+          duration: '2:45',
+          description: 'Detailed showcase of our traditional silk saree collection',
+          category: 'product',
+          quality: {
+            '1080p': 'https://assets.shopify.com/videos/saree-showcase-1080p.mp4',
+            '720p': 'https://assets.shopify.com/videos/saree-showcase-720p.mp4',
+            '480p': 'https://assets.shopify.com/videos/saree-showcase-480p.mp4',
+            '360p': 'https://assets.shopify.com/videos/saree-showcase-360p.mp4'
+          },
+          tags: ['saree', 'silk', 'traditional', 'showcase']
+        },
+        {
+          id: 'video-2',
+          title: 'Fabric Detail & Texture Guide',
+          url: 'https://assets.shopify.com/videos/fabric-guide.mp4',
+          thumbnail: 'https://assets.shopify.com/videos/fabric-thumb.jpg',
+          duration: '3:20',
+          description: 'Close-up details of fabric textures and quality',
+          category: 'tutorial',
+          quality: {
+            '1080p': 'https://assets.shopify.com/videos/fabric-guide-1080p.mp4',
+            '720p': 'https://assets.shopify.com/videos/fabric-guide-720p.mp4',
+            '480p': 'https://assets.shopify.com/videos/fabric-guide-480p.mp4',
+            '360p': 'https://assets.shopify.com/videos/fabric-guide-360p.mp4'
+          },
+          tags: ['fabric', 'texture', 'quality', 'guide']
+        },
+        {
+          id: 'video-3',
+          title: 'Styling Tips & Fashion Advice',
+          url: 'https://assets.shopify.com/videos/styling-tips.mp4',
+          thumbnail: 'https://assets.shopify.com/videos/styling-thumb.jpg',
+          duration: '4:15',
+          description: 'Professional styling tips and fashion advice',
+          category: 'tutorial',
+          quality: {
+            '1080p': 'https://assets.shopify.com/videos/styling-tips-1080p.mp4',
+            '720p': 'https://assets.shopify.com/videos/styling-tips-720p.mp4',
+            '480p': 'https://assets.shopify.com/videos/styling-tips-480p.mp4',
+            '360p': 'https://assets.shopify.com/videos/styling-tips-360p.mp4'
+          },
+          tags: ['styling', 'fashion', 'tips', 'advice']
+        },
+        {
+          id: 'video-4',
+          title: 'Customer Testimonials & Reviews',
+          url: 'https://assets.shopify.com/videos/testimonials.mp4',
+          thumbnail: 'https://assets.shopify.com/videos/testimonials-thumb.jpg',
+          duration: '5:30',
+          description: 'Real customer testimonials and product reviews',
+          category: 'testimonial',
+          quality: {
+            '1080p': 'https://assets.shopify.com/videos/testimonials-1080p.mp4',
+            '720p': 'https://assets.shopify.com/videos/testimonials-720p.mp4',
+            '480p': 'https://assets.shopify.com/videos/testimonials-480p.mp4',
+            '360p': 'https://assets.shopify.com/videos/testimonials-360p.mp4'
+          },
+          tags: ['testimonial', 'review', 'customer', 'feedback']
+        },
+        {
+          id: 'video-5',
+          title: 'Behind the Scenes - Making Process',
+          url: 'https://assets.shopify.com/videos/behind-scenes.mp4',
+          thumbnail: 'https://assets.shopify.com/videos/behind-scenes-thumb.jpg',
+          duration: '6:45',
+          description: 'Behind the scenes look at our making process',
+          category: 'documentary',
+          quality: {
+            '1080p': 'https://assets.shopify.com/videos/behind-scenes-1080p.mp4',
+            '720p': 'https://assets.shopify.com/videos/behind-scenes-720p.mp4',
+            '480p': 'https://assets.shopify.com/videos/behind-scenes-480p.mp4',
+            '360p': 'https://assets.shopify.com/videos/behind-scenes-360p.mp4'
+          },
+          tags: ['behind-scenes', 'making', 'process', 'craftsmanship']
+        }
+      ];
+    }
+
+    renderVideoThumbnails() {
+      const container = this.container.querySelector('.video-thumbnails-container');
+      container.innerHTML = '';
+
+      this.videos.forEach((video, index) => {
+        const thumbnail = document.createElement('div');
+        thumbnail.className = `video-thumbnail ${index === 0 ? 'active' : ''} w-32 h-20 bg-gray-200 rounded-lg overflow-hidden relative`;
+        thumbnail.setAttribute('role', 'listitem');
+        thumbnail.setAttribute('aria-label', video.title);
+        thumbnail.innerHTML = `
+          <img src="${video.thumbnail}" alt="${video.title}" class="w-full h-full object-cover">
+          <div class="video-thumbnail-duration">${video.duration}</div>
+          <div class="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 transition-all flex items-center justify-center">
+            <svg class="w-8 h-8 text-white opacity-0 hover:opacity-100 transition-opacity" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"/>
+            </svg>
+          </div>
+        `;
+
+        thumbnail.addEventListener('click', () => this.playVideo(index));
+        container.appendChild(thumbnail);
+      });
+    }
+
+    renderPlaylist() {
+      const container = this.container.querySelector('.playlist-videos');
+      container.innerHTML = '';
+
+      this.videos.forEach((video, index) => {
+        const item = document.createElement('div');
+        item.className = `playlist-video-item ${index === 0 ? 'active' : ''}`;
+        item.setAttribute('role', 'listitem');
+        item.innerHTML = `
+          <img src="${video.thumbnail}" alt="${video.title}" class="w-20 h-12 object-cover rounded">
+          <div class="flex-1">
+            <h4 class="font-medium text-sm">${video.title}</h4>
+            <p class="text-xs text-gray-600">${video.duration} • ${video.category}</p>
+          </div>
+          <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"/>
+          </svg>
+        `;
+
+        item.addEventListener('click', () => this.playVideo(index));
+        container.appendChild(item);
+      });
+    }
+
+    setupEventListeners() {
+      // Play/Pause button
+      this.container.querySelector('[data-action="toggle-play"]').addEventListener('click', () => {
+        this.togglePlayPause();
+      });
+
+      // Mute/Unmute button
+      this.container.querySelector('[data-action="toggle-mute"]').addEventListener('click', () => {
+        this.toggleMute();
+      });
+
+      // Fullscreen button
+      this.container.querySelector('[data-action="toggle-fullscreen"]').addEventListener('click', () => {
+        this.toggleFullscreen();
+      });
+
+      // Gallery navigation
+      this.container.querySelector('[data-direction="prev"]').addEventListener('click', () => {
+        this.navigateVideo('prev');
+      });
+
+      this.container.querySelector('[data-direction="next"]').addEventListener('click', () => {
+        this.navigateVideo('next');
+      });
+
+      // Video events
+      this.mainVideo.addEventListener('play', () => {
+        this.isPlaying = true;
+        this.updatePlayButton();
+        this.trackVideoStart();
+      });
+
+      this.mainVideo.addEventListener('pause', () => {
+        this.isPlaying = false;
+        this.updatePlayButton();
+      });
+
+      this.mainVideo.addEventListener('ended', () => {
+        this.isPlaying = false;
+        this.updatePlayButton();
+        this.trackVideoComplete();
+        if (this.settings.loop) {
+          this.playVideo(this.currentVideoIndex);
+        }
+      });
+
+      this.mainVideo.addEventListener('timeupdate', () => {
+        this.updateVideoProgress();
+      });
+
+      // Settings
+      document.getElementById('autoplay-toggle').addEventListener('change', (e) => {
+        this.settings.autoplay = e.target.checked;
+      });
+
+      document.getElementById('loop-toggle').addEventListener('change', (e) => {
+        this.settings.loop = e.target.checked;
+        this.mainVideo.loop = e.target.checked;
+      });
+
+      document.getElementById('playback-speed').addEventListener('change', (e) => {
+        this.settings.playbackSpeed = parseFloat(e.target.value);
+        this.mainVideo.playbackRate = this.settings.playbackSpeed;
+      });
+
+      document.getElementById('default-quality').addEventListener('change', (e) => {
+        this.settings.defaultQuality = e.target.value;
+      });
+
+      // Settings buttons
+      this.container.querySelector('[data-action="save-settings"]').addEventListener('click', () => {
+        this.saveSettings();
+      });
+
+      this.container.querySelector('[data-action="reset-settings"]').addEventListener('click', () => {
+        this.resetSettings();
+      });
+
+      // Quality options
+      this.container.querySelectorAll('.quality-option').forEach(option => {
+        option.addEventListener('click', () => {
+          this.changeVideoQuality(option.dataset.quality);
+        });
+      });
+
+      // Keyboard shortcuts
+      document.addEventListener('keydown', (e) => {
+        if (document.activeElement === this.mainVideo) {
+          switch(e.key) {
+            case ' ':
+              e.preventDefault();
+              this.togglePlayPause();
+              break;
+            case 'ArrowLeft':
+              e.preventDefault();
+              this.navigateVideo('prev');
+              break;
+            case 'ArrowRight':
+              e.preventDefault();
+              this.navigateVideo('next');
+              break;
+            case 'f':
+              e.preventDefault();
+              this.toggleFullscreen();
+              break;
+            case 'm':
+              e.preventDefault();
+              this.toggleMute();
+              break;
+          }
+        }
+      });
+
+      // Touch gestures
+      let touchStartX = 0;
+      let touchEndX = 0;
+
+      this.mainVideo.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+      });
+
+      this.mainVideo.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        this.handleSwipe();
+      });
+
+      const handleSwipe = () => {
+        if (touchEndX < touchStartX - 50) {
+          this.navigateVideo('next');
+        }
+        if (touchEndX > touchStartX + 50) {
+          this.navigateVideo('prev');
+        }
+      };
+
+      this.handleSwipe = handleSwipe;
+    }
+
+    playVideo(index) {
+      this.currentVideoIndex = index;
+      const video = this.videos[index];
+
+      // Update main video
+      this.mainVideo.src = video.quality[this.settings.defaultQuality] || video.url;
+      this.mainVideo.load();
+
+      // Update UI
+      this.container.querySelector('#video-title').textContent = video.title;
+      this.container.querySelector('#video-duration').textContent = video.duration;
+
+      // Update active states
+      this.container.querySelectorAll('.video-thumbnail').forEach((thumb, i) => {
+        thumb.classList.toggle('active', i === index);
+      });
+
+      this.container.querySelectorAll('.playlist-video-item').forEach((item, i) => {
+        item.classList.toggle('active', i === index);
+      });
+
+      // Update navigation buttons
+      this.updateNavigationButtons();
+
+      // Play if autoplay is enabled
+      if (this.settings.autoplay) {
+        this.mainVideo.play().catch(e => console.log('Autoplay prevented:', e));
+      }
+
+      // Track view
+      this.trackVideoView();
+    }
+
+    togglePlayPause() {
+      if (this.isPlaying) {
+        this.mainVideo.pause();
+      } else {
+        this.mainVideo.play().catch(e => console.log('Play prevented:', e));
+      }
+    }
+
+    toggleMute() {
+      this.mainVideo.muted = !this.mainVideo.muted;
+      this.updateMuteButton();
+    }
+
+    toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        this.mainVideo.requestFullscreen().catch(err => {
+          console.log('Fullscreen error:', err);
+        });
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    navigateVideo(direction) {
+      let newIndex = this.currentVideoIndex;
+
+      if (direction === 'prev' && this.currentVideoIndex > 0) {
+        newIndex = this.currentVideoIndex - 1;
+      } else if (direction === 'next' && this.currentVideoIndex < this.videos.length - 1) {
+        newIndex = this.currentVideoIndex + 1;
+      }
+
+      if (newIndex !== this.currentVideoIndex) {
+        this.playVideo(newIndex);
+      }
+    }
+
+    changeVideoQuality(quality) {
+      const video = this.videos[this.currentVideoIndex];
+      const currentTime = this.mainVideo.currentTime;
+      const wasPlaying = !this.mainVideo.paused;
+
+      this.mainVideo.src = video.quality[quality] || video.url;
+      this.mainVideo.load();
+      this.mainVideo.currentTime = currentTime;
+
+      if (wasPlaying) {
+        this.mainVideo.play().catch(e => console.log('Play prevented:', e));
+      }
+    }
+
+    updatePlayButton() {
+      const playIcon = this.container.querySelector('.play-icon');
+      const pauseIcon = this.container.querySelector('.pause-icon');
+
+      if (this.isPlaying) {
+        playIcon.classList.add('hidden');
+        pauseIcon.classList.remove('hidden');
+      } else {
+        playIcon.classList.remove('hidden');
+        pauseIcon.classList.add('hidden');
+      }
+    }
+
+    updateMuteButton() {
+      const unmutedIcon = this.container.querySelector('.unmuted-icon');
+      const mutedIcon = this.container.querySelector('.muted-icon');
+
+      if (this.mainVideo.muted) {
+        unmutedIcon.classList.add('hidden');
+        mutedIcon.classList.remove('hidden');
+      } else {
+        unmutedIcon.classList.remove('hidden');
+        mutedIcon.classList.add('hidden');
+      }
+    }
+
+    updateNavigationButtons() {
+      const prevBtn = this.container.querySelector('[data-direction="prev"]');
+      const nextBtn = this.container.querySelector('[data-direction="next"]');
+
+      prevBtn.disabled = this.currentVideoIndex === 0;
+      nextBtn.disabled = this.currentVideoIndex === this.videos.length - 1;
+    }
+
+    updateVideoProgress() {
+      // Update progress bar if needed
+      const progress = (this.mainVideo.currentTime / this.mainVideo.duration) * 100;
+      // Update analytics
+      this.analytics.interactions++;
+    }
+
+    trackVideoView() {
+      this.analytics.totalViews++;
+      this.updateAnalyticsDisplay();
+      this.saveAnalytics();
+    }
+
+    trackVideoStart() {
+      this.analytics.watchTimes.push({
+        startTime: Date.now(),
+        videoId: this.videos[this.currentVideoIndex].id
+      });
+    }
+
+    trackVideoComplete() {
+      this.analytics.completions++;
+      this.updateAnalyticsDisplay();
+      this.saveAnalytics();
+    }
+
+    updateAnalyticsDisplay() {
+      document.getElementById('total-views').textContent = this.analytics.totalViews;
+
+      // Calculate average watch time
+      const completedWatches = this.analytics.watchTimes.filter(watch => watch.endTime);
+      if (completedWatches.length > 0) {
+        const avgTime = completedWatches.reduce((sum, watch) => {
+          return sum + (watch.endTime - watch.startTime);
+        }, 0) / completedWatches.length;
+        const minutes = Math.floor(avgTime / 60000);
+        const seconds = Math.floor((avgTime % 60000) / 1000);
+        document.getElementById('avg-watch-time').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+      }
+
+      // Calculate completion rate
+      if (this.analytics.totalViews > 0) {
+        const completionRate = (this.analytics.completions / this.analytics.totalViews) * 100;
+        document.getElementById('completion-rate').textContent = `${Math.round(completionRate)}%`;
+      }
+
+      // Calculate engagement score
+      const engagementScore = this.analytics.interactions + (this.analytics.completions * 10);
+      document.getElementById('engagement-score').textContent = engagementScore;
+    }
+
+    saveSettings() {
+      localStorage.setItem('productVideoSettings', JSON.stringify(this.settings));
+      this.showNotification('Settings saved successfully!', 'success');
+    }
+
+    loadSettings() {
+      const saved = localStorage.getItem('productVideoSettings');
+      if (saved) {
+        this.settings = { ...this.settings, ...JSON.parse(saved) };
+
+        // Update UI
+        document.getElementById('autoplay-toggle').checked = this.settings.autoplay;
+        document.getElementById('loop-toggle').checked = this.settings.loop;
+        document.getElementById('playback-speed').value = this.settings.playbackSpeed;
+        document.getElementById('default-quality').value = this.settings.defaultQuality;
+
+        this.mainVideo.loop = this.settings.loop;
+        this.mainVideo.playbackRate = this.settings.playbackSpeed;
+      }
+    }
+
+    resetSettings() {
+      this.settings = {
+        autoplay: true,
+        loop: true,
+        playbackSpeed: 1,
+        defaultQuality: '720p'
+      };
+
+      // Update UI
+      document.getElementById('autoplay-toggle').checked = this.settings.autoplay;
+      document.getElementById('loop-toggle').checked = this.settings.loop;
+      document.getElementById('playback-speed').value = this.settings.playbackSpeed;
+      document.getElementById('default-quality').value = this.settings.defaultQuality;
+
+      this.mainVideo.loop = this.settings.loop;
+      this.mainVideo.playbackRate = this.settings.playbackSpeed;
+
+      this.showNotification('Settings reset to defaults!', 'info');
+    }
+
+    saveAnalytics() {
+      localStorage.setItem('productVideoAnalytics', JSON.stringify(this.analytics));
+    }
+
+    loadAnalytics() {
+      const saved = localStorage.getItem('productVideoAnalytics');
+      if (saved) {
+        this.analytics = { ...this.analytics, ...JSON.parse(saved) };
+        this.updateAnalyticsDisplay();
+      }
+    }
+
+    showNotification(message, type = 'info') {
+      // Create notification element
+      const notification = document.createElement('div');
+      notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg text-white z-50 transition-all transform translate-x-full`;
+
+      switch(type) {
+        case 'success':
+          notification.classList.add('bg-green-500');
+          break;
+        case 'error':
+          notification.classList.add('bg-red-500');
+          break;
+        default:
+          notification.classList.add('bg-blue-500');
+      }
+
+      notification.textContent = message;
+      document.body.appendChild(notification);
+
+      // Animate in
+      setTimeout(() => {
+        notification.classList.remove('translate-x-full');
+      }, 100);
+
+      // Remove after 3 seconds
+      setTimeout(() => {
+        notification.classList.add('translate-x-full');
+        setTimeout(() => {
+          document.body.removeChild(notification);
+        }, 300);
+      }, 3000);
+    }
+  }
+
+  // Initialize video integration
+  const videoContainers = document.querySelectorAll('.product-video-integration');
+  videoContainers.forEach(container => {
+    new ProductVideoIntegration(container);
+  });
+
+  // Make available globally for Shopify integration
+  window.theme = window.theme || {};
+  window.theme.productVideoIntegration = ProductVideoIntegration;
+});
+</script>
