@@ -521,7 +521,7 @@
           <div class="bis-notification-product">${notification.productTitle}</div>
           <div class="bis-notification-details">
             ${notification.email} • ${window.theme.backInStock.getVariantLabel(notification.variant)} •
-            {{ 'back_in_stock.priority_' + notification.priority | t }}
+            {{ 'back_in_stock.priority_' | t }}
           </div>
         </div>
         <div class="bis-notification-actions">
@@ -633,4 +633,13 @@
       });
     }
   });
-</script>
+</script>{%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{{ 'back_in_stock.priority_' + notification.priority | t }}"
+  to: "{{ 'back_in_stock.priority_' | t }}"
+  position: 14639..14674
+{%- endcomment -%}

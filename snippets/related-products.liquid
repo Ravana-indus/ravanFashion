@@ -598,7 +598,7 @@
 
           <div class="related-badges">
             ${product.badges.map(badge => `
-              <span class="related-badge ${badge}">{{ 'related.badge_' + badge | t }}</span>
+              <span class="related-badge ${badge}">{{ 'related.badge_' | t }}</span>
             `).join('')}
           </div>
 
@@ -817,4 +817,13 @@
       window.theme.relatedProducts.init();
     }
   });
-</script>
+</script>{%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{{ 'related.badge_' + badge | t }}"
+  to: "{{ 'related.badge_' | t }}"
+  position: 14813..14839
+{%- endcomment -%}

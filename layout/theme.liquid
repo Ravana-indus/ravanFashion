@@ -36,9 +36,9 @@
     {{ content_for_header }}
 
     {{ 'theme.build.css' | asset_url | stylesheet_tag }}
-    {{ 'main.js' | asset_url | script_tag, defer: true }}
-    {{ 'klaviyo-service.js' | asset_url | script_tag, defer: true }}
-    {{ 'pod-service.js' | asset_url | script_tag, defer: true }}
+    {{ 'main.js' | asset_url | script_tag: defer: true }}
+    {{ 'klaviyo-service.js' | asset_url | script_tag: defer: true }}
+    {{ 'pod-service.js' | asset_url | script_tag: defer: true }}
 
     <!-- Klaviyo Configuration -->
     {% if settings.klaviyo_public_key %}
@@ -116,4 +116,19 @@
 
     <div class="notification-container fixed top-4 right-4 z-50"></div>
   </body>
-</html>
+</html>{%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{{ 'main.js' | asset_url | script_tag, defer: true }}"
+  to: "{{ 'main.js' | asset_url | script_tag: defer: true }}"
+  position: 1413..1466
+- from: "{{ 'klaviyo-service.js' | asset_url | script_tag, defer: true }}"
+  to: "{{ 'klaviyo-service.js' | asset_url | script_tag: defer: true }}"
+  position: 1471..1535
+- from: "{{ 'pod-service.js' | asset_url | script_tag, defer: true }}"
+  to: "{{ 'pod-service.js' | asset_url | script_tag: defer: true }}"
+  position: 1540..1600
+{%- endcomment -%}

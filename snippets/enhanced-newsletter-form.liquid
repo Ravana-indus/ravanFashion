@@ -45,16 +45,16 @@
     <!-- Interest Selection -->
     <div class="space-y-2">
       <label class="block text-sm font-medium text-gray-300">
-        {% render 'translation', key: 'newsletter.interests', default: 'I\'m interested in:' %}
+        {% render 'translation', key: 'newsletter.interests', default: 'I\' %}
       </label>
       <div class="grid grid-cols-2 gap-3">
         <label class="flex items-center space-x-2 cursor-pointer">
           <input type="checkbox" name="interests[]" value="mens" class="rounded text-gold focus:ring-gold">
-          <span class="text-sm">{% render 'translation', key: 'newsletter.mens', default: 'Men\'s Fashion' %}</span>
+          <span class="text-sm">{% render 'translation', key: 'newsletter.mens', default: 'Men\' %}</span>
         </label>
         <label class="flex items-center space-x-2 cursor-pointer">
           <input type="checkbox" name="interests[]" value="womens" class="rounded text-gold focus:ring-gold">
-          <span class="text-sm">{% render 'translation', key: 'newsletter.womens', default: 'Women\'s Fashion' %}</span>
+          <span class="text-sm">{% render 'translation', key: 'newsletter.womens', default: 'Women\' %}</span>
         </label>
         <label class="flex items-center space-x-2 cursor-pointer">
           <input type="checkbox" name="interests[]" value="accessories" class="rounded text-gold focus:ring-gold">
@@ -104,4 +104,22 @@
       </a>
     </div>
   </div>
-</div>
+</div>{%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{% render 'translation', key: 'newsletter.interests', default: 'I\\'m interested
+    in:' %}"
+  to: "{% render 'translation', key: 'newsletter.interests', default: 'I\\' %}"
+  position: 2336..2406
+- from: "{% render 'translation', key: 'newsletter.mens', default: 'Men\\'s Fashion'
+    %}"
+  to: "{% render 'translation', key: 'newsletter.mens', default: 'Men\\' %}"
+  position: 2672..2739
+- from: "{% render 'translation', key: 'newsletter.womens', default: 'Women\\'s Fashion'
+    %}"
+  to: "{% render 'translation', key: 'newsletter.womens', default: 'Women\\' %}"
+  position: 2973..3044
+{%- endcomment -%}
